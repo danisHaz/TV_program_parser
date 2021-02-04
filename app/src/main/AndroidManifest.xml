@@ -13,8 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ManageFavouritesActivity"></activity>
-        <activity android:name=".WatchProgramActivity" />
+        <activity android:name=".ManageFavouritesActivity"
+            android:label="@string/manageFavourites">
+        </activity>
+        <activity android:name=".WatchProgramActivity"
+            android:label="@string/watchProgram"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
