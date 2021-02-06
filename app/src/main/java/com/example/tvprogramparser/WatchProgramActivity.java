@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-//import android.widget.Toast;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,7 +24,7 @@ public class WatchProgramActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_watch_program);
 
         Thread newThread = new Thread(new Runnable() {
             @Override
@@ -51,7 +51,7 @@ public class WatchProgramActivity extends AppCompatActivity {
             res[i] = fir.get(i).ownText();
         }
 
-        ListView list = (ListView)findViewById(R.id.mainList);
+        ListView list = findViewById(R.id.mainList);
         ArrayAdapter<String> arr = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, res);
         list.setAdapter(arr);
     }
