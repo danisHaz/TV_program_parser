@@ -4,16 +4,18 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
-
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 /**
  * <p>A fragment that shows a list of items as a modal bottom sheet.</p>
@@ -22,69 +24,60 @@ import android.widget.TextView;
  *     BottomSheetFragment.newInstance(30).show(getSupportFragmentManager(), "dialog");
  * </pre>
  */
-public class BottomSheetFragment extends BottomSheetDialogFragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_ITEM_COUNT = "item_count";
+public class BottomSheetFragment extends Fragment {
+    static Document doc = null;
+    static String title = "jopa";
+    static String mainURL = "https://tv.mail.ru/kazan/";
 
-    // TODO: Customize parameters
-    public static BottomSheetFragment newInstance(int itemCount) {
-        final BottomSheetFragment fragment = new BottomSheetFragment();
-        final Bundle args = new Bundle();
-        args.putInt(ARG_ITEM_COUNT, itemCount);
-        fragment.setArguments(args);
-        return fragment;
+    // TODO: rewrite createInstance
+    public static BottomSheetFragment createInstance() {
+        BottomSheetFragment newFragment = new BottomSheetFragment();
+        return newFragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle onSavedInstanceState) {
         return inflater.inflate(R.layout.fragment_bottom_sheet, container, false);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        final RecyclerView recyclerView = (RecyclerView) view;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new ItemAdapter(getArguments().getInt(ARG_ITEM_COUNT)));
-    }
+    public void onStart() {
+        super.onStart();
+        View view = getView();
+        if (view != null) {
 
-    private class ViewHolder extends RecyclerView.ViewHolder {
+            Thread newThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        doc = Jsoup.connect(mainURL).get();
+                    } catch (java.io.IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 
-        final TextView text;
+            newThread.start();
 
-        ViewHolder(LayoutInflater inflater, ViewGroup parent) {
-            // TODO: Customize the item layout
-            super(inflater.inflate(R.layout.fragment_bottom_sheet_item, parent, false));
-            text = itemView.findViewById(R.id.text);
+            try {
+                newThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Elements fir = doc.select("a.p-channels__item__info__title__link");
+            String[] res = new String[fir.size()];
+            for (int i = 0; i < fir.size(); i++) {
+                res[i] = fir.get(i).ownText();
+            }
+
+            ListView list = view.findViewById(R.id.list);
+            ArrayAdapter<String> arr = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, res);
+            list.setAdapter(arr);
+
+        } else {
+            Toast.makeText(getActivity(), "shitty shit", Toast.LENGTH_SHORT).show();
         }
     }
-
-    private class ItemAdapter extends RecyclerView.Adapter<ViewHolder> {
-
-        private final int mItemCount;
-
-        ItemAdapter(int itemCount) {
-            mItemCount = itemCount;
-        }
-
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext()), parent);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.text.setText(String.valueOf(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return mItemCount;
-        }
-
-    }
-
 }

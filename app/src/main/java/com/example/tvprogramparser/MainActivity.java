@@ -10,12 +10,20 @@ public class MainActivity extends AppCompatActivity {
     private final static int FRAGMENT_COUNT = 1;
     private final static String TAG = "dialog";
 
+    public MainActivity() {
+        super(R.layout.activity_main);
+    }
+
+    // TODO: rewrite createInstance
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-       BottomSheetFragment frag = BottomSheetFragment.newInstance(FRAGMENT_COUNT);
-       frag.show(getSupportFragmentManager(), TAG);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.frag, BottomSheetFragment.createInstance(), null)
+                    .commit();
+        }
     }
 
     public void onWatchProgramClick(View view) {

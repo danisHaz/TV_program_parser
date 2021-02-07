@@ -8,32 +8,43 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/watchProgram"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/watchProgram"
-        android:onClick="onWatchProgramClick"
-        app:layout_constraintTop_toTopOf="parent"
+    <fragment
+        android:id="@+id/frag"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/inner_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_sheet_frag"
-        app:layout_constraintHorizontal_bias="0.5"/>
-    <Button
-        android:id="@+id/manageFavourites"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/manageFavourites"
-        android:onClick="onManageFavouritesClick"
-        app:layout_constraintTop_toBottomOf="@id/watchProgram"
-        app:layout_constraintStart_toStartOf="@+id/watchProgram"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:name="com.example.tvprogramparser.BottomSheetFragment"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/inner_layout"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/bottom_sheet_frag"
+        android:background="@color/colorPrimaryLight"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/watchProgram"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onWatchProgramClick"
+            android:text="@string/watchProgram"
+            android:background="@drawable/main_layout_buttons_style"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <Button
+            android:id="@+id/manageFavourites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/manageFavourites"
+            android:onClick="onManageFavouritesClick"
+            android:background="@drawable/main_layout_buttons_style"
+            app:layout_constraintStart_toEndOf="@+id/watchProgram"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
