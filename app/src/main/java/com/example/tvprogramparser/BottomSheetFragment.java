@@ -25,10 +25,10 @@ import org.jsoup.select.Elements;
  * </pre>
  */
 
+// TODO: add ListView.onItemClickListener
 public class BottomSheetFragment extends Fragment {
-    static Document doc = null;
-    static String title = "jopa";
-    static String mainURL = "https://tv.mail.ru/kazan/";
+    private static Document doc = null;
+    private static String mainURL = "https://tv.mail.ru/kazan/";
 
     // TODO: rewrite createInstance
     public static BottomSheetFragment createInstance() {
@@ -73,6 +73,8 @@ public class BottomSheetFragment extends Fragment {
             }
 
             ListView list = view.findViewById(R.id.list);
+
+            // TODO: handle NullPointerException from getActivity()
             ArrayAdapter<String> arr = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, res);
             list.setAdapter(arr);
 
