@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="top|start"
+    tools:context=".ManageFavouritesFragment">
+
+    <TextView
+        android:id="@+id/favouriteChannelsTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/defaultChannelTitle"/>
+
+    <ListView
+        android:id="@+id/favouriteChannelsList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/favouriteProgramsTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/defaultProgramTitle"/>
+
+    <ListView
+        android:id="@+id/favouriteProgramsList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

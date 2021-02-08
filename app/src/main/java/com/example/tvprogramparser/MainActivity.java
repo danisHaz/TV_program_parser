@@ -12,7 +12,6 @@ public class MainActivity extends AppCompatActivity {
         super(R.layout.activity_main);
     }
 
-    // TODO: rewrite createInstance
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // TODO: rewrite createInstance
     private void setWatchProgramFragment() {
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)

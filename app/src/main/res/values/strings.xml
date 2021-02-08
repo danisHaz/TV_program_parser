@@ -3,4 +3,6 @@
     <string name="lazha">Even Lazha Is More Than Lazha!</string>
     <string name="watchProgram">Watch current program</string>
     <string name="manageFavourites">Manage your favourites</string>
+    <string name="defaultChannelTitle">Your Favourite Channels:</string>
+    <string name="defaultProgramTitle">Your Favourite Programs:</string>
 </resources>
