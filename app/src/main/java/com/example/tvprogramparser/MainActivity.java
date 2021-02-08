@@ -24,8 +24,12 @@ public class MainActivity extends AppCompatActivity {
     private void setWatchProgramFragment() {
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .add(R.id.frag, BottomSheetFragment.createInstance(), null)
+                .add(R.id.frag, BottomSheetFragment.createInstance(), TLS.WATCH_PROGRAM_TAG)
                 .commit();
+    }
+
+    private void setManageFavouritesFragment() {
+        // TODO: add code
     }
 
     public void onWatchProgramClick(View view) {

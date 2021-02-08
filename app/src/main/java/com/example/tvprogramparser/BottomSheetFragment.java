@@ -28,7 +28,6 @@ import org.jsoup.select.Elements;
 // TODO: add ListView.onItemClickListener
 public class BottomSheetFragment extends Fragment {
     private static Document doc = null;
-    private static String mainURL = "https://tv.mail.ru/kazan/";
 
     // TODO: rewrite createInstance
     public static BottomSheetFragment createInstance() {
@@ -52,7 +51,7 @@ public class BottomSheetFragment extends Fragment {
                 @Override
                 public void run() {
                     try {
-                        doc = Jsoup.connect(mainURL).get();
+                        doc = Jsoup.connect(TLS.MAIN_URL).get();
                     } catch (java.io.IOException e) {
                         e.printStackTrace();
                     }
@@ -66,7 +65,7 @@ public class BottomSheetFragment extends Fragment {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Elements fir = doc.select("a.p-channels__item__info__title__link");
+            Elements fir = doc.select(TLS.MAIN_QUERY);
             String[] res = new String[fir.size()];
             for (int i = 0; i < fir.size(); i++) {
                 res[i] = fir.get(i).ownText();
