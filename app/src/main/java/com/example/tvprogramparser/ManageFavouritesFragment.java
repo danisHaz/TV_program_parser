@@ -16,6 +16,11 @@ import java.util.ArrayList;
 
 public class ManageFavouritesFragment extends Fragment {
 
+    public static ManageFavouritesFragment createInstance() {
+        ManageFavouritesFragment frag = new ManageFavouritesFragment();
+        return frag;
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,6 +47,12 @@ public class ManageFavouritesFragment extends Fragment {
                     android.R.layout.simple_list_item_1,
                     programs
             );
+
+            if (adap1.isEmpty())
+                adap1.add(getResources().getString(R.string.channelsListEmpty));
+
+            if (adap2.isEmpty())
+                adap2.add(getResources().getString(R.string.programsListEmpty));
 
             ((ListView)view.findViewById(R.id.favouriteChannelsList)).setAdapter(adap1);
             ((ListView)view.findViewById(R.id.favouriteProgramsList)).setAdapter(adap2);

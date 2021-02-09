@@ -24,12 +24,15 @@ public class MainActivity extends AppCompatActivity {
     private void setWatchProgramFragment() {
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .add(R.id.frag, BottomSheetFragment.createInstance(), TLS.WATCH_PROGRAM_TAG)
+                .replace(R.id.frag, BottomSheetFragment.createInstance(), TLS.WATCH_PROGRAM_TAG)
                 .commit();
     }
 
     private void setManageFavouritesFragment() {
-        // TODO: add code
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.frag, ManageFavouritesFragment.createInstance(), TLS.MANAGE_YOUR_FAVOURITES_TAG)
+                .commit();
     }
 
     public void onWatchProgramClick(View view) {
@@ -37,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onManageFavouritesClick(View view) {
-        Intent intent = new Intent(this, ManageFavouritesActivity.class);
-        startActivity(intent);
+        this.setManageFavouritesFragment();
     }
 }
