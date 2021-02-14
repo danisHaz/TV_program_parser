@@ -59,12 +59,17 @@ public class ManageFavouritesActivity extends AppCompatActivity {
         }
 
         Elements fir = doc.select(TLS.QUERY_1_3);
-        Toast.makeText(this, String.valueOf(fir.size()), Toast.LENGTH_SHORT).show();
+        Elements sec = doc.select(TLS.QUERY_1_2);
+
+        if (fir.size() != sec.size()) {
+            Toast.makeText(this, "Something went wrong, please try later", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         String[] strArr = new String[fir.size()];
 
         for (int i = 0; i < fir.size(); i++) {
-            strArr[i] = fir.get(i).ownText();
+            strArr[i] = sec.get(i).ownText() + "    " + fir.get(i).ownText();
         }
 
         ListView list = (ListView) findViewById(R.id.manageFavouritesList);
@@ -72,6 +77,8 @@ public class ManageFavouritesActivity extends AppCompatActivity {
         ArrayAdapter<String> arr = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
                 strArr);
+
+
         list.setAdapter(arr);
     }
 }
