@@ -13,20 +13,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.content.Intent;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-
-import java.util.ArrayList;
-
-/**
- * <p>A fragment that shows a list of items as a modal bottom sheet.</p>
- * <p>You can show this modal bottom sheet from your activity like this:</p>
- * <pre>
- *     BottomSheetFragment.newInstance(30).show(getSupportFragmentManager(), "dialog");
- * </pre>
- */
 
 // TODO: add ListView.onItemClickListener
 public class BottomSheetFragment extends Fragment {
@@ -45,13 +36,15 @@ public class BottomSheetFragment extends Fragment {
     }
 
     private static Channel[] getChannelsArray(Elements fir, Elements sec) {
-        Channel[] channelsArray = new Channel[fir.size() + TLS.ADDITIONAL_CHANNELS.size()];
-        String[] namesArray = new String[fir.size() + TLS.ADDITIONAL_CHANNELS.size()];
-        String[] linksArray = new String[sec.size() + TLS.ADDITIONAL_CHANNELS.size()];
-        for (int i = 0; i < fir.size() + TLS.ADDITIONAL_CHANNELS.size(); i++) {
+        Channel[] channelsArray = new Channel[fir.size()];
+        for (int i = 0; i < fir.size(); i++) {
             channelsArray[i] = new Channel(fir.get(i).ownText(),
-                    sec.get(i).ownText());
+                    sec.get(i).attr("href"));
         }
+
+//        for (int i = 0; i < TLS.ADDITIONAL_CHANNELS.size(); i++) {
+//            channelsArray[i] = TLS.ADDITIONAL_CHANNELS.get(i);
+//        }
 
         return channelsArray;
     }
@@ -74,7 +67,7 @@ public class BottomSheetFragment extends Fragment {
                 @Override
                 public void run() {
                     try {
-                        doc = Jsoup.connect(TLS.MAIN_URL).get();
+                        doc = Jsoup.connect(TLS.LOCAL_MAIN_URL).get();
                     } catch (java.io.IOException e) {
                         e.printStackTrace();
                     }
@@ -91,19 +84,21 @@ public class BottomSheetFragment extends Fragment {
             Elements fir = doc.select(TLS.MAIN_QUERY);
             Elements sec = doc.select(TLS.QUERY_1_1);
 
-            ListView list = (ListView)view.findViewById(R.id.list);
+            ListView list = (ListView) view.findViewById(R.id.list);
 
-            Channel[] ar = getChannelsArray(fir, sec);
+            final Channel[] ar = getChannelsArray(fir, sec);
 
             // TODO: handle NullPointerException from getActivity()
             ArrayAdapter<String> arr = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, getNamesArray(ar));
             list.setAdapter(arr);
 
-            // TODO: provide code for OnItemCLickListener
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-                    Toast.makeText(getActivity(), String.valueOf(pos), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), ar[pos].getLink(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), ManageFavouritesActivity.class);
+                    intent.putExtra("name", ar[pos]);
+                    startActivity(intent);
                 }
             });
 

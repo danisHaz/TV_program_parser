@@ -1,6 +1,8 @@
 package com.example.tvprogramparser;
 
-public class Channel {
+import java.io.Serializable;
+
+public class Channel implements Serializable {
     private String name;
     private String link;
     private boolean favourite;
