@@ -31,7 +31,9 @@ public class ManageFavouritesActivity extends AppCompatActivity {
             ch = (Channel) intent.getExtras().getSerializable("name");
         } catch (NullPointerException e) {
             e.printStackTrace();
-            Toast.makeText(this, "An error has occurred, please try later", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,
+                    "An error has occurred, please try later",
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -62,7 +64,9 @@ public class ManageFavouritesActivity extends AppCompatActivity {
         Elements sec = doc.select(TLS.QUERY_1_2);
 
         if (fir.size() != sec.size()) {
-            Toast.makeText(this, "Something went wrong, please try later", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,
+                    "Something went wrong, please try later",
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 

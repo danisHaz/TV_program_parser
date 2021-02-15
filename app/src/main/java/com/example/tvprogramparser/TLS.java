@@ -16,4 +16,8 @@ public class TLS {
         add(new Channel("KHL HD", "/kazan/channel/1590/"));
         add(new Channel("Kino TV", "/kazan/channel/1653/"));
     }};
+
+    public static String favouriteProgramParser(String programName) {
+        return programName.split(")")[0];
+    }
 }
