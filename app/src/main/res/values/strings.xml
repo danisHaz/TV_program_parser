@@ -7,4 +7,9 @@
     <string name="defaultProgramTitle">Your Favourite Programs:</string>
     <string name="channelsListEmpty">No channels are in Favourite</string>
     <string name="programsListEmpty">No programs are in Favourite</string>
+    <string name="helloThere">Hello there</string>
+    <string-array name="favouriteProgramsMenu">
+        <item>Add to favourites</item>
+        <item></item>
+    </string-array>
 </resources>
