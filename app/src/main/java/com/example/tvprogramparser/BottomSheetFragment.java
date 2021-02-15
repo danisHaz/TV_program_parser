@@ -32,19 +32,24 @@ public class BottomSheetFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle onSavedInstanceState) {
-        return inflater.inflate(R.layout.fragment_bottom_sheet, container, false);
+        return inflater.inflate(R.layout.fragment_bottom_sheet,
+                container,
+                false);
     }
 
     private static Channel[] getChannelsArray(Elements fir, Elements sec) {
-        Channel[] channelsArray = new Channel[fir.size()];
-        for (int i = 0; i < fir.size(); i++) {
-            channelsArray[i] = new Channel(fir.get(i).ownText(),
-                    sec.get(i).attr("href"));
+        Channel[] channelsArray = new Channel[
+                fir.size() + TLS.ADDITIONAL_CHANNELS.size()];
+
+        for (int i = 0; i < TLS.ADDITIONAL_CHANNELS.size(); i++) {
+            channelsArray[i] = TLS.ADDITIONAL_CHANNELS.get(i);
         }
 
-//        for (int i = 0; i < TLS.ADDITIONAL_CHANNELS.size(); i++) {
-//            channelsArray[i] = TLS.ADDITIONAL_CHANNELS.get(i);
-//        }
+        for (int i = 0; i < fir.size(); i++) {
+            channelsArray[i + TLS.ADDITIONAL_CHANNELS.size()] = new Channel(
+                    fir.get(i).ownText(),
+                    sec.get(i).attr("href"));
+        }
 
         return channelsArray;
     }
@@ -89,14 +94,18 @@ public class BottomSheetFragment extends Fragment {
             final Channel[] ar = getChannelsArray(fir, sec);
 
             // TODO: handle NullPointerException from getActivity()
-            ArrayAdapter<String> arr = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, getNamesArray(ar));
+            ArrayAdapter<String> arr = new ArrayAdapter<String>(getActivity(),
+                    android.R.layout.simple_list_item_1,
+                    getNamesArray(ar));
+
             list.setAdapter(arr);
 
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-                    Toast.makeText(getActivity(), ar[pos].getLink(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getActivity(), ManageFavouritesActivity.class);
+                    Intent intent = new Intent(getActivity(),
+                            ManageFavouritesActivity.class);
+
                     intent.putExtra("name", ar[pos]);
                     startActivity(intent);
                 }

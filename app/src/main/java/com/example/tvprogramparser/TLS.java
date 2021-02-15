@@ -12,6 +12,8 @@ public class TLS {
     public static final String QUERY_1_2 = "span.p-programms__item__time-value";
     public static final String QUERY_1_3 = "span.p-programms__item__name-link";
     public static final ArrayList<Channel> ADDITIONAL_CHANNELS = new ArrayList<Channel>() {{
-        add(new Channel("Paramount Comedy", "https://tv.mail.ru/kazan/channel/808/"));
+        add(new Channel("Paramount Comedy", "/kazan/channel/808/"));
+        add(new Channel("KHL HD", "/kazan/channel/1590/"));
+        add(new Channel("Kino TV", "/kazan/channel/1653/"));
     }};
 }
