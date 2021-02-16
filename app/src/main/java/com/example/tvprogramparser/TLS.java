@@ -12,7 +12,7 @@ public class TLS {
     public static final String QUERY_1_2 = "span.p-programms__item__time-value";
     public static final String QUERY_1_3 = "span.p-programms__item__name-link";
     public static final String ARG_COUNT = "argCount";
-    public static final String CURRENT_ARRAY_NAME = "currentName";
+    public static final String CURRENT_ARRAY_ID = "smallMenuId";
 
     public static final ArrayList<Channel> ADDITIONAL_CHANNELS = new ArrayList<Channel>() {{
         add(new Channel("Paramount Comedy", "/kazan/channel/808/"));

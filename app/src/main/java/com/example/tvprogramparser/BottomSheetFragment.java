@@ -19,7 +19,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-// TODO: add ListView.onItemClickListener
 public class BottomSheetFragment extends Fragment {
     private static Document doc = null;
 

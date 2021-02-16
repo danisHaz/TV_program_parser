@@ -14,12 +14,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import java.lang.ArrayIndexOutOfBoundsException;
+
 public class SmallMenuFragment extends BottomSheetDialogFragment {
 
     /**
      * Remember providing this method with specific Bundle:
      * TLS.ARG_COUNT: int,
-     * String-array res name: String
+     * TLS.CURRENT_ARRAY_ID: int
      */
     public static SmallMenuFragment createInstance(Bundle savedInfo) {
         SmallMenuFragment smallMenu = new SmallMenuFragment();
@@ -44,6 +46,8 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
 
         RecyclerView recView = (RecyclerView) view;
         recView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // TODO: handle with getArguments 'null' problem
         recView.setAdapter(new ItemAdapter(getArguments()));
     }
 
@@ -59,22 +63,28 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
 
     private static class ItemAdapter extends RecyclerView.Adapter<CustomViewHolder>{
         private int argCount;
-        private String itemNamesArray;
+        private int resourcesOptionsId;
+        private String[] fragmentOptions;
 
         ItemAdapter(Bundle args) {
             this.argCount = args.getInt(TLS.ARG_COUNT);
-            this.itemNamesArray = args.getString(TLS.CURRENT_ARRAY_NAME);
+            this.resourcesOptionsId = args.getInt(TLS.CURRENT_ARRAY_ID);
         }
 
         @NonNull
         @Override
         public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup container, int viewType) {
+            fragmentOptions =  container.getContext().getResources().getStringArray(resourcesOptionsId);
             return new CustomViewHolder(LayoutInflater.from(container.getContext()), container);
         }
 
         @Override
         public void onBindViewHolder(@NonNull CustomViewHolder holder, int pos) {
-            holder.textCell.setText(R.string.helloThere);
+            try {
+                holder.textCell.setText(fragmentOptions[pos]);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override

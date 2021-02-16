@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.content.Intent;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.ArrayAdapter;
+import android.view.View;
 
 import java.lang.NullPointerException;
 import java.lang.Thread;
@@ -82,6 +84,17 @@ public class ManageFavouritesActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1,
                 strArr);
 
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
+                Bundle fragmentInfo = new Bundle();
+                fragmentInfo.putInt(TLS.ARG_COUNT, getResources().getStringArray(R.array.favouriteProgramsMenu).length);
+                fragmentInfo.putInt(TLS.CURRENT_ARRAY_ID, R.array.favouriteProgramsMenu);
+
+                SmallMenuFragment smallMenu = SmallMenuFragment.createInstance(fragmentInfo);
+                smallMenu.show(getSupportFragmentManager(), "smallMenu");
+            }
+        });
 
         list.setAdapter(arr);
     }

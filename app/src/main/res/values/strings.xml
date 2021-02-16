@@ -9,7 +9,7 @@
     <string name="programsListEmpty">No programs are in Favourite</string>
     <string name="helloThere">Hello there</string>
     <string-array name="favouriteProgramsMenu">
-        <item>Add to favourites</item>
-        <item></item>
+        <item>Add program to favourites</item>
+        <item>Rate this program</item>
     </string-array>
 </resources>
