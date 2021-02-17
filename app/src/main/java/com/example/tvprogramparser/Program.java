@@ -5,6 +5,13 @@ public class Program {
     private String timeBegin;
     private String timeEnd;
 
+    // Called only for temporary needs
+    Program(String programName) {
+        this.programName = programName;
+        this.timeBegin = null;
+        this.timeEnd = null;
+    }
+
     Program(String programName, String timeBegin) {
         this.programName = programName;
         this.timeBegin = timeBegin;

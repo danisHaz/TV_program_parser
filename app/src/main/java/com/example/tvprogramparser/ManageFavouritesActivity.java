@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ArrayAdapter;
 import android.view.View;
@@ -90,6 +91,7 @@ public class ManageFavouritesActivity extends AppCompatActivity {
                 Bundle fragmentInfo = new Bundle();
                 fragmentInfo.putInt(TLS.ARG_COUNT, getResources().getStringArray(R.array.favouriteProgramsMenu).length);
                 fragmentInfo.putInt(TLS.CURRENT_ARRAY_ID, R.array.favouriteProgramsMenu);
+                fragmentInfo.putString(TLS.CHOSEN_OBJECT_NAME, ((TextView)view).getText().toString());
 
                 SmallMenuFragment smallMenu = SmallMenuFragment.createInstance(fragmentInfo);
                 smallMenu.show(getSupportFragmentManager(), "smallMenu");

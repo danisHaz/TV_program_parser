@@ -30,4 +30,9 @@ public class FavouriteObject {
     public static void addToFavouritePrograms(Program pr) {
         favouritePrograms.add(pr);
     }
+
+    static void parseFavouriteProgram(String programName) {
+        String[] temp = programName.split("\\(");
+        addToFavouritePrograms(new Program(temp[0].trim()));
+    }
 }

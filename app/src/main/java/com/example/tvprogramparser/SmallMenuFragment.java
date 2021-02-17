@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -65,16 +66,18 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
         private int argCount;
         private int resourcesOptionsId;
         private String[] fragmentOptions;
+        private String chosenObjectName;
 
         ItemAdapter(Bundle args) {
             this.argCount = args.getInt(TLS.ARG_COUNT);
             this.resourcesOptionsId = args.getInt(TLS.CURRENT_ARRAY_ID);
+            this.chosenObjectName = args.getString(TLS.CHOSEN_OBJECT_NAME);
         }
 
         @NonNull
         @Override
         public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup container, int viewType) {
-            fragmentOptions =  container.getContext().getResources().getStringArray(resourcesOptionsId);
+            this.fragmentOptions =  container.getContext().getResources().getStringArray(resourcesOptionsId);
             return new CustomViewHolder(LayoutInflater.from(container.getContext()), container);
         }
 
@@ -85,6 +88,18 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
             } catch (ArrayIndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
+
+            final int position = pos;
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO: add a Toast to notify user about successful add to favourites
+                    if (position == 0) {
+                        FavouriteObject.parseFavouriteProgram(chosenObjectName);
+                    }
+                }
+            });
         }
 
         @Override
