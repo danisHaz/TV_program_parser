@@ -2,6 +2,7 @@ package com.example.tvprogramparser;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.lang.ArrayIndexOutOfBoundsException;
 
 public class FavouriteObject {
     private static ArrayList<Channel> favouriteChannels = new ArrayList<Channel>();
@@ -32,7 +33,11 @@ public class FavouriteObject {
     }
 
     static void parseFavouriteProgram(String programName) {
-        String[] temp = programName.split("\\(");
-        addToFavouritePrograms(new Program(temp[0].trim()));
+        String[] temp = programName.split("\\(")[0].trim().split(" ");
+        try {
+            addToFavouritePrograms(new Program(temp[1].trim()));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
     }
 }

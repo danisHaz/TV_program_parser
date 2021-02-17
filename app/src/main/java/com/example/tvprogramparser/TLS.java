@@ -22,6 +22,6 @@ public class TLS {
     }};
 
     public static String favouriteProgramParser(String programName) {
-        return programName.split(")")[0];
+        return programName.split("\\)")[0];
     }
 }
