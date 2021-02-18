@@ -14,6 +14,11 @@ public class TLS {
     public static final String ARG_COUNT = "argCount";
     public static final String CURRENT_ARRAY_ID = "smallMenuId";
     public static final String CHOSEN_OBJECT_NAME = "chosenObjectName";
+    public static final String CHOSEN_LAYOUT = "chosenLayout";
+    public static final String ADD_TO_FAVOURITES = "addToFavourites";
+    public static final String DELETE_FROM_FAVOURITE_PROGRAMS = "deleteFromPrograms";
+    public static final String CHOSEN_POSITION = "chosenPosition";
+    public static final String DELETE_FROM_FAVOURITE_CHANNELS = "deleteFromChannels";
 
     public static final ArrayList<Channel> ADDITIONAL_CHANNELS = new ArrayList<Channel>() {{
         add(new Channel("Paramount Comedy", "/kazan/channel/808/"));

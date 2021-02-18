@@ -32,8 +32,24 @@ public class FavouriteObject {
         favouritePrograms.add(pr);
     }
 
+    public static void deleteFromFavouriteChannels(int position) {
+        try {
+            favouriteChannels.remove(position);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteFromFavouritePrograms(int position) {
+        try {
+            favouritePrograms.remove(position);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+    }
+
     static void parseFavouriteProgram(String programName) {
-        String[] temp = programName.split("\\(")[0].trim().split(" ");
+        String[] temp = programName.split("\\(")[0].trim().split("    ");
         try {
             addToFavouritePrograms(new Program(temp[1].trim()));
         } catch (ArrayIndexOutOfBoundsException e) {

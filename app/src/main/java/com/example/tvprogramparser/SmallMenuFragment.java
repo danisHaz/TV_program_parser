@@ -22,7 +22,9 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
     /**
      * Remember providing this method with specific Bundle:
      * TLS.ARG_COUNT: int,
-     * TLS.CURRENT_ARRAY_ID: int
+     * TLS.CURRENT_ARRAY_ID: int,
+     * TLS.CHOSEN_OBJECT_NAME: String,
+     * TLS.CHOSEN_LAYOUT: String
      */
     public static SmallMenuFragment createInstance(Bundle savedInfo) {
         SmallMenuFragment smallMenu = new SmallMenuFragment();
@@ -67,11 +69,15 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
         private int resourcesOptionsId;
         private String[] fragmentOptions;
         private String chosenObjectName;
+        private String chosenLayout;
+        private int chosenPos;
 
         ItemAdapter(Bundle args) {
             this.argCount = args.getInt(TLS.ARG_COUNT);
             this.resourcesOptionsId = args.getInt(TLS.CURRENT_ARRAY_ID);
             this.chosenObjectName = args.getString(TLS.CHOSEN_OBJECT_NAME);
+            this.chosenLayout = args.getString(TLS.CHOSEN_LAYOUT);
+            this.chosenPos = args.getInt(TLS.CHOSEN_POSITION);
         }
 
         @NonNull
@@ -82,7 +88,7 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull CustomViewHolder holder, int pos) {
+        public void onBindViewHolder(@NonNull CustomViewHolder holder, final int pos) {
             try {
                 holder.textCell.setText(fragmentOptions[pos]);
             } catch (ArrayIndexOutOfBoundsException e) {
@@ -94,9 +100,30 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (chosenLayout.equals(TLS.ADD_TO_FAVOURITES))
+                        addFavouriteProgramMethod();
+                    else if (chosenLayout.equals(TLS.DELETE_FROM_FAVOURITE_PROGRAMS))
+                        deleteFromFavouritePrograms();
+                    else if (chosenLayout.equals(TLS.DELETE_FROM_FAVOURITE_CHANNELS))
+                        deleteFromFavouriteChannels();
+                }
+
+                private void addFavouriteProgramMethod() {
                     // TODO: add a Toast to notify user about successful add to favourites
                     if (position == 0) {
                         FavouriteObject.parseFavouriteProgram(chosenObjectName);
+                    }
+                }
+
+                private void deleteFromFavouritePrograms() {
+                    if (position == 0) {
+                        FavouriteObject.deleteFromFavouritePrograms(chosenPos);
+                    }
+                }
+
+                private void deleteFromFavouriteChannels() {
+                    if (position == 0) {
+                        FavouriteObject.deleteFromFavouriteChannels(chosenPos);
                     }
                 }
             });

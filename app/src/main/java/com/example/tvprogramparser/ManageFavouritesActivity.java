@@ -92,6 +92,8 @@ public class ManageFavouritesActivity extends AppCompatActivity {
                 fragmentInfo.putInt(TLS.ARG_COUNT, getResources().getStringArray(R.array.favouriteProgramsMenu).length);
                 fragmentInfo.putInt(TLS.CURRENT_ARRAY_ID, R.array.favouriteProgramsMenu);
                 fragmentInfo.putString(TLS.CHOSEN_OBJECT_NAME, ((TextView)view).getText().toString());
+                fragmentInfo.putString(TLS.CHOSEN_LAYOUT, TLS.ADD_TO_FAVOURITES);
+                fragmentInfo.putInt(TLS.CHOSEN_POSITION, pos);
 
                 SmallMenuFragment smallMenu = SmallMenuFragment.createInstance(fragmentInfo);
                 smallMenu.show(getSupportFragmentManager(), "smallMenu");

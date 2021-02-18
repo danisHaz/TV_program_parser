@@ -12,4 +12,10 @@
         <item>Add program to favourites</item>
         <item>Rate this program</item>
     </string-array>
+    <string-array name="favouriteProgramsBottomFragment">
+        <item>Remove program from favourites</item>
+    </string-array>
+    <string-array name="favouriteChannelsBottomFragment">
+        <item>Remove from channel favourites</item>
+    </string-array>
 </resources>
