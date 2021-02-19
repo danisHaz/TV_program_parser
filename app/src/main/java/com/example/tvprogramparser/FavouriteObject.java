@@ -1,14 +1,30 @@
 package com.example.tvprogramparser;
 
-import java.io.IOException;
+import androidx.room.Room;
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.lang.ArrayIndexOutOfBoundsException;
 
+// TODO: get rid of favouriteLists
 public class FavouriteObject {
     private static ArrayList<Channel> favouriteChannels = new ArrayList<Channel>();
     private static ArrayList<Program> favouritePrograms = new ArrayList<Program>();
+    private static FavouriteObjectsDB.DefaultDb appDb;
+    private static boolean isDbDefined = false;
 
-    public static ArrayList<String> getArrayOfFavouriteChannels() {
+    private static void defineDb(Context context) {
+        appDb = Room.databaseBuilder(context, FavouriteObjectsDB.DefaultDb.class,
+                "defDb").build();
+        isDbDefined = true;
+    }
+
+    public static ArrayList<String> getArrayOfFavouriteChannels(Context context) {
+        if (!isDbDefined)
+            defineDb(context);
+
+        FavouriteObjectsDB.ChannelsDao dao = appDb.channelsDao();
+        ArrayList<FavouriteObjectsDB.Channel> restoredChannels = dao.getAll();
         ArrayList<String> channels = new ArrayList<>();
         for (Channel chan: favouriteChannels) {
             channels.add(chan.getName());
@@ -16,7 +32,10 @@ public class FavouriteObject {
         return channels;
     }
 
-    public static ArrayList<String> getArrayOfFavouritePrograms() {
+    public static ArrayList<String> getArrayOfFavouritePrograms(Context context) {
+        if (!isDbDefined)
+            defineDb(context);
+
         ArrayList<String> programs = new ArrayList<>();
         for (Program prog: favouritePrograms) {
             programs.add(prog.getName());
