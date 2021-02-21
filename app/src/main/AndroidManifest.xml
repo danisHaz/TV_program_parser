@@ -13,11 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ManageFavouritesActivity"
-            android:label="@string/manageFavourites">
-        </activity>
-        <activity android:name=".WatchProgramActivity"
-            android:label="@string/watchProgram"/>
+        <service
+            android:name=".CheckFavouritesService"
+            android:enabled="true"
+            android:exported="true"/>
+
+        <activity
+            android:name=".ManageFavouritesActivity"
+            android:label="@string/manageFavourites"/>
+        <activity
+            android:name=".WatchProgramActivity"
+            android:label="@string/watchProgram" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,6 +31,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver
+            android:name=".RestartService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="RestartServiceWhenStopped"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="RestartService" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

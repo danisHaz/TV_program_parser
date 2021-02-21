@@ -28,6 +28,10 @@ public class Program {
         this.id = (new HashMaster(programName)).getHash();
     }
 
+    public boolean isEqual(Program pr) {
+        return (pr.getId() == this.id);
+    }
+
     public String getName() {
         return this.programName;
     }

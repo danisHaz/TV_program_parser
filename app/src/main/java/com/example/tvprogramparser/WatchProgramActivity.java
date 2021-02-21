@@ -18,7 +18,6 @@ import java.lang.InterruptedException;
 
 public class WatchProgramActivity extends AppCompatActivity {
     static Document doc = null;
-    static String title = "jopa";
     static String mainURL = "https://tv.mail.ru/kazan/";
 
     @Override

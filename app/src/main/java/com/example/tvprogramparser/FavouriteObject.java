@@ -151,11 +151,23 @@ public class FavouriteObject {
     }
 
     static void parseFavouriteProgram(String programName) {
-        String[] temp = programName.split("\\(")[0].trim().split("    ");
         try {
-            addToFavouritePrograms(new Program(temp[1].trim()));
+            addToFavouritePrograms(new Program(parseProgram(programName)));
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String parseProgram(String programName) {
+        return programName.split("\\(")[0].trim().split("    ")[1].trim();
+    }
+
+    // TODO: reorganize favourite lists to boost this method (maybe to Decart tree)
+    public static boolean isProgramInFavourites(Program pr) {
+        for (Program favouritePr: favouritePrograms) {
+            if (pr.isEqual(favouritePr))
+                return true;
+        }
+        return false;
     }
 }

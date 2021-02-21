@@ -36,22 +36,7 @@ public class BottomSheetFragment extends Fragment {
                 false);
     }
 
-    private static Channel[] getChannelsArray(Elements fir, Elements sec) {
-        Channel[] channelsArray = new Channel[
-                fir.size() + TLS.ADDITIONAL_CHANNELS.size()];
 
-        for (int i = 0; i < TLS.ADDITIONAL_CHANNELS.size(); i++) {
-            channelsArray[i] = TLS.ADDITIONAL_CHANNELS.get(i);
-        }
-
-        for (int i = 0; i < fir.size(); i++) {
-            channelsArray[i + TLS.ADDITIONAL_CHANNELS.size()] = new Channel(
-                    fir.get(i).ownText(),
-                    sec.get(i).attr("href"));
-        }
-
-        return channelsArray;
-    }
 
     private static String[] getNamesArray(Channel[] arr) {
         String[] str = new String[arr.length];
@@ -67,30 +52,10 @@ public class BottomSheetFragment extends Fragment {
         View view = getView();
         if (view != null) {
 
-            Thread newThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        doc = Jsoup.connect(TLS.LOCAL_MAIN_URL).get();
-                    } catch (java.io.IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+            MainChannelsList.define();
+            final Channel[] ar = MainChannelsList.getChannelsList();
 
-            newThread.start();
-
-            try {
-                newThread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Elements fir = doc.select(TLS.MAIN_QUERY);
-            Elements sec = doc.select(TLS.QUERY_1_1);
-
-            ListView list = (ListView) view.findViewById(R.id.list);
-
-            final Channel[] ar = getChannelsArray(fir, sec);
+            ListView list = (ListView)view.findViewById(R.id.list);
 
             // TODO: handle NullPointerException from getActivity()
             ArrayAdapter<String> arr = new ArrayAdapter<String>(getActivity(),
