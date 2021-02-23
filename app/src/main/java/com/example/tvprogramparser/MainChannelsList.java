@@ -41,7 +41,7 @@ public class MainChannelsList {
         isDefined = true;
         Thread newThread = new Thread(new Runnable() {
             @Override
-            public void run() {
+            public synchronized void run() {
                 try {
                     doc = Jsoup.connect(TLS.LOCAL_MAIN_URL).get();
                 } catch (java.io.IOException e) {
@@ -57,6 +57,7 @@ public class MainChannelsList {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         Elements fir = doc.select(TLS.MAIN_QUERY);
         Elements sec = doc.select(TLS.QUERY_1_1);
 

@@ -19,6 +19,8 @@ public class TLS {
     public static final String DELETE_FROM_FAVOURITE_PROGRAMS = "deleteFromPrograms";
     public static final String CHOSEN_POSITION = "chosenPosition";
     public static final String DELETE_FROM_FAVOURITE_CHANNELS = "deleteFromChannels";
+    public static final String ACTION_WRITE_FAVOURITE = "actionWriteFavourite";
+    public static final String ACTION_PERFORM_FAVOURITE = "com.example.tvprogramparser.ACTION_NAME";
 
     public static final ArrayList<Channel> ADDITIONAL_CHANNELS = new ArrayList<Channel>() {{
         add(new Channel("Paramount Comedy", "/kazan/channel/808/"));

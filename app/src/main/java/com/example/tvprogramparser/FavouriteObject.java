@@ -8,6 +8,11 @@ import java.lang.ArrayIndexOutOfBoundsException;
 
 import java.lang.Thread;
 import java.lang.InterruptedException;
+import org.jsoup.Jsoup;
+import org.jsoup.select.Elements;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Document;
+import android.util.Log;
 
 // TODO: rewrite thread sections ('cause they are SOOOOO stupid, guys)
 public class FavouriteObject {
@@ -16,14 +21,16 @@ public class FavouriteObject {
     private static FavouriteObjectsDB.DefaultDb appDb;
     private static boolean isDbDefined = false;
 
-    private static void defineDb(Context context) {
+    public static void defineDb(Context context) {
+        if (isDbDefined)
+            return;
         appDb = Room.databaseBuilder(context, FavouriteObjectsDB.DefaultDb.class,
                 "defDb").build();
 
         // section 1
         Thread thread1 = new Thread(new Runnable() {
             @Override
-            public void run() {
+            public synchronized void run() {
                 FavouriteObjectsDB.ChannelsDao chanDao = appDb.channelsDao();
                 for (FavouriteObjectsDB.Channel ch: chanDao.getAll()) {
                     favouriteChannels.add(new Channel(ch.name, ch.link));
@@ -38,19 +45,10 @@ public class FavouriteObject {
 
         thread1.start();
 
-        try {
-            thread1.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         isDbDefined = true;
     }
 
     public static ArrayList<String> getArrayOfFavouriteChannels(Context context) {
-        if (!isDbDefined)
-            defineDb(context);
-
         ArrayList<String> channels = new ArrayList<>();
         for (Channel chan: favouriteChannels) {
             channels.add(chan.getName());
@@ -59,9 +57,6 @@ public class FavouriteObject {
     }
 
     public static ArrayList<String> getArrayOfFavouritePrograms(Context context) {
-        if (!isDbDefined)
-            defineDb(context);
-
         ArrayList<String> programs = new ArrayList<>();
         for (Program prog: favouritePrograms) {
             programs.add(prog.getName());
@@ -152,22 +147,73 @@ public class FavouriteObject {
 
     static void parseFavouriteProgram(String programName) {
         try {
-            addToFavouritePrograms(new Program(parseProgram(programName)));
+            addToFavouritePrograms(new Program(parseProgram(programName).split("    ")[1].trim()));
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
     }
 
     public static String parseProgram(String programName) {
-        return programName.split("\\(")[0].trim().split("    ")[1].trim();
+        return programName.split("\\(")[0].trim();
     }
 
     // TODO: reorganize favourite lists to boost this method (maybe to Decart tree)
-    public static boolean isProgramInFavourites(Program pr) {
+    public static boolean isProgramInFavourites(Context context, Program pr) {
+
         for (Program favouritePr: favouritePrograms) {
             if (pr.isEqual(favouritePr))
                 return true;
         }
         return false;
+    }
+
+    public static int dailyProgramChecker(final Context context) {
+        MainChannelsList.define();
+        Channel[] channelArray =  MainChannelsList.getChannelsList();
+
+        final ArrayList<Program> result = new ArrayList<>();
+
+        for (final Channel channel: channelArray) {
+
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public synchronized void run() {
+                    Document doc = null;
+                    try {
+                        doc = Jsoup.connect(TLS.MAIN_URL + channel.getLink()).get();
+                    } catch (java.io.IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    Elements firEls = null;
+                    try {
+                        firEls = doc.select(TLS.QUERY_1_3);
+                    } catch (java.lang.NullPointerException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    Elements secEls = null;
+                    try {
+                        secEls = doc.select(TLS.QUERY_1_2);
+                    } catch (java.lang.NullPointerException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    for (int i = 0; i < firEls.size(); i++) {
+                        Program curProg = new Program(
+                                FavouriteObject.parseProgram(firEls.get(i).ownText())
+                        );
+
+                        if (FavouriteObject.isProgramInFavourites(context, curProg)) {
+                            result.add(curProg);
+                        }
+                    }
+                }
+            });
+
+        }
+        return result.size();
     }
 }
