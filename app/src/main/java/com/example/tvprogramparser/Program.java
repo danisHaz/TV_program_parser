@@ -29,6 +29,10 @@ public class Program {
         this.id = (new HashMaster(programName)).getHash();
     }
 
+    public void updateTimeBegin(String timeBegin) {
+        this.timeBegin = timeBegin;
+    }
+
     public boolean isEqual(Program pr) {
         return (pr.getId() == this.id);
     }

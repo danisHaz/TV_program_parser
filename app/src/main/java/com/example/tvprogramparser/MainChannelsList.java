@@ -41,9 +41,9 @@ public class MainChannelsList {
         isDefined = true;
         Thread newThread = new Thread(new Runnable() {
             @Override
-            public synchronized void run() {
+            public void run() {
                 try {
-                    doc = Jsoup.connect(TLS.LOCAL_MAIN_URL).get();
+                    doc = Jsoup.connect(TLS.LOCAL_MAIN_URL).userAgent("Mozilla").get();
                 } catch (java.io.IOException e) {
                     e.printStackTrace();
                 }

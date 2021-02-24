@@ -8,9 +8,10 @@ import java.lang.ArrayIndexOutOfBoundsException;
 
 import java.lang.Thread;
 import java.lang.InterruptedException;
+import java.util.concurrent.TimeUnit;
+
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
-import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Document;
 import android.util.Log;
 
@@ -167,53 +168,67 @@ public class FavouriteObject {
         return false;
     }
 
-    public static int dailyProgramChecker(final Context context) {
-        MainChannelsList.define();
+    public static ArrayList<Program> dailyProgramChecker(final Context context) {
         Channel[] channelArray =  MainChannelsList.getChannelsList();
 
         final ArrayList<Program> result = new ArrayList<>();
 
-        for (final Channel channel: channelArray) {
+        final Document[] doc = new Document[1];
+        for (Channel channel: channelArray) {
 
+            final String mainLink = TLS.MAIN_URL + channel.getLink();
             Thread thread = new Thread(new Runnable() {
                 @Override
-                public synchronized void run() {
-                    Document doc = null;
+                public void run() {
                     try {
-                        doc = Jsoup.connect(TLS.MAIN_URL + channel.getLink()).get();
+                        doc[0] = Jsoup.connect(mainLink).get();
                     } catch (java.io.IOException e) {
                         e.printStackTrace();
                     }
-
-                    Elements firEls = null;
-                    try {
-                        firEls = doc.select(TLS.QUERY_1_3);
-                    } catch (java.lang.NullPointerException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-
-                    Elements secEls = null;
-                    try {
-                        secEls = doc.select(TLS.QUERY_1_2);
-                    } catch (java.lang.NullPointerException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-
-                    for (int i = 0; i < firEls.size(); i++) {
-                        Program curProg = new Program(
-                                FavouriteObject.parseProgram(firEls.get(i).ownText())
-                        );
-
-                        if (FavouriteObject.isProgramInFavourites(context, curProg)) {
-                            result.add(curProg);
-                        }
-                    }
                 }
             });
+            thread.start();
 
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            Elements firEls = null;
+            try {
+                firEls = doc[0].select(TLS.QUERY_1_3);
+            } catch (java.lang.NullPointerException e) {
+                e.printStackTrace();
+                break;
+            }
+
+            Elements secEls = null;
+            try {
+                secEls = doc[0].select(TLS.QUERY_1_2);
+            } catch (java.lang.NullPointerException e) {
+                e.printStackTrace();
+                break;
+            };
+
+            for (int i = 0; i < firEls.size(); i++) {
+
+                Program curProg = new Program(
+                        FavouriteObject.parseProgram(firEls.get(i).ownText())
+                );
+
+                if (FavouriteObject.isProgramInFavourites(context, curProg)) {
+                    result.add(new Program(firEls.get(i).ownText(),
+                            secEls.get(i).ownText()));
+                }
+            }
+
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-        return result.size();
+        return result;
     }
 }

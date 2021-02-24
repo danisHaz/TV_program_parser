@@ -23,14 +23,15 @@ public class NotificationBuilder {
     }
 
     public void setNotification() {
-        Notification.Builder builder = new Notification.Builder(context, "Channel id")
+        Notification.Builder builder = new Notification.Builder(context, channelId)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(context.getString(R.string.contentTitle))
-                .setContentText("Some text here");
+                .setContentText(contentText)
+                .setStyle(new Notification.BigTextStyle().bigText(contentText));
 
         Notification notification = builder.build();
 
-        NotificationChannel channel = new NotificationChannel("Channel id", "Channel name",
+        NotificationChannel channel = new NotificationChannel(channelId, channelName,
                 NotificationManager.IMPORTANCE_DEFAULT);
         channel.setDescription("Channel description");
 

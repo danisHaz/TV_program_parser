@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ArrayAdapter;
 import android.view.View;
+import android.util.Log;
 
 import java.lang.NullPointerException;
 import java.lang.Thread;
@@ -44,6 +45,7 @@ public class ManageFavouritesActivity extends AppCompatActivity {
             return;
 
         final String link = TLS.MAIN_URL + ch.getLink();
+        final boolean[] bool = new boolean[1];
 
         Thread newThread = new Thread(new Runnable() {
             @Override
@@ -52,6 +54,7 @@ public class ManageFavouritesActivity extends AppCompatActivity {
                     doc = Jsoup.connect(link).get();
                 } catch (IOException e) {
                     e.printStackTrace();
+                    bool[0] = true;
                 }
             }
         });
@@ -61,6 +64,10 @@ public class ManageFavouritesActivity extends AppCompatActivity {
             newThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+
+        if (bool[0]) {
+            return;
         }
 
         Elements fir = doc.select(TLS.QUERY_1_3);
