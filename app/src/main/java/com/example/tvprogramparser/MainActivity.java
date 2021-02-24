@@ -2,18 +2,9 @@ package com.example.tvprogramparser;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
-import android.content.Intent;
-import android.widget.Toast;
-import android.content.Context;
 import android.util.Log;
-
-import java.lang.Thread;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
         FavouriteObject.defineDb(this);
         MainChannelsList.define();
 
-        // TODO: provide logic for scheduleJob
         RestartService.scheduleJob(this);
     }
 

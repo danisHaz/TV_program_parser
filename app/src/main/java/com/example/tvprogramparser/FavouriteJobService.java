@@ -3,7 +3,6 @@ package com.example.tvprogramparser;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.os.IBinder;
-import android.widget.Toast;
 import java.util.ArrayList;
 
 public class FavouriteJobService extends JobService {

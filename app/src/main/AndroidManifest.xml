@@ -18,16 +18,11 @@
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE"/>
-        <service
-            android:name=".CheckFavouritesIntentService"
-            android:exported="false" />
 
         <activity
             android:name=".ManageFavouritesActivity"
             android:label="@string/manageFavourites" />
-        <activity
-            android:name=".WatchProgramActivity"
-            android:label="@string/watchProgram" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,16 +31,6 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name=".RestartService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
-                <action android:name="com.example.action.ACTION_DETECTED" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

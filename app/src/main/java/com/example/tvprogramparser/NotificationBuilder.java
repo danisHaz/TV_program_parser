@@ -24,7 +24,7 @@ public class NotificationBuilder {
 
     public void setNotification() {
         Notification.Builder builder = new Notification.Builder(context, channelId)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(smallIcon)
                 .setContentTitle(context.getString(R.string.contentTitle))
                 .setContentText(contentText)
                 .setStyle(new Notification.BigTextStyle().bigText(contentText));

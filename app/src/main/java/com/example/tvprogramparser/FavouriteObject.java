@@ -74,7 +74,7 @@ public class FavouriteObject {
         // section 2
         Thread thread2 = new Thread(new Runnable() {
             @Override
-            public void run() {
+            public synchronized void run() {
                 FavouriteObjectsDB.ChannelsDao chDao = appDb.channelsDao();
                 chDao.insertChannel(new FavouriteObjectsDB.Channel(nId, nName, nLink));
             }
@@ -92,14 +92,13 @@ public class FavouriteObject {
         // section 3
         Thread thread2 = new Thread(new Runnable() {
             @Override
-            public void run() {
+            public synchronized void run() {
                 FavouriteObjectsDB.ProgramsDao progDao = appDb.programsDao();
                 progDao.insertProgram(new FavouriteObjectsDB.Program(nId, nName));
             }
         });
 
         thread2.start();
-
 
     }
 
@@ -113,7 +112,7 @@ public class FavouriteObject {
 
             Thread thready = new Thread(new Runnable() {
                 @Override
-                public void run() {
+                public synchronized void run() {
                     FavouriteObjectsDB.ChannelsDao chDao = appDb.channelsDao();
                     chDao.delete(new FavouriteObjectsDB.Channel(nId, nName, nLink));
                 }
@@ -134,7 +133,7 @@ public class FavouriteObject {
 
             Thread thready = new Thread(new Runnable() {
                 @Override
-                public void run() {
+                public synchronized void run() {
                     FavouriteObjectsDB.ProgramsDao prDao = appDb.programsDao();
                     prDao.delete(new FavouriteObjectsDB.Program(nId, nName));
                 }
