@@ -1,10 +1,12 @@
 package com.example.tvprogramparser;
 
+import android.annotation.SuppressLint;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.os.IBinder;
 import java.util.ArrayList;
 
+@SuppressLint("SpecifyJobSchedulerIdRange")
 public class FavouriteJobService extends JobService {
     public FavouriteJobService() {
     }
@@ -32,7 +34,7 @@ public class FavouriteJobService extends JobService {
 
         thread.start();
 
-        return false;
+        return true;
     }
 
     @Override

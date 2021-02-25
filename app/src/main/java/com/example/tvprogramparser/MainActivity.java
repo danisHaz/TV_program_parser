@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         FavouriteObject.defineDb(this);
         MainChannelsList.define();
 
-        RestartService.scheduleJob(this);
+        RestartService.scheduleWork(this);
     }
 
     // TODO: rewrite createInstance

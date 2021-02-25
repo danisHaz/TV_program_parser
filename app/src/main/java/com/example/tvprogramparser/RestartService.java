@@ -7,8 +7,15 @@ import android.app.job.JobInfo;
 import android.util.Log;
 //import android.os.PersistableBundle;
 
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkerParameters;
+import androidx.work.WorkManager;
+
+import java.util.concurrent.TimeUnit;
+
 public class RestartService {
     private static int currJobNum = 1;
+    private static int repeatIntervalInHours = 7;
 
     public RestartService() {}
 
@@ -29,5 +36,12 @@ public class RestartService {
         } else {
             Log.d("tag", "failure");
         }
+    }
+
+    public static void scheduleWork(Context context) {
+        WorkManager manager = WorkManager.getInstance(context);
+        manager.enqueue(new PeriodicWorkRequest.Builder(FavouriteObjectCheckingWork.class,
+                repeatIntervalInHours,
+                TimeUnit.HOURS).build());
     }
 }
