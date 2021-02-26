@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.util.Log;
+import android.content.ComponentName;
+import android.content.pm.PackageManager;
 import android.content.SharedPreferences;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,8 +25,15 @@ public class MainActivity extends AppCompatActivity {
         MainChannelsList.define();
 
         SharedPreferences prefs = getSharedPreferences(TLS.APPLICATION_PREFERENCES, MODE_PRIVATE);
-        if (prefs.getInt(TLS.BACKGROUND_REQUEST_ID, 0) == 0)
-            RestartService.scheduleWork(this);
+        if (prefs.getInt(TLS.BACKGROUND_REQUEST_ID, 1) == 1) {
+            RestartService.scheduleAlarm(this);
+            ComponentName receiver = new ComponentName(this, RestartService.class);
+            PackageManager pm = this.getPackageManager();
+
+            pm.setComponentEnabledSetting(receiver,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP);
+        }
     }
 
     // TODO: rewrite createInstance

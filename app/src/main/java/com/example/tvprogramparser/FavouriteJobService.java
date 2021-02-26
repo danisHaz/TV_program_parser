@@ -4,6 +4,12 @@ import android.annotation.SuppressLint;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.os.IBinder;
+
+import com.example.tvprogramparser.FavouriteObject;
+import com.example.tvprogramparser.NotificationBuilder;
+import com.example.tvprogramparser.Program;
+import com.example.tvprogramparser.R;
+
 import java.util.ArrayList;
 
 @SuppressLint("SpecifyJobSchedulerIdRange")
