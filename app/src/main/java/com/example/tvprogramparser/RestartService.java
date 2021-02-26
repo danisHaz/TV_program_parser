@@ -4,18 +4,21 @@ import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 import android.app.job.JobInfo;
+import android.content.SharedPreferences;
 import android.util.Log;
 //import android.os.PersistableBundle;
 
+import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkerParameters;
+import androidx.work.WorkRequest;
 import androidx.work.WorkManager;
+import androidx.work.Constraints;
 
 import java.util.concurrent.TimeUnit;
 
 public class RestartService {
     private static int currJobNum = 1;
-    private static int repeatIntervalInHours = 7;
+    private static int repeatIntervalInHours = 1;
 
     public RestartService() {}
 
@@ -40,8 +43,24 @@ public class RestartService {
 
     public static void scheduleWork(Context context) {
         WorkManager manager = WorkManager.getInstance(context);
-        manager.enqueue(new PeriodicWorkRequest.Builder(FavouriteObjectCheckingWork.class,
+
+        Constraints constrs = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresBatteryNotLow(false)
+                .setRequiresCharging(false)
+                .build();
+
+        WorkRequest request = new PeriodicWorkRequest.Builder(FavouriteObjectCheckingWork.class,
                 repeatIntervalInHours,
-                TimeUnit.HOURS).build());
+                TimeUnit.HOURS)
+                .setConstraints(constrs)
+                .build();
+
+        manager.enqueue(request);
+        SharedPreferences.Editor prefs = context.getSharedPreferences(TLS.APPLICATION_PREFERENCES,
+                Context.MODE_PRIVATE).edit();
+        prefs.putInt(TLS.BACKGROUND_REQUEST_ID, 1);
+
+        prefs.apply();
     }
 }

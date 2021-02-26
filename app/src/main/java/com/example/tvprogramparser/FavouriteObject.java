@@ -3,6 +3,7 @@ package com.example.tvprogramparser;
 import androidx.room.Room;
 import android.content.Context;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.lang.ArrayIndexOutOfBoundsException;
 
@@ -167,7 +168,7 @@ public class FavouriteObject {
         return false;
     }
 
-    public static ArrayList<Program> dailyProgramChecker(final Context context) {
+    public static ArrayList<Program> dailyProgramChecker(final Context context) throws java.io.IOException {
         Channel[] channelArray =  MainChannelsList.getChannelsList();
 
         final ArrayList<Program> result = new ArrayList<>();
@@ -183,6 +184,7 @@ public class FavouriteObject {
                         doc[0] = Jsoup.connect(mainLink).get();
                     } catch (java.io.IOException e) {
                         e.printStackTrace();
+                        doc[0] = null;
                     }
                 }
             });
@@ -193,6 +195,9 @@ public class FavouriteObject {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+            if (doc[0] == null)
+                throw new IOException("BAD INTERNET CONNECTION");
 
             Elements firEls = null;
             try {

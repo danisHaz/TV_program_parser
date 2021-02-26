@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.util.Log;
+import android.content.SharedPreferences;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,7 +22,9 @@ public class MainActivity extends AppCompatActivity {
         FavouriteObject.defineDb(this);
         MainChannelsList.define();
 
-        RestartService.scheduleWork(this);
+        SharedPreferences prefs = getSharedPreferences(TLS.APPLICATION_PREFERENCES, MODE_PRIVATE);
+        if (prefs.getInt(TLS.BACKGROUND_REQUEST_ID, 0) == 0)
+            RestartService.scheduleWork(this);
     }
 
     // TODO: rewrite createInstance
