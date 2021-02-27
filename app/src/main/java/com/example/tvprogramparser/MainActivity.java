@@ -8,6 +8,7 @@ import android.util.Log;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,13 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences(TLS.APPLICATION_PREFERENCES, MODE_PRIVATE);
         if (prefs.getInt(TLS.BACKGROUND_REQUEST_ID, 1) == 1) {
-            RestartService.scheduleAlarm(this);
-            ComponentName receiver = new ComponentName(this, RestartService.class);
-            PackageManager pm = this.getPackageManager();
 
-            pm.setComponentEnabledSetting(receiver,
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                    PackageManager.DONT_KILL_APP);
+            RestartService.scheduleAlarm(this);
         }
     }
 
