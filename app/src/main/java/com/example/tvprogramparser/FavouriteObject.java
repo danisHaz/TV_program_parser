@@ -160,7 +160,6 @@ public class FavouriteObject {
 
     // TODO: reorganize favourite lists to boost this method (maybe to Decart tree)
     public static boolean isProgramInFavourites(Context context, Program pr) {
-
         for (Program favouritePr: favouritePrograms) {
             if (pr.isEqual(favouritePr))
                 return true;
@@ -169,6 +168,10 @@ public class FavouriteObject {
     }
 
     public static ArrayList<Program> dailyProgramChecker(final Context context) throws java.io.IOException {
+        // if works in the background
+        MainChannelsList.define();
+        FavouriteObject.defineDb(context);
+        // ----
         Channel[] channelArray =  MainChannelsList.getChannelsList();
 
         final ArrayList<Program> result = new ArrayList<>();

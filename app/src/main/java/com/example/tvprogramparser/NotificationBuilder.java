@@ -11,7 +11,7 @@ public class NotificationBuilder {
     private String contentText;
     private String channelId;
     private String channelName;
-    private static int notificationId;
+    private static int notificationId = 0;
 
     NotificationBuilder(Context context, int smallIcon, String contentText,
                         String channelId, String channelName) {

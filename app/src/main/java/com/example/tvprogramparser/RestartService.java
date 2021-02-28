@@ -13,10 +13,9 @@ import android.util.Log;
 import android.widget.Toast;
 //import android.os.PersistableBundle;
 
-import androidx.work.ListenableWorker;
+import androidx.work.ExistingWorkPolicy;
 import androidx.work.NetworkType;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkRequest;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.Constraints;
 
@@ -28,6 +27,7 @@ import java.lang.Thread;
 public class RestartService extends BroadcastReceiver {
     private static int currJobNum = 1;
     private static int repeatIntervalInHours = 1;
+    private static String workTag = "com.example.tvprogramparser.workTag";
 
     public RestartService() {}
 
@@ -43,38 +43,7 @@ public class RestartService extends BroadcastReceiver {
             scheduleAlarm(context);
         } else if (intent.getAction().equals(TLS.ACTION_PERFORM_FAVOURITE)) {
 
-//            NotificationBuilder builder = new NotificationBuilder(context,
-//                    R.mipmap.ic_launcher, "It works, shitty shit", "ChannelIDEBoy",
-//                    "ChannelNameEBoy");
-//            builder.setNotification();
             scheduleWork(context);
-
-//            Thread thread = new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    ArrayList<Program> programList = new ArrayList<>();
-//                    try {
-//                        programList = FavouriteObject.dailyProgramChecker(context);
-//                    } catch (java.io.IOException e) {
-//                        e.printStackTrace();
-//                        return;
-//                    }
-//                    for (int i = 0; i < programList.size(); i++) {
-//                        String channelId = "CHANNEL_ID_" + String.valueOf(i);
-//                        String channelName = "CHANNEL_NAME_" + String.valueOf(i);
-//                        String contentText = programList.get(i).getName() + " at " + programList.get(i).getTimeBegin();
-//                        NotificationBuilder builder = new NotificationBuilder(context,
-//                                R.mipmap.ic_launcher,
-//                                contentText,
-//                                channelId,
-//                                channelName
-//                        );
-//                        builder.setNotification();
-//                    }
-//                }
-//            });
-//
-//            thread.start();
         }
     }
 
@@ -106,13 +75,15 @@ public class RestartService extends BroadcastReceiver {
                 .setRequiresCharging(false)
                 .build();
 
-        WorkRequest request = new PeriodicWorkRequest.Builder(FavouriteObjectCheckingWork.class,
-                repeatIntervalInHours,
-                TimeUnit.HOURS)
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(FavouriteObjectCheckingWork.class)
+                .addTag(workTag)
                 .setConstraints(constrs)
                 .build();
 
-        manager.enqueue(request);
+        manager.enqueueUniqueWork("checkFavourites",
+                ExistingWorkPolicy.REPLACE,
+                request);
+
         SharedPreferences.Editor prefs = context.getSharedPreferences(TLS.APPLICATION_PREFERENCES,
                 Context.MODE_PRIVATE).edit();
         prefs.putInt(TLS.BACKGROUND_REQUEST_ID, 1);
@@ -120,8 +91,37 @@ public class RestartService extends BroadcastReceiver {
         prefs.apply();
     }
 
-    public static void testingScheduleAlarm(Context context) {
-        AlarmManager mng = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+    public static void testScheduleThread(final Context context) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<Program> programList = new ArrayList<>();
+                try {
+                    programList = FavouriteObject.dailyProgramChecker(context);
+                } catch (java.io.IOException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                for (int i = 0; i < programList.size(); i++) {
+                    String channelId = "CHANNEL_ID_" + String.valueOf(i);
+                    String channelName = "CHANNEL_NAME_" + String.valueOf(i);
+                    String contentText = programList.get(i).getName() + " at " + programList.get(i).getTimeBegin();
+                    NotificationBuilder builder = new NotificationBuilder(context,
+                            R.mipmap.ic_launcher,
+                            contentText,
+                            channelId,
+                            channelName
+                    );
+                    builder.setNotification();
+                }
+            }
+        });
+
+        thread.start();
+        NotificationBuilder builder = new NotificationBuilder(context,
+                R.mipmap.ic_launcher, "It works, shitty shit", "ChannelIDEBoy",
+                "ChannelNameEBoy");
+        builder.setNotification();
     }
 
     public static void scheduleAlarm(Context context) {
@@ -138,14 +138,13 @@ public class RestartService extends BroadcastReceiver {
 
         try {
             manager.cancel(pendingIntent);
-            Toast.makeText(context, "manager found context", Toast.LENGTH_LONG).show();
         } catch (java.lang.Exception e) {
             e.printStackTrace();
         }
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 19);
-        calendar.set(Calendar.MINUTE, 42);
+        calendar.set(Calendar.HOUR_OF_DAY, 7);
+        calendar.set(Calendar.MINUTE, 30);
 
         SharedPreferences.Editor prefs = context.getSharedPreferences(TLS.APPLICATION_PREFERENCES,
                 Context.MODE_PRIVATE).edit();
@@ -155,7 +154,7 @@ public class RestartService extends BroadcastReceiver {
 
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(),
-                TimeUnit.MINUTES.toMillis(perfectInterval), pendingIntent);
+                AlarmManager.INTERVAL_HALF_DAY, pendingIntent);
 
         Log.d("Eboy", "Eboyyyyy");
     }

@@ -6,6 +6,7 @@ import androidx.work.ListenableWorker;
 import androidx.work.WorkerParameters;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,7 @@ public class FavouriteObjectCheckingWork extends Worker {
         } catch (java.io.IOException e) {
             return ListenableWorker.Result.failure();
         }
+//        Log.d("SuperTag", String.valueOf(programList.size()));
         for (int i = 0; i < programList.size(); i++) {
             String channelId = "CHANNEL_ID_" + String.valueOf(i);
             String channelName = "CHANNEL_NAME_" + String.valueOf(i);
