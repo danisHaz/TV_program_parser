@@ -1,10 +1,12 @@
-package com.example.tvprogramparser;
+package com.example.tvprogramparser.Components;
+
+import android.util.Log;
+
+import com.example.tvprogramparser.TLS;
 
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Document;
-
-import java.util.ArrayList;
 
 public class MainChannelsList {
     private static Channel[] channelsList;
@@ -37,8 +39,11 @@ public class MainChannelsList {
         return channelsArray;
     }
 
+
+    // todo: cache it!
     private static void receiveAllData() {
         isDefined = true;
+
         Thread newThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -47,20 +52,22 @@ public class MainChannelsList {
                 } catch (java.io.IOException e) {
                     e.printStackTrace();
                 }
+                Elements fir = doc.select(TLS.MAIN_QUERY);
+                Elements sec = doc.select(TLS.QUERY_1_1);
+
+                channelsList = getChannelsArray(fir, sec);
+
+                try {
+                    WorkDoneListener.complete(TLS.GET_CHANNELS_LIST, OnCompleteListener.Result.SUCCESS);
+                    WorkDoneListener.complete(TLS.DAILY_CHECKER_TAG, OnCompleteListener.Result.SUCCESS);
+                } catch (NullPointerException e) {
+                    Log.e("MainChannelsList", "Listener not found");
+                }
             }
         });
 
+        newThread.setDaemon(true);
+
         newThread.start();
-
-        try {
-            newThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        Elements fir = doc.select(TLS.MAIN_QUERY);
-        Elements sec = doc.select(TLS.QUERY_1_1);
-
-        channelsList = getChannelsArray(fir, sec);
     }
 }

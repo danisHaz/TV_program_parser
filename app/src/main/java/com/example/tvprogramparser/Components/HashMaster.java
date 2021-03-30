@@ -1,4 +1,4 @@
-package com.example.tvprogramparser;
+package com.example.tvprogramparser.Components;
 
 public class HashMaster {
     private int hash;

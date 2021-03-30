@@ -1,14 +1,20 @@
-package com.example.tvprogramparser;
+package com.example.tvprogramparser.Ui.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import com.example.tvprogramparser.Components.FavouriteObject;
+import com.example.tvprogramparser.Components.OnCompleteListener;
+import com.example.tvprogramparser.Components.WorkDoneListener;
+import com.example.tvprogramparser.R;
+import com.example.tvprogramparser.TLS;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -18,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import java.lang.ArrayIndexOutOfBoundsException;
 
 public class SmallMenuFragment extends BottomSheetDialogFragment {
+    public static SmallMenuFragment local;
 
     /**
      * Remember providing this method with specific Bundle:
@@ -27,7 +34,16 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
      * TLS.CHOSEN_LAYOUT: String
      */
     public static SmallMenuFragment createInstance(Bundle savedInfo) {
-        SmallMenuFragment smallMenu = new SmallMenuFragment();
+        SmallMenuFragment smallMenu = local;
+
+        if (smallMenu == null) {
+            synchronized (SmallMenuFragment.class) {
+                smallMenu = local;
+                if (smallMenu == null)
+                    smallMenu = local = new SmallMenuFragment();
+            }
+        }
+
         smallMenu.setArguments(savedInfo);
         return smallMenu;
     }
@@ -54,6 +70,12 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
         recView.setAdapter(new ItemAdapter(getArguments()));
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        local = null;
+    }
+
     private static class CustomViewHolder extends RecyclerView.ViewHolder {
         final TextView textCell;
 
@@ -71,6 +93,7 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
         private String chosenObjectName;
         private String chosenLayout;
         private int chosenPos;
+        private Context upperContext;
 
         ItemAdapter(Bundle args) {
             this.argCount = args.getInt(TLS.ARG_COUNT);
@@ -84,6 +107,7 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
         @Override
         public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup container, int viewType) {
             this.fragmentOptions =  container.getContext().getResources().getStringArray(resourcesOptionsId);
+            upperContext = container.getContext();
             return new CustomViewHolder(LayoutInflater.from(container.getContext()), container);
         }
 
@@ -95,8 +119,6 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
                 e.printStackTrace();
             }
 
-            final int position = pos;
-
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -106,24 +128,46 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
                         deleteFromFavouritePrograms();
                     else if (chosenLayout.equals(TLS.DELETE_FROM_FAVOURITE_CHANNELS))
                         deleteFromFavouriteChannels();
+
+                    try {
+                        local.onStop();
+                        local.onDestroy();
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 private void addFavouriteProgramMethod() {
                     // TODO: add a Toast to notify user about successful add to favourites
-                    if (position == 0) {
-                        FavouriteObject.parseFavouriteProgram(chosenObjectName);
+                    if (pos == 0) {
+                        FavouriteObject.parseFavouriteProgram(chosenObjectName, upperContext);
+                    }
+                    try {
+                        WorkDoneListener.complete(TLS.ADD_TO_FAVOURITES, OnCompleteListener.Result.SUCCESS);
+                    } catch (NullPointerException e) {
+                        // pass
                     }
                 }
 
                 private void deleteFromFavouritePrograms() {
-                    if (position == 0) {
-                        FavouriteObject.deleteFromFavouritePrograms(chosenPos);
+                    if (pos == 0) {
+                        FavouriteObject.deleteFromFavouritePrograms(chosenPos, upperContext);
+                    }
+                    try {
+                        WorkDoneListener.complete(TLS.DELETE_FROM_FAVOURITE_PROGRAMS, OnCompleteListener.Result.SUCCESS);
+                    } catch (NullPointerException e) {
+                        // pass
                     }
                 }
 
                 private void deleteFromFavouriteChannels() {
-                    if (position == 0) {
-                        FavouriteObject.deleteFromFavouriteChannels(chosenPos);
+                    if (pos == 0) {
+                        FavouriteObject.deleteFromFavouriteChannels(chosenPos, upperContext);
+                    }
+                    try {
+                        WorkDoneListener.complete(TLS.DELETE_FROM_FAVOURITE_CHANNELS, OnCompleteListener.Result.SUCCESS);
+                    } catch (NullPointerException e) {
+                        // pass
                     }
                 }
             });

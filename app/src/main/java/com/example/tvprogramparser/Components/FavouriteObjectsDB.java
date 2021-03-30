@@ -1,4 +1,4 @@
-package com.example.tvprogramparser;
+package com.example.tvprogramparser.Components;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Database;
@@ -8,12 +8,56 @@ import androidx.room.Entity;
 import androidx.room.Insert;
 import androidx.room.PrimaryKey;
 import androidx.room.Query;
+import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
+
 public class FavouriteObjectsDB {
+    private static volatile FavouriteObjectsDB objectsDB;
+    private DefaultDb myDB;
+
+    public FavouriteObjectsDB(Context context) {
+        myDB = Room.databaseBuilder(context, FavouriteObjectsDB.DefaultDb.class,
+                "defDb").build();
+
+        Thread thread1 = new Thread(new Runnable() {
+            @Override
+            public synchronized void run() {
+                FavouriteObjectsDB.ChannelsDao chanDao = myDB.channelsDao();
+                for (FavouriteObjectsDB.Channel ch: chanDao.getAll()) {
+                    FavouriteObject.favouriteChannels.add(new com.example.tvprogramparser.Components.Channel(ch.name, ch.link));
+                }
+
+                FavouriteObjectsDB.ProgramsDao progDao = myDB.programsDao();
+                for (FavouriteObjectsDB.Program prog: progDao.getAll()) {
+                    FavouriteObject.favouritePrograms.add(new com.example.tvprogramparser.Components.Program(prog.name));
+                }
+            }
+        });
+
+        thread1.start();
+    }
+
+    public static FavouriteObjectsDB createInstance(Context context) {
+        FavouriteObjectsDB localDB = objectsDB;
+        if (localDB == null) {
+            synchronized (FavouriteObjectsDB.class) {
+                localDB = objectsDB;
+                if (localDB == null) {
+                    objectsDB = localDB = new FavouriteObjectsDB(context);
+                }
+            }
+        }
+
+        return localDB;
+    }
+
+    public DefaultDb getDB() {
+        return myDB;
+    }
     @Entity
     public static class Channel {
         @PrimaryKey

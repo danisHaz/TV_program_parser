@@ -1,4 +1,4 @@
-package com.example.tvprogramparser;
+package com.example.tvprogramparser.Ui.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,7 +10,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ArrayAdapter;
 import android.view.View;
-import android.util.Log;
+
+import com.example.tvprogramparser.Components.Channel;
+import com.example.tvprogramparser.Components.OnCompleteListener;
+import com.example.tvprogramparser.Components.WorkDoneListener;
+import com.example.tvprogramparser.R;
+import com.example.tvprogramparser.Ui.Fragments.SmallMenuFragment;
+import com.example.tvprogramparser.TLS;
 
 import java.lang.NullPointerException;
 import java.lang.Thread;
@@ -97,6 +103,13 @@ public class ManageFavouritesActivity extends AppCompatActivity {
                 fragmentInfo.putInt(TLS.CHOSEN_POSITION, pos);
 
                 SmallMenuFragment smallMenu = SmallMenuFragment.createInstance(fragmentInfo);
+                WorkDoneListener.setNewListener(new OnCompleteListener() {
+                    @Override
+                    public void doWork() {
+                        Toast.makeText(getApplicationContext(), "Program is set to favorites",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }.setTag(TLS.ADD_TO_FAVOURITES));
                 smallMenu.show(getSupportFragmentManager(), "smallMenu");
             }
         });

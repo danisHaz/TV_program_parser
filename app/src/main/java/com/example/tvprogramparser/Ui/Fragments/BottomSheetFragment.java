@@ -1,9 +1,7 @@
-package com.example.tvprogramparser;
+package com.example.tvprogramparser.Ui.Fragments;
 
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -15,16 +13,27 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.content.Intent;
 
-import org.jsoup.Jsoup;
+import com.example.tvprogramparser.Components.Channel;
+import com.example.tvprogramparser.Components.MainChannelsList;
+import com.example.tvprogramparser.R;
+import com.example.tvprogramparser.Ui.Activities.ManageFavouritesActivity;
+
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 
 public class BottomSheetFragment extends Fragment {
     private static Document doc = null;
+    private static BottomSheetFragment local;
 
     // TODO: rewrite createInstance
     public static BottomSheetFragment createInstance() {
-        BottomSheetFragment newFragment = new BottomSheetFragment();
+        BottomSheetFragment newFragment = local;
+        if (newFragment == null)  {
+            synchronized (BottomSheetFragment.class) {
+                newFragment = local;
+                if (newFragment == null)
+                    newFragment = local = new BottomSheetFragment();
+            }
+        }
         return newFragment;
     }
 
@@ -52,10 +61,9 @@ public class BottomSheetFragment extends Fragment {
         View view = getView();
         if (view != null) {
 
-            MainChannelsList.define();
             final Channel[] ar = MainChannelsList.getChannelsList();
 
-            ListView list = (ListView)view.findViewById(R.id.list);
+            ListView list = (ListView) view.findViewById(R.id.list);
 
             // TODO: handle NullPointerException from getActivity()
             ArrayAdapter<String> arr = new ArrayAdapter<String>(getActivity(),

@@ -15,16 +15,18 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <service
-            android:name=".FavouriteJobService"
+            android:name=".Background.FavouriteJobService"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE"/>
 
         <activity
-            android:name=".ManageFavouritesActivity"
-            android:label="@string/manageFavourites" />
+            android:name=".Ui.Activities.ManageFavouritesActivity"
+            android:label="@string/manageFavourites"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".Ui.Activities.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,7 +34,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".RestartService"
+        <receiver android:name=".Background.RestartService"
             android:exported="false"
             android:enabled="true">
             <intent-filter>

@@ -1,4 +1,4 @@
-package com.example.tvprogramparser;
+package com.example.tvprogramparser.Background;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -10,8 +10,6 @@ import android.content.Intent;
 import android.app.job.JobInfo;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
-//import android.os.PersistableBundle;
 
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.NetworkType;
@@ -19,10 +17,10 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.Constraints;
 
-import java.util.ArrayList;
+import com.example.tvprogramparser.R;
+import com.example.tvprogramparser.TLS;
+
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
-import java.lang.Thread;
 
 public class RestartService extends BroadcastReceiver {
     private static int currJobNum = 1;
@@ -42,14 +40,12 @@ public class RestartService extends BroadcastReceiver {
 
             scheduleAlarm(context);
         } else if (intent.getAction().equals(TLS.ACTION_PERFORM_FAVOURITE)) {
-
             scheduleWork(context);
         }
     }
 
     public static void scheduleJob(Context context) {
         ComponentName jobService = new ComponentName(context, FavouriteJobService.class);
-//        PersistableBundle bundle = new PersistableBundle();
 
         JobInfo.Builder jobBuilder = new JobInfo.Builder(currJobNum++, jobService)
                 .setRequiresCharging(false)
@@ -86,42 +82,9 @@ public class RestartService extends BroadcastReceiver {
 
         SharedPreferences.Editor prefs = context.getSharedPreferences(TLS.APPLICATION_PREFERENCES,
                 Context.MODE_PRIVATE).edit();
-        prefs.putInt(TLS.BACKGROUND_REQUEST_ID, 1);
+        prefs.putInt(TLS.BACKGROUND_REQUEST_ID, 0);
 
         prefs.apply();
-    }
-
-    public static void testScheduleThread(final Context context) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ArrayList<Program> programList = new ArrayList<>();
-                try {
-                    programList = FavouriteObject.dailyProgramChecker(context);
-                } catch (java.io.IOException e) {
-                    e.printStackTrace();
-                    return;
-                }
-                for (int i = 0; i < programList.size(); i++) {
-                    String channelId = "CHANNEL_ID_" + String.valueOf(i);
-                    String channelName = "CHANNEL_NAME_" + String.valueOf(i);
-                    String contentText = programList.get(i).getName() + " at " + programList.get(i).getTimeBegin();
-                    NotificationBuilder builder = new NotificationBuilder(context,
-                            R.mipmap.ic_launcher,
-                            contentText,
-                            channelId,
-                            channelName
-                    );
-                    builder.setNotification();
-                }
-            }
-        });
-
-        thread.start();
-        NotificationBuilder builder = new NotificationBuilder(context,
-                R.mipmap.ic_launcher, "It works, shitty shit", "ChannelIDEBoy",
-                "ChannelNameEBoy");
-        builder.setNotification();
     }
 
     public static void scheduleAlarm(Context context) {
@@ -149,7 +112,7 @@ public class RestartService extends BroadcastReceiver {
         SharedPreferences.Editor prefs = context.getSharedPreferences(TLS.APPLICATION_PREFERENCES,
                 Context.MODE_PRIVATE).edit();
 
-        prefs.putInt(TLS.BACKGROUND_REQUEST_ID, 1);
+        prefs.putInt(TLS.BACKGROUND_REQUEST_ID, 0);
         prefs.apply();
 
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,

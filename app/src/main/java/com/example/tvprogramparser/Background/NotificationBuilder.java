@@ -1,9 +1,11 @@
-package com.example.tvprogramparser;
+package com.example.tvprogramparser.Background;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+
+import com.example.tvprogramparser.R;
 
 public class NotificationBuilder {
     private Context context;

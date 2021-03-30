@@ -1,4 +1,4 @@
-package com.example.tvprogramparser;
+package com.example.tvprogramparser.Components;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ public class Channel implements Serializable {
     private boolean favourite;
     private int id;
 
-    Channel(String name, String link) {
+    public Channel(String name, String link) {
         this.name = name;
         this.link = link;
         this.favourite = false;
