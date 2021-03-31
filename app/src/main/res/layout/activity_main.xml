@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".Ui.Activities.MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/frag"

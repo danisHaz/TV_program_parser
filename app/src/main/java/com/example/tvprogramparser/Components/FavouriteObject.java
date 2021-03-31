@@ -1,7 +1,8 @@
-package com.example.tvprogramparser;
+package com.example.tvprogramparser.Components;
 
-import androidx.room.Room;
 import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,41 +15,13 @@ import java.util.concurrent.TimeUnit;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Document;
-import android.util.Log;
+
+import com.example.tvprogramparser.TLS;
 
 // TODO: rewrite thread sections ('cause they are SOOOOO stupid, guys)
 public class FavouriteObject {
-    private static ArrayList<Channel> favouriteChannels = new ArrayList<Channel>();
-    private static ArrayList<Program> favouritePrograms = new ArrayList<Program>();
-    private static FavouriteObjectsDB.DefaultDb appDb;
-    private static boolean isDbDefined = false;
-
-    public static void defineDb(Context context) {
-        if (isDbDefined)
-            return;
-        appDb = Room.databaseBuilder(context, FavouriteObjectsDB.DefaultDb.class,
-                "defDb").build();
-
-        // section 1
-        Thread thread1 = new Thread(new Runnable() {
-            @Override
-            public synchronized void run() {
-                FavouriteObjectsDB.ChannelsDao chanDao = appDb.channelsDao();
-                for (FavouriteObjectsDB.Channel ch: chanDao.getAll()) {
-                    favouriteChannels.add(new Channel(ch.name, ch.link));
-                }
-
-                FavouriteObjectsDB.ProgramsDao progDao = appDb.programsDao();
-                for (FavouriteObjectsDB.Program prog: progDao.getAll()) {
-                    favouritePrograms.add(new Program(prog.name));
-                }
-            }
-        });
-
-        thread1.start();
-
-        isDbDefined = true;
-    }
+    public static ArrayList<Channel> favouriteChannels = new ArrayList<Channel>();
+    public static ArrayList<Program> favouritePrograms = new ArrayList<Program>();
 
     public static ArrayList<String> getArrayOfFavouriteChannels(Context context) {
         ArrayList<String> channels = new ArrayList<>();
@@ -66,7 +39,7 @@ public class FavouriteObject {
         return programs;
     }
 
-    public static void addToFavouriteChannels(Channel ch) {
+    public static void addToFavouriteChannels(Channel ch, final Context context) {
         favouriteChannels.add(ch);
         final int nId = ch.getId();
         final String nName = ch.getName();
@@ -76,7 +49,7 @@ public class FavouriteObject {
         Thread thread2 = new Thread(new Runnable() {
             @Override
             public synchronized void run() {
-                FavouriteObjectsDB.ChannelsDao chDao = appDb.channelsDao();
+                FavouriteObjectsDB.ChannelsDao chDao = FavouriteObjectsDB.createInstance(context).getDB().channelsDao();
                 chDao.insertChannel(new FavouriteObjectsDB.Channel(nId, nName, nLink));
             }
         });
@@ -85,7 +58,13 @@ public class FavouriteObject {
 
     }
 
-    public static void addToFavouritePrograms(Program pr) {
+    public static void addToFavouritePrograms(Program pr, final Context context) {
+        for (int i = 0; i < favouritePrograms.size(); i++) {
+            if (favouritePrograms.get(i).isEqual(pr)) {
+                Toast.makeText(context, "Program is already in favourites", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
         favouritePrograms.add(pr);
         final int nId = pr.getId();
         final String nName = pr.getName();
@@ -94,7 +73,7 @@ public class FavouriteObject {
         Thread thread2 = new Thread(new Runnable() {
             @Override
             public synchronized void run() {
-                FavouriteObjectsDB.ProgramsDao progDao = appDb.programsDao();
+                FavouriteObjectsDB.ProgramsDao progDao = FavouriteObjectsDB.createInstance(context).getDB().programsDao();
                 progDao.insertProgram(new FavouriteObjectsDB.Program(nId, nName));
             }
         });
@@ -103,7 +82,7 @@ public class FavouriteObject {
 
     }
 
-    public static void deleteFromFavouriteChannels(int position) {
+    public static void deleteFromFavouriteChannels(int position, final Context context) {
         try {
             final int nId = favouriteChannels.get(position).getId();
             final String nName = favouriteChannels.get(position).getName();
@@ -114,7 +93,7 @@ public class FavouriteObject {
             Thread thready = new Thread(new Runnable() {
                 @Override
                 public synchronized void run() {
-                    FavouriteObjectsDB.ChannelsDao chDao = appDb.channelsDao();
+                    FavouriteObjectsDB.ChannelsDao chDao = FavouriteObjectsDB.createInstance(context).getDB().channelsDao();
                     chDao.delete(new FavouriteObjectsDB.Channel(nId, nName, nLink));
                 }
             });
@@ -125,7 +104,7 @@ public class FavouriteObject {
         }
     }
 
-    public static void deleteFromFavouritePrograms(int position) {
+    public static void deleteFromFavouritePrograms(int position, final Context context) {
         try {
             final int nId = favouritePrograms.get(position).getId();
             final String nName = favouritePrograms.get(position).getName();
@@ -135,7 +114,7 @@ public class FavouriteObject {
             Thread thready = new Thread(new Runnable() {
                 @Override
                 public synchronized void run() {
-                    FavouriteObjectsDB.ProgramsDao prDao = appDb.programsDao();
+                    FavouriteObjectsDB.ProgramsDao prDao = FavouriteObjectsDB.createInstance(context).getDB().programsDao();
                     prDao.delete(new FavouriteObjectsDB.Program(nId, nName));
                 }
             });
@@ -146,9 +125,9 @@ public class FavouriteObject {
         }
     }
 
-    static void parseFavouriteProgram(String programName) {
+    public static void parseFavouriteProgram(String programName, Context context) {
         try {
-            addToFavouritePrograms(new Program(parseProgram(programName).split("    ")[1].trim()));
+            addToFavouritePrograms(new Program(parseProgram(programName).split("    ")[1].trim()), context);
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
@@ -160,7 +139,6 @@ public class FavouriteObject {
 
     // TODO: reorganize favourite lists to boost this method (maybe to Decart tree)
     public static boolean isProgramInFavourites(Context context, Program pr) {
-
         for (Program favouritePr: favouritePrograms) {
             if (pr.isEqual(favouritePr))
                 return true;
@@ -169,6 +147,7 @@ public class FavouriteObject {
     }
 
     public static ArrayList<Program> dailyProgramChecker(final Context context) throws java.io.IOException {
+
         Channel[] channelArray =  MainChannelsList.getChannelsList();
 
         final ArrayList<Program> result = new ArrayList<>();
@@ -177,23 +156,11 @@ public class FavouriteObject {
         for (Channel channel: channelArray) {
 
             final String mainLink = TLS.MAIN_URL + channel.getLink();
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        doc[0] = Jsoup.connect(mainLink).get();
-                    } catch (java.io.IOException e) {
-                        e.printStackTrace();
-                        doc[0] = null;
-                    }
-                }
-            });
-            thread.start();
-
             try {
-                thread.join();
-            } catch (InterruptedException e) {
+                doc[0] = Jsoup.connect(mainLink).get();
+            } catch (java.io.IOException e) {
                 e.printStackTrace();
+                doc[0] = null;
             }
 
             if (doc[0] == null)

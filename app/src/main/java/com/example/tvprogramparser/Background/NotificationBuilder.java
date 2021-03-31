@@ -1,9 +1,11 @@
-package com.example.tvprogramparser;
+package com.example.tvprogramparser.Background;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+
+import com.example.tvprogramparser.R;
 
 public class NotificationBuilder {
     private Context context;
@@ -11,7 +13,7 @@ public class NotificationBuilder {
     private String contentText;
     private String channelId;
     private String channelName;
-    private static int notificationId;
+    private static int notificationId = 0;
 
     NotificationBuilder(Context context, int smallIcon, String contentText,
                         String channelId, String channelName) {

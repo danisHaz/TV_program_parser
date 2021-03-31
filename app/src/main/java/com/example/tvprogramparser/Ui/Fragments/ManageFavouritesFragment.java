@@ -1,10 +1,12 @@
-package com.example.tvprogramparser;
+package com.example.tvprogramparser.Ui.Fragments;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +15,40 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView;
 
+import com.example.tvprogramparser.Components.FavouriteObject;
+import com.example.tvprogramparser.Components.OnCompleteListener;
+import com.example.tvprogramparser.Components.WorkDoneListener;
+import com.example.tvprogramparser.R;
+import com.example.tvprogramparser.TLS;
+
 import java.util.ArrayList;
 
 public class ManageFavouritesFragment extends Fragment {
+    private static ManageFavouritesFragment local;
 
     public static ManageFavouritesFragment createInstance() {
-        ManageFavouritesFragment frag = new ManageFavouritesFragment();
-        return frag;
+        ManageFavouritesFragment newFragment = local;
+        if (newFragment == null)  {
+            synchronized (ManageFavouritesFragment.class) {
+                newFragment = local;
+                if (newFragment == null)
+                    newFragment = local = new ManageFavouritesFragment();
+            }
+        }
+        return newFragment;
+    }
+
+    public void updateAndRefresh() {
+        try {
+            FragmentTransaction transaction = getActivity()
+                    .getSupportFragmentManager().beginTransaction();
+
+            transaction.detach(local);
+            transaction.attach(local);
+            transaction.commit();
+        } catch (NullPointerException e) {
+            Log.e("ManageFavouritesFragment", "Error when refreshing");
+        }
     }
 
     @Override
@@ -65,13 +94,13 @@ public class ManageFavouritesFragment extends Fragment {
             channelsBundle.putInt(TLS.CURRENT_ARRAY_ID, R.array.favouriteChannelsBottomFragment);
             channelsBundle.putString(TLS.CHOSEN_LAYOUT, TLS.DELETE_FROM_FAVOURITE_CHANNELS);
 
-
             ListView channelsView = ((ListView)view.findViewById(R.id.favouriteChannelsList));
             channelsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
                     channelsBundle.putInt(TLS.CHOSEN_POSITION, pos);
-                    SmallMenuFragment.createInstance(channelsBundle).show(getActivity().getSupportFragmentManager(), "manageFavourites");
+                    SmallMenuFragment.createInstance(channelsBundle)
+                            .show(getActivity().getSupportFragmentManager(), "manageFavourites");
                 }
             });
             channelsView.setAdapter(adap1);
@@ -80,7 +109,14 @@ public class ManageFavouritesFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
                     programsBundle.putInt(TLS.CHOSEN_POSITION, pos);
-                    SmallMenuFragment.createInstance(programsBundle).show(getActivity().getSupportFragmentManager(), "manageFavourites");
+                    WorkDoneListener.setNewListener(new OnCompleteListener() {
+                        @Override
+                        public void doWork(Bundle bundle) {
+                            local.updateAndRefresh();
+                        }
+                    }.setTag(TLS.DELETE_FROM_FAVOURITE_PROGRAMS));
+                    SmallMenuFragment.createInstance(programsBundle)
+                            .show(getActivity().getSupportFragmentManager(), "manageFavourites");
                 }
             });
             programsView.setAdapter(adap2);

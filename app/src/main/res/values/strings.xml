@@ -19,4 +19,5 @@
     <string-array name="favouriteChannelsBottomFragment">
         <item>Remove from channel favourites</item>
     </string-array>
+    <string name="no_network">No network connection</string>
 </resources>

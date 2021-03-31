@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="top|start"
-    tools:context=".ManageFavouritesFragment">
+    tools:context=".Ui.Fragments.ManageFavouritesFragment">
 
     <TextView
         android:id="@+id/favouriteChannelsTitle"

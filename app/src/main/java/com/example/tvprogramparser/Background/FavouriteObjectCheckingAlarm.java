@@ -1,4 +1,4 @@
-package com.example.tvprogramparser.sampledata;
+package com.example.tvprogramparser.Background;
 
 import android.app.Service;
 import android.content.Intent;
