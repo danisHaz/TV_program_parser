@@ -23,23 +23,30 @@ public class MainActivity extends AppCompatActivity {
         super(R.layout.activity_main);
     }
     private int defaultFragment = 0;
+    public static boolean isNetworkActive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setProgressFragment();
+        isNetworkActive = TLS.isNetworkProvided(this);
 
         FavouriteObjectsDB.createInstance(this);
+        if (!isNetworkActive) {
+            setWatchProgramFragment();
+            return;
+        }
+
+        setProgressFragment();
 
         final MainActivity activity = this;
 
         WorkDoneListener.setNewListener(new OnCompleteListener() {
             @Override
-            public void doWork() {
+            public void doWork(Bundle bundle) {
                 activity.setDefaultFragment();
                 SharedPreferences prefs = getSharedPreferences(TLS.APPLICATION_PREFERENCES, MODE_PRIVATE);
-                if (prefs.getInt(TLS.BACKGROUND_REQUEST_ID, 1) == 1) {
+                if (prefs.getInt(TLS.BACKGROUND_REQUEST_ID, 0) == 0) {
                     RestartService.scheduleAlarm(activity);
                 }
             }
@@ -68,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setWatchProgramFragment() {
+        if (!isNetworkActive) {
+            getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.frag, NoNetworkFragment.createInstance(), TLS.WATCH_PROGRAM_TAG)
+                    .commit();
+            return;
+        }
+
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.frag, BottomSheetFragment.createInstance(), TLS.WATCH_PROGRAM_TAG)

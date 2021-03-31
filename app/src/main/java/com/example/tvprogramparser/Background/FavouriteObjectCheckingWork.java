@@ -1,11 +1,12 @@
 package com.example.tvprogramparser.Background;
 
 import androidx.annotation.NonNull;
-import	androidx.work.Worker;
+import androidx.work.Worker;
 import androidx.work.ListenableWorker;
 import androidx.work.WorkerParameters;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import com.example.tvprogramparser.Components.FavouriteObject;
 import com.example.tvprogramparser.Components.FavouriteObjectsDB;
@@ -27,33 +28,42 @@ public class FavouriteObjectCheckingWork extends Worker {
     @Override
     @NonNull
     public ListenableWorker.Result doWork() {
-        MainChannelsList.define();
-        FavouriteObjectsDB.createInstance(getApplicationContext());
         WorkDoneListener.setNewListener(new OnCompleteListener() {
             @Override
-            public void doWork() {
-                ArrayList<Program> programList = new ArrayList<>();
-                try {
-                    programList = FavouriteObject.dailyProgramChecker(getApplicationContext());
-                } catch (java.io.IOException e) {
-                    // pass
-                }
+            public void doWork(Bundle bundle) {
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
 
-                for (int i = 0; i < programList.size(); i++) {
-                    String channelId = "CHANNEL_ID_" + String.valueOf(i);
-                    String channelName = "CHANNEL_NAME_" + String.valueOf(i);
-                    String contentText = programList.get(i).getName() + " at " + programList.get(i).getTimeBegin();
-                    NotificationBuilder builder = new NotificationBuilder(getApplicationContext(),
-                            R.mipmap.ic_launcher,
-                            contentText,
-                            channelId,
-                            channelName
-                    );
-                    builder.setNotification();
-                }
+                        ArrayList<Program> programList = new ArrayList<>();
+                        try {
+                            programList = FavouriteObject.dailyProgramChecker(getApplicationContext());
+                        } catch (java.io.IOException e) {
+                            // pass
+                        }
 
+                        for (int i = 0; i < programList.size(); i++) {
+                            String channelId = "CHANNEL_ID_" + String.valueOf(i);
+                            String channelName = "CHANNEL_NAME_" + String.valueOf(i);
+                            String contentText = programList.get(i).getName() + " at " + programList.get(i).getTimeBegin();
+                            NotificationBuilder builder = new NotificationBuilder(getApplicationContext(),
+                                    R.mipmap.ic_launcher,
+                                    contentText,
+                                    channelId,
+                                    channelName
+                            );
+                            builder.setNotification();
+                        }
+
+                    }
+                });
+
+                thread.start();
             }
         }.setTag(TLS.DAILY_CHECKER_TAG));
-       return ListenableWorker.Result.success();
+        MainChannelsList.define();
+        FavouriteObjectsDB.createInstance(getApplicationContext());
+
+        return ListenableWorker.Result.success();
     }
 }

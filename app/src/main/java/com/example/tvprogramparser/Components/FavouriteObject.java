@@ -1,6 +1,8 @@
 package com.example.tvprogramparser.Components;
 
 import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,6 +59,12 @@ public class FavouriteObject {
     }
 
     public static void addToFavouritePrograms(Program pr, final Context context) {
+        for (int i = 0; i < favouritePrograms.size(); i++) {
+            if (favouritePrograms.get(i).isEqual(pr)) {
+                Toast.makeText(context, "Program is already in favourites", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
         favouritePrograms.add(pr);
         final int nId = pr.getId();
         final String nName = pr.getName();

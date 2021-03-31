@@ -94,13 +94,13 @@ public class ManageFavouritesFragment extends Fragment {
             channelsBundle.putInt(TLS.CURRENT_ARRAY_ID, R.array.favouriteChannelsBottomFragment);
             channelsBundle.putString(TLS.CHOSEN_LAYOUT, TLS.DELETE_FROM_FAVOURITE_CHANNELS);
 
-
             ListView channelsView = ((ListView)view.findViewById(R.id.favouriteChannelsList));
             channelsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
                     channelsBundle.putInt(TLS.CHOSEN_POSITION, pos);
-                    SmallMenuFragment.createInstance(channelsBundle).show(getActivity().getSupportFragmentManager(), "manageFavourites");
+                    SmallMenuFragment.createInstance(channelsBundle)
+                            .show(getActivity().getSupportFragmentManager(), "manageFavourites");
                 }
             });
             channelsView.setAdapter(adap1);
@@ -111,11 +111,12 @@ public class ManageFavouritesFragment extends Fragment {
                     programsBundle.putInt(TLS.CHOSEN_POSITION, pos);
                     WorkDoneListener.setNewListener(new OnCompleteListener() {
                         @Override
-                        public void doWork() {
+                        public void doWork(Bundle bundle) {
                             local.updateAndRefresh();
                         }
                     }.setTag(TLS.DELETE_FROM_FAVOURITE_PROGRAMS));
-                    SmallMenuFragment.createInstance(programsBundle).show(getActivity().getSupportFragmentManager(), "manageFavourites");
+                    SmallMenuFragment.createInstance(programsBundle)
+                            .show(getActivity().getSupportFragmentManager(), "manageFavourites");
                 }
             });
             programsView.setAdapter(adap2);

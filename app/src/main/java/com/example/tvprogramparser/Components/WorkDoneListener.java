@@ -3,8 +3,10 @@ package com.example.tvprogramparser.Components;
 import java.util.TreeMap;
 
 import android.util.Log;
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class WorkDoneListener {
     private static volatile TreeMap<String, OnCompleteListener> listenersContainer = new TreeMap<>();
@@ -20,17 +22,25 @@ public class WorkDoneListener {
         }
     }
 
-    public static void complete(@NonNull final String tag, OnCompleteListener.Result result) throws NullPointerException {
+    public static void complete(@NonNull final String tag, @Nullable Bundle bundle, OnCompleteListener.Result result) throws NullPointerException {
         if (result == OnCompleteListener.Result.SUCCESS) {
             Log.i("WorkDoneListener", "Previous work complete");
         } else {
             Log.i("WorkDoneListener", "Previous work incomplete");
+            if (listenersContainer.containsKey(tag)) {
+                synchronized (WorkDoneListener.class) {
+                    if (listenersContainer.containsKey(tag)) {
+                        listenersContainer.remove(tag);
+                    }
+                }
+            }
+            return;
         }
 
         if (listenersContainer.containsKey(tag)) {
             synchronized (WorkDoneListener.class) {
                 if (listenersContainer.containsKey(tag)) {
-                    listenersContainer.get(tag).doWork();
+                    listenersContainer.get(tag).doWork(bundle);
                     listenersContainer.remove(tag);
                     Log.i("WorkDoneListener", "Work Done");
                     return;

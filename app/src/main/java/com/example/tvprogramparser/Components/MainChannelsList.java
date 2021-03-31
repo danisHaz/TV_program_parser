@@ -16,6 +16,14 @@ public class MainChannelsList {
     public static void define() {
         if (!isDefined)
             receiveAllData();
+
+        try {
+            WorkDoneListener.complete(TLS.DAILY_CHECKER_TAG,
+                    null,
+                    OnCompleteListener.Result.SUCCESS);
+        } catch (NullPointerException e) {
+//            pass
+        }
     }
 
     public static Channel[] getChannelsList() {
@@ -58,8 +66,12 @@ public class MainChannelsList {
                 channelsList = getChannelsArray(fir, sec);
 
                 try {
-                    WorkDoneListener.complete(TLS.GET_CHANNELS_LIST, OnCompleteListener.Result.SUCCESS);
-                    WorkDoneListener.complete(TLS.DAILY_CHECKER_TAG, OnCompleteListener.Result.SUCCESS);
+                    WorkDoneListener.complete(TLS.GET_CHANNELS_LIST,
+                            null,
+                            OnCompleteListener.Result.SUCCESS);
+                    WorkDoneListener.complete(TLS.DAILY_CHECKER_TAG,
+                            null,
+                            OnCompleteListener.Result.SUCCESS);
                 } catch (NullPointerException e) {
                     Log.e("MainChannelsList", "Listener not found");
                 }

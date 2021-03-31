@@ -143,7 +143,9 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
                         FavouriteObject.parseFavouriteProgram(chosenObjectName, upperContext);
                     }
                     try {
-                        WorkDoneListener.complete(TLS.ADD_TO_FAVOURITES, OnCompleteListener.Result.SUCCESS);
+                        WorkDoneListener.complete(TLS.ADD_TO_FAVOURITES,
+                                null,
+                                OnCompleteListener.Result.SUCCESS);
                     } catch (NullPointerException e) {
                         // pass
                     }
@@ -154,7 +156,9 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
                         FavouriteObject.deleteFromFavouritePrograms(chosenPos, upperContext);
                     }
                     try {
-                        WorkDoneListener.complete(TLS.DELETE_FROM_FAVOURITE_PROGRAMS, OnCompleteListener.Result.SUCCESS);
+                        WorkDoneListener.complete(TLS.DELETE_FROM_FAVOURITE_PROGRAMS,
+                                null,
+                                OnCompleteListener.Result.SUCCESS);
                     } catch (NullPointerException e) {
                         // pass
                     }
@@ -165,7 +169,9 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
                         FavouriteObject.deleteFromFavouriteChannels(chosenPos, upperContext);
                     }
                     try {
-                        WorkDoneListener.complete(TLS.DELETE_FROM_FAVOURITE_CHANNELS, OnCompleteListener.Result.SUCCESS);
+                        WorkDoneListener.complete(TLS.DELETE_FROM_FAVOURITE_CHANNELS,
+                                null,
+                                OnCompleteListener.Result.SUCCESS);
                     } catch (NullPointerException e) {
                         // pass
                     }

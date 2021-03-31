@@ -1,5 +1,9 @@
 package com.example.tvprogramparser.Components;
 
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+
 public abstract class OnCompleteListener {
     private String tag = null;
 
@@ -23,5 +27,5 @@ public abstract class OnCompleteListener {
         FAILURE
     }
 
-    public abstract void doWork();
+    public abstract void doWork(@Nullable Bundle bundle);
 }

@@ -79,12 +79,6 @@ public class RestartService extends BroadcastReceiver {
         manager.enqueueUniqueWork("checkFavourites",
                 ExistingWorkPolicy.REPLACE,
                 request);
-
-        SharedPreferences.Editor prefs = context.getSharedPreferences(TLS.APPLICATION_PREFERENCES,
-                Context.MODE_PRIVATE).edit();
-        prefs.putInt(TLS.BACKGROUND_REQUEST_ID, 0);
-
-        prefs.apply();
     }
 
     public static void scheduleAlarm(Context context) {
@@ -112,7 +106,7 @@ public class RestartService extends BroadcastReceiver {
         SharedPreferences.Editor prefs = context.getSharedPreferences(TLS.APPLICATION_PREFERENCES,
                 Context.MODE_PRIVATE).edit();
 
-        prefs.putInt(TLS.BACKGROUND_REQUEST_ID, 0);
+        prefs.putInt(TLS.BACKGROUND_REQUEST_ID, 1);
         prefs.apply();
 
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
