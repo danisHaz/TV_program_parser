@@ -16,6 +16,7 @@ import com.example.tvprogramparser.Components.MainChannelsList;
 import com.example.tvprogramparser.Ui.Fragments.ManageFavouritesFragment;
 import com.example.tvprogramparser.R;
 import com.example.tvprogramparser.TLS;
+import com.example.tvprogramparser.Ui.Fragments.NoNetworkFragment;
 import com.example.tvprogramparser.Ui.Fragments.ProgressFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             public void doWork(Bundle bundle) {
                 activity.setDefaultFragment();
                 SharedPreferences prefs = getSharedPreferences(TLS.APPLICATION_PREFERENCES, MODE_PRIVATE);
-                if (prefs.getInt(TLS.BACKGROUND_REQUEST_ID, 0) == 0) {
+                if (prefs.getInt(TLS.BACKGROUND_REQUEST_ID, 1) == 1) {
                     RestartService.scheduleAlarm(activity);
                 }
             }

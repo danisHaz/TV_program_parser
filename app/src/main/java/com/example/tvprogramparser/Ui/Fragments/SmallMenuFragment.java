@@ -10,7 +10,6 @@ import com.example.tvprogramparser.R;
 import com.example.tvprogramparser.TLS;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,12 +69,6 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
         recView.setAdapter(new ItemAdapter(getArguments()));
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        local = null;
-    }
-
     private static class CustomViewHolder extends RecyclerView.ViewHolder {
         final TextView textCell;
 
@@ -130,8 +123,7 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
                         deleteFromFavouriteChannels();
 
                     try {
-                        local.onStop();
-                        local.onDestroy();
+                        local.dismiss();
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }

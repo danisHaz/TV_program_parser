@@ -19,7 +19,7 @@ public class FavouriteObjectsDB {
     private static volatile FavouriteObjectsDB objectsDB;
     private DefaultDb myDB;
 
-    public FavouriteObjectsDB(Context context) {
+    private FavouriteObjectsDB(Context context) {
         myDB = Room.databaseBuilder(context, FavouriteObjectsDB.DefaultDb.class,
                 "defDb").build();
 

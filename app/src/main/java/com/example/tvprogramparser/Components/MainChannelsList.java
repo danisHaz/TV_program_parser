@@ -16,13 +16,22 @@ public class MainChannelsList {
     public static void define() {
         if (!isDefined)
             receiveAllData();
-
-        try {
-            WorkDoneListener.complete(TLS.DAILY_CHECKER_TAG,
-                    null,
-                    OnCompleteListener.Result.SUCCESS);
-        } catch (NullPointerException e) {
+        else {
+            try {
+                WorkDoneListener.complete(TLS.GET_CHANNELS_LIST,
+                        null,
+                        OnCompleteListener.Result.SUCCESS);
+            } catch (NullPointerException e) {
 //            pass
+            }
+
+            try {
+                WorkDoneListener.complete(TLS.DAILY_CHECKER_TAG,
+                        null,
+                        OnCompleteListener.Result.SUCCESS);
+            } catch (NullPointerException e) {
+//            pass
+            }
         }
     }
 
@@ -69,11 +78,16 @@ public class MainChannelsList {
                     WorkDoneListener.complete(TLS.GET_CHANNELS_LIST,
                             null,
                             OnCompleteListener.Result.SUCCESS);
+                } catch (NullPointerException e) {
+//            pass
+                }
+
+                try {
                     WorkDoneListener.complete(TLS.DAILY_CHECKER_TAG,
                             null,
                             OnCompleteListener.Result.SUCCESS);
                 } catch (NullPointerException e) {
-                    Log.e("MainChannelsList", "Listener not found");
+//            pass
                 }
             }
         });

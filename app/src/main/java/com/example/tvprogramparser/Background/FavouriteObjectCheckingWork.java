@@ -7,6 +7,7 @@ import androidx.work.WorkerParameters;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.tvprogramparser.Components.FavouriteObject;
 import com.example.tvprogramparser.Components.FavouriteObjectsDB;
@@ -31,6 +32,7 @@ public class FavouriteObjectCheckingWork extends Worker {
         WorkDoneListener.setNewListener(new OnCompleteListener() {
             @Override
             public void doWork(Bundle bundle) {
+                Log.d("FavouriteObjectCheckingWork", "listener is set");
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -61,9 +63,8 @@ public class FavouriteObjectCheckingWork extends Worker {
                 thread.start();
             }
         }.setTag(TLS.DAILY_CHECKER_TAG));
-        MainChannelsList.define();
         FavouriteObjectsDB.createInstance(getApplicationContext());
-
+        MainChannelsList.define();
         return ListenableWorker.Result.success();
     }
 }

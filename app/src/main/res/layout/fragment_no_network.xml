@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".Ui.Activities.NoNetworkFragment">
+    tools:context=".Ui.Fragments.NoNetworkFragment">
 
     <TextView
         android:layout_width="wrap_content"

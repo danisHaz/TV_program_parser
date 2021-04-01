@@ -1,4 +1,4 @@
-package com.example.tvprogramparser.Ui.Activities;
+package com.example.tvprogramparser.Ui.Fragments;
 
 import android.os.Bundle;
 

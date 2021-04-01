@@ -106,7 +106,7 @@ public class RestartService extends BroadcastReceiver {
         SharedPreferences.Editor prefs = context.getSharedPreferences(TLS.APPLICATION_PREFERENCES,
                 Context.MODE_PRIVATE).edit();
 
-        prefs.putInt(TLS.BACKGROUND_REQUEST_ID, 1);
+        prefs.putInt(TLS.BACKGROUND_REQUEST_ID, 0);
         prefs.apply();
 
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
