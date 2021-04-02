@@ -1,11 +1,15 @@
 package com.example.tvprogramparser.Ui.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.content.SharedPreferences;
+import android.widget.EditText;
 
 import com.example.tvprogramparser.Background.RestartService;
 import com.example.tvprogramparser.Components.OnCompleteListener;
@@ -32,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
         isNetworkActive = TLS.isNetworkProvided(this);
 
+        Toolbar customToolbar = (Toolbar) findViewById(R.id.toolbar_main);
+        setSupportActionBar(customToolbar);
+
         FavouriteObjectsDB.createInstance(this);
         if (!isNetworkActive) {
             setWatchProgramFragment();
@@ -53,6 +60,20 @@ public class MainActivity extends AppCompatActivity {
             }
         }.setTag(TLS.GET_CHANNELS_LIST));
         MainChannelsList.define();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        EditText texter = (EditText) item.getActionView();
+        texter.setText("Texter text set");
+        return super.onOptionsItemSelected(item);
     }
 
     private void setDefaultFragment() {

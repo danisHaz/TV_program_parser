@@ -112,7 +112,5 @@ public class RestartService extends BroadcastReceiver {
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_HALF_DAY, pendingIntent);
-
-        Log.d("Eboy", "Eboyyyyy");
     }
 }
