@@ -8,21 +8,21 @@ public class Program {
     private int id;
 
     // Called only for temporary needs
-    Program(String programName) {
+    public Program(String programName) {
         this.programName = programName;
         this.timeBegin = undefined;
         this.timeEnd = undefined;
         this.id = (new HashMaster(programName)).getHash();
     }
 
-    Program(String programName, String timeBegin) {
+    public Program(String programName, String timeBegin) {
         this.programName = programName;
         this.timeBegin = timeBegin;
         this.timeEnd = undefined;
         this.id = (new HashMaster(programName)).getHash();
     }
 
-    Program(String programName, String timeBegin, String timeEnd) {
+    public Program(String programName, String timeBegin, String timeEnd) {
         this.programName = programName;
         this.timeBegin = timeBegin;
         this.timeEnd = timeEnd;

@@ -140,7 +140,7 @@ public class FavouriteObject {
     // TODO: reorganize favourite lists to boost this method (maybe to Decart tree)
     public static boolean isProgramInFavourites(Context context, Program pr) {
         for (Program favouritePr: favouritePrograms) {
-            if (pr.isEqual(favouritePr))
+            if ((pr.getName().toLowerCase()).equals(favouritePr.getName().toLowerCase()))
                 return true;
         }
         return false;

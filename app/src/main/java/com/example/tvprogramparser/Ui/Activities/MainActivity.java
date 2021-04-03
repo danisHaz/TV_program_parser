@@ -3,16 +3,21 @@ package com.example.tvprogramparser.Ui.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.content.SharedPreferences;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.tvprogramparser.Background.RestartService;
+import com.example.tvprogramparser.Components.FavouriteObject;
 import com.example.tvprogramparser.Components.OnCompleteListener;
+import com.example.tvprogramparser.Components.Program;
 import com.example.tvprogramparser.Components.WorkDoneListener;
 import com.example.tvprogramparser.Ui.Fragments.BottomSheetFragment;
 import com.example.tvprogramparser.Components.FavouriteObjectsDB;
@@ -53,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void doWork(Bundle bundle) {
                 activity.setDefaultFragment();
-                SharedPreferences prefs = getSharedPreferences(TLS.APPLICATION_PREFERENCES, MODE_PRIVATE);
+                SharedPreferences prefs
+                        = getSharedPreferences(TLS.APPLICATION_PREFERENCES, MODE_PRIVATE);
                 if (prefs.getInt(TLS.BACKGROUND_REQUEST_ID, 1) == 1) {
                     RestartService.scheduleAlarm(activity);
                 }
@@ -69,10 +75,28 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+//    Actually now there is only one item in menu: set to favourites
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        EditText texter = (EditText) item.getActionView();
-        texter.setText("Texter text set");
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        final EditText texter = (EditText) item.getActionView();
+        texter.setHint(R.string.addNewProgram);
+        texter.setSingleLine(true);
+        texter.requestFocus();
+        final InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        texter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String str = texter.getText().toString();
+                FavouriteObject.addToFavouritePrograms(new Program(str), MainActivity.this);
+                texter.setText("");
+                inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                item.collapseActionView();
+                Toast.makeText(MainActivity.this,
+                        "Program is set to favourites",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
         return super.onOptionsItemSelected(item);
     }
 

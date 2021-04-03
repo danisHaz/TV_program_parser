@@ -10,6 +10,7 @@
     <string name="helloThere">Hello there</string>
     <string name="contentTitle">TV program</string>
     <string name="addNewProgram">Add new program</string>
+    <string name="newProgramHint">Add New Program</string>
     <string-array name="favouriteProgramsMenu">
         <item>Add program to favourites</item>
         <item>Rate this program</item>
