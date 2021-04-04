@@ -84,11 +84,13 @@ public class MainActivity extends AppCompatActivity {
         texter.requestFocus();
         final InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
         texter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String str = texter.getText().toString();
                 FavouriteObject.addToFavouritePrograms(new Program(str), MainActivity.this);
+                ManageFavouritesFragment.createInstance().updateAndRefresh();
                 texter.setText("");
                 inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                 item.collapseActionView();
@@ -97,26 +99,23 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         });
+
         return super.onOptionsItemSelected(item);
     }
 
     private void setDefaultFragment() {
-        switch (defaultFragment) {
-            case 0:
-                setWatchProgramFragment();
-                break;
-            case 1:
-                setManageFavouritesFragment();
-                break;
-            default:
-                Log.d("MainActivity", "Undefined default fragment id");
-        }
+        setWatchProgramFragment();
+        setManageFavouritesFragment();
     }
 
     private void setProgressFragment() {
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.frag, ProgressFragment.createInstance(), TLS.PROGRESS_FRAGMENT)
+                .commit();
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.secondFrag, ProgressFragment.createInstance(), TLS.PROGRESS_FRAGMENT)
                 .commit();
     }
 
@@ -138,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
     private void setManageFavouritesFragment() {
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.frag, ManageFavouritesFragment.createInstance(), TLS.MANAGE_YOUR_FAVOURITES_TAG)
+                .replace(R.id.secondFrag, ManageFavouritesFragment.createInstance(), TLS.MANAGE_YOUR_FAVOURITES_TAG)
                 .commit();
     }
 

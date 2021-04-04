@@ -21,15 +21,16 @@ public class ProgressFragment extends Fragment {
     }
 
     public static ProgressFragment createInstance() {
-        ProgressFragment fragment = local;
-        if (fragment == null) {
-            synchronized (ProgressFragment.class) {
-                fragment = local;
-                if (fragment == null)
-                    fragment = local = new ProgressFragment();
-            }
-        }
-        return fragment;
+//        ProgressFragment fragment = local;
+//        if (fragment == null) {
+//            synchronized (ProgressFragment.class) {
+//                fragment = local;
+//                if (fragment == null)
+//                    fragment = local = new ProgressFragment();
+//            }
+//        }
+//        return fragment;
+        return new ProgressFragment();
     }
 
     @Override

@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="top|start"
+    android:id="@+id/favouritesList"
     tools:context=".Ui.Fragments.ManageFavouritesFragment">
 
     <TextView
