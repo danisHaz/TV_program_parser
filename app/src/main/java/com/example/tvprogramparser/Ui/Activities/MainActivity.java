@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.tvprogramparser.Background.RestartService;
 import com.example.tvprogramparser.Components.FavouriteObject;
@@ -142,16 +143,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onWatchProgramClick(View view) {
-        if (WorkDoneListener.isListenerSet(TLS.GET_CHANNELS_LIST))
-            return;
+        Log.d("Lox", "1");
+        ToggleButton button = (ToggleButton) view;
+        button.setCompoundDrawablesRelativeWithIntrinsicBounds(0,
+                R.drawable.ic_baseline_list_enabled_24, 0, 0);
 
-        this.setWatchProgramFragment();
+        ((ToggleButton)findViewById(R.id.manageFavourites)).setCompoundDrawablesRelativeWithIntrinsicBounds(0,
+                R.drawable.ic_baseline_home_24, 0, 0);
     }
 
     public void onManageFavouritesClick(View view) {
-        if (WorkDoneListener.isListenerSet(TLS.GET_CHANNELS_LIST))
-            return;
+        Log.d("Lox", "2");
+        ToggleButton button = (ToggleButton) view;
+        button.setCompoundDrawablesRelativeWithIntrinsicBounds(0,
+                R.drawable.ic_baseline_home_enabled_24, 0, 0);
 
-        this.setManageFavouritesFragment();
+        ((ToggleButton)findViewById(R.id.watchProgram)).setCompoundDrawablesRelativeWithIntrinsicBounds(0,
+                R.drawable.ic_baseline_list_24, 0, 0);
     }
 }

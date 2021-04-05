@@ -35,21 +35,27 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
+        <ToggleButton
             android:id="@+id/watchProgram"
             android:layout_width="0dp"
+            android:onClick="onWatchProgramClick"
             android:layout_height="wrap_content"
             android:background="@drawable/main_layout_buttons_style"
-            android:text="@string/watchProgram"
+            android:textOff="@string/watchProgram"
+            android:textOn="@string/watchProgram"
+            android:drawableTop="@drawable/ic_baseline_list_24"
             app:layout_constraintEnd_toStartOf="@+id/manageFavourites"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-        <Button
+        <ToggleButton
             android:id="@+id/manageFavourites"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/manageFavourites"
+            android:onClick="onManageFavouritesClick"
+            android:textOn="@string/manageFavourites"
+            android:textOff="@string/manageFavourites"
+            android:drawableTop="@drawable/ic_baseline_home_enabled_24"
             android:background="@drawable/main_layout_buttons_style"
             app:layout_constraintStart_toEndOf="@+id/watchProgram"
             app:layout_constraintTop_toTopOf="parent"

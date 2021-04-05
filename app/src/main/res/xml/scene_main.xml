@@ -5,7 +5,7 @@
     <Transition
         motion:constraintSetEnd="@+id/mainList"
         motion:constraintSetStart="@+id/favourites"
-        motion:duration="300"
+        motion:duration="200"
         motion:motionInterpolator="linear">
         <OnClick
             motion:targetId="@+id/watchProgram"
@@ -15,7 +15,7 @@
     <Transition
         motion:constraintSetStart="@+id/mainList"
         motion:constraintSetEnd="@+id/favourites"
-        motion:duration="300"
+        motion:duration="200"
         motion:motionInterpolator="linear">
         <OnClick
             motion:targetId="@+id/manageFavourites"
@@ -29,12 +29,14 @@
             motion:layout_constraintBottom_toTopOf="@+id/inner_layout"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintWidth_default="wrap"
+            motion:layout_constraintWidth_default="percent"
+            motion:layout_constraintWidth_percent="1"
             />
 
         <Constraint
             android:id="@+id/secondFrag"
-            motion:layout_constraintWidth_default="wrap"
+            motion:layout_constraintWidth_default="percent"
+            motion:layout_constraintWidth_percent="1"
             motion:layout_constraintStart_toEndOf="parent"
             motion:layout_constraintBottom_toTopOf="@+id/inner_layout"
             motion:layout_constraintTop_toBottomOf="@+id/toolbar_main"/>
@@ -43,7 +45,8 @@
     <ConstraintSet android:id="@+id/favourites">
         <Constraint
             android:id="@+id/secondFrag"
-            motion:layout_constraintWidth_default="wrap"
+            motion:layout_constraintWidth_default="percent"
+            motion:layout_constraintWidth_percent="1"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintBottom_toTopOf="@+id/inner_layout"
@@ -51,7 +54,8 @@
 
         <Constraint
             android:id="@+id/frag"
-            motion:layout_constraintWidth_default="wrap"
+            motion:layout_constraintWidth_default="percent"
+            motion:layout_constraintWidth_percent="1"
             motion:layout_constraintEnd_toStartOf="parent"
             motion:layout_constraintTop_toBottomOf="@+id/toolbar_main"
             motion:layout_constraintBottom_toTopOf="@+id/inner_layout"/>
