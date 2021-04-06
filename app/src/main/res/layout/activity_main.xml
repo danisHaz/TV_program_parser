@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:id="@+id/main_layout"
+    app:layoutDescription="@xml/scene_main"
     tools:context=".Ui.Activities.MainActivity">
 
     <include
@@ -16,10 +18,13 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/frag"
         android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/secondFrag"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/inner_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_main" />
+        />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/inner_layout"
@@ -27,29 +32,37 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryLight"
+        android:background="@drawable/main_inner_layout_shape"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
+        <ToggleButton
             android:id="@+id/watchProgram"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
             android:onClick="onWatchProgramClick"
-            android:text="@string/watchProgram"
-            android:background="@drawable/main_layout_buttons_style"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-        <Button
-            android:id="@+id/manageFavourites"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/manageFavourites"
+            android:background="@drawable/style_main_layout_buttons_checked"
+            android:textOff="@string/watchProgram"
+            android:textOn="@string/watchProgram"
+            android:textSize="10sp"
+            android:drawableTop="@drawable/ic_baseline_list_24"
+            app:layout_constraintEnd_toStartOf="@+id/manageFavourites"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <ToggleButton
+            android:id="@+id/manageFavourites"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:onClick="onManageFavouritesClick"
-            android:background="@drawable/main_layout_buttons_style"
+            android:textOn="@string/manageFavourites"
+            android:textOff="@string/manageFavourites"
+            android:textSize="10sp"
+            android:drawableTop="@drawable/ic_baseline_home_enabled_24"
+            android:background="@drawable/style_main_layout_buttons_checked"
             app:layout_constraintStart_toEndOf="@+id/watchProgram"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

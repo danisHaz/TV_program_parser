@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/mainList"
+        motion:constraintSetStart="@+id/favourites"
+        motion:duration="200"
+        android:id="@+id/transition_to_main"
+        motion:motionInterpolator="linear">
+        <OnClick
+            motion:clickAction="transitionToEnd"/>
+    </Transition>
+
+    <Transition
+        motion:constraintSetStart="@+id/mainList"
+        motion:constraintSetEnd="@+id/favourites"
+        motion:duration="200"
+        android:id="@+id/transition_to_favourites"
+        motion:motionInterpolator="linear">
+        <OnClick
+            motion:clickAction="transitionToEnd"/>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/mainList">
+        <Constraint
+            android:id="@+id/frag"
+            motion:layout_constraintTop_toBottomOf="@+id/toolbar_main"
+            motion:layout_constraintBottom_toTopOf="@+id/inner_layout"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintWidth_default="percent"
+            motion:layout_constraintWidth_percent="1"
+            />
+
+        <Constraint
+            android:id="@+id/secondFrag"
+            motion:layout_constraintWidth_default="percent"
+            motion:layout_constraintWidth_percent="1"
+            motion:layout_constraintStart_toEndOf="parent"
+            motion:layout_constraintBottom_toTopOf="@+id/inner_layout"
+            motion:layout_constraintTop_toBottomOf="@+id/toolbar_main"/>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/favourites">
+        <Constraint
+            android:id="@+id/secondFrag"
+            motion:layout_constraintWidth_default="percent"
+            motion:layout_constraintWidth_percent="1"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintBottom_toTopOf="@+id/inner_layout"
+            motion:layout_constraintTop_toBottomOf="@+id/toolbar_main" />
+
+        <Constraint
+            android:id="@+id/frag"
+            motion:layout_constraintWidth_default="percent"
+            motion:layout_constraintWidth_percent="1"
+            motion:layout_constraintEnd_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@+id/toolbar_main"
+            motion:layout_constraintBottom_toTopOf="@+id/inner_layout"/>
+
+    </ConstraintSet>
+
+</MotionScene>

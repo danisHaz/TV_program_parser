@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">TV program parser</string>
     <string name="lazha">Even Lazha Is More Than Lazha!</string>
-    <string name="watchProgram">Watch current program</string>
-    <string name="manageFavourites">Manage your favourites</string>
+    <string name="watchProgram">Watch</string>
+    <string name="manageFavourites">Manage</string>
     <string name="defaultChannelTitle">Your Favourite Channels:</string>
     <string name="defaultProgramTitle">Your Favourite Programs:</string>
     <string name="channelsListEmpty">No channels are in Favourite</string>
@@ -10,6 +10,7 @@
     <string name="helloThere">Hello there</string>
     <string name="contentTitle">TV program</string>
     <string name="addNewProgram">Add new program</string>
+    <string name="newProgramHint">Add New Program</string>
     <string-array name="favouriteProgramsMenu">
         <item>Add program to favourites</item>
         <item>Rate this program</item>
