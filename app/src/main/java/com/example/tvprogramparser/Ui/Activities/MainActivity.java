@@ -2,6 +2,7 @@ package com.example.tvprogramparser.Ui.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.motion.widget.MotionLayout;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -143,20 +144,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onWatchProgramClick(View view) {
-        Log.d("Lox", "1");
         ToggleButton button = (ToggleButton) view;
         button.setCompoundDrawablesRelativeWithIntrinsicBounds(0,
                 R.drawable.ic_baseline_list_enabled_24, 0, 0);
+
+        ((MotionLayout)findViewById(R.id.main_layout)).transitionToState(R.id.mainList);
 
         ((ToggleButton)findViewById(R.id.manageFavourites)).setCompoundDrawablesRelativeWithIntrinsicBounds(0,
                 R.drawable.ic_baseline_home_24, 0, 0);
     }
 
     public void onManageFavouritesClick(View view) {
-        Log.d("Lox", "2");
         ToggleButton button = (ToggleButton) view;
         button.setCompoundDrawablesRelativeWithIntrinsicBounds(0,
                 R.drawable.ic_baseline_home_enabled_24, 0, 0);
+
+        ((MotionLayout)findViewById(R.id.main_layout)).transitionToState(R.id.favourites);
 
         ((ToggleButton)findViewById(R.id.watchProgram)).setCompoundDrawablesRelativeWithIntrinsicBounds(0,
                 R.drawable.ic_baseline_list_24, 0, 0);

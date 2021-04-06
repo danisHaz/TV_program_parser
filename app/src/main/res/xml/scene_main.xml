@@ -6,9 +6,9 @@
         motion:constraintSetEnd="@+id/mainList"
         motion:constraintSetStart="@+id/favourites"
         motion:duration="200"
+        android:id="@+id/transition_to_main"
         motion:motionInterpolator="linear">
         <OnClick
-            motion:targetId="@+id/watchProgram"
             motion:clickAction="transitionToEnd"/>
     </Transition>
 
@@ -16,9 +16,9 @@
         motion:constraintSetStart="@+id/mainList"
         motion:constraintSetEnd="@+id/favourites"
         motion:duration="200"
+        android:id="@+id/transition_to_favourites"
         motion:motionInterpolator="linear">
         <OnClick
-            motion:targetId="@+id/manageFavourites"
             motion:clickAction="transitionToEnd"/>
     </Transition>
 

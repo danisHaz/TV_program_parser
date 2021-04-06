@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:id="@+id/main_layout"
     app:layoutDescription="@xml/scene_main"
     tools:context=".Ui.Activities.MainActivity">
 
@@ -43,6 +44,7 @@
             android:background="@drawable/main_layout_buttons_style"
             android:textOff="@string/watchProgram"
             android:textOn="@string/watchProgram"
+            android:textSize="10sp"
             android:drawableTop="@drawable/ic_baseline_list_24"
             app:layout_constraintEnd_toStartOf="@+id/manageFavourites"
             app:layout_constraintHorizontal_bias="0.5"
@@ -55,6 +57,7 @@
             android:onClick="onManageFavouritesClick"
             android:textOn="@string/manageFavourites"
             android:textOff="@string/manageFavourites"
+            android:textSize="10sp"
             android:drawableTop="@drawable/ic_baseline_home_enabled_24"
             android:background="@drawable/main_layout_buttons_style"
             app:layout_constraintStart_toEndOf="@+id/watchProgram"
