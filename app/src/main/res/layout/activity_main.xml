@@ -32,7 +32,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryLight"
+        android:background="@drawable/main_inner_layout_shape"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -41,7 +41,7 @@
             android:layout_width="0dp"
             android:onClick="onWatchProgramClick"
             android:layout_height="wrap_content"
-            android:background="@drawable/main_layout_buttons_style"
+            android:background="@drawable/style_main_layout_buttons_checked"
             android:textOff="@string/watchProgram"
             android:textOn="@string/watchProgram"
             android:textSize="10sp"
@@ -59,7 +59,7 @@
             android:textOff="@string/manageFavourites"
             android:textSize="10sp"
             android:drawableTop="@drawable/ic_baseline_home_enabled_24"
-            android:background="@drawable/main_layout_buttons_style"
+            android:background="@drawable/style_main_layout_buttons_checked"
             app:layout_constraintStart_toEndOf="@+id/watchProgram"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

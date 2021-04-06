@@ -6,7 +6,6 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -79,26 +78,42 @@ public class MainActivity extends AppCompatActivity {
 
 //    Actually now there is only one item in menu: set to favourites
     @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
-        final EditText texter = (EditText) item.getActionView();
-        texter.setHint(R.string.addNewProgram);
-        texter.setSingleLine(true);
-        texter.requestFocus();
-        final InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+    public boolean onOptionsItemSelected(MenuItem item) {
 
-        texter.setOnClickListener(new View.OnClickListener() {
+        item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
-            public void onClick(View view) {
-                String str = texter.getText().toString();
-                FavouriteObject.addToFavouritePrograms(new Program(str), MainActivity.this);
-                ManageFavouritesFragment.createInstance().updateAndRefresh();
+            public boolean onMenuItemActionExpand(final MenuItem menuItem) {
+                final EditText texter = (EditText) menuItem.getActionView();
+                texter.setHint(R.string.addNewProgram);
+                texter.setSingleLine(true);
+                texter.requestFocus();
+                final InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+                texter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String str = texter.getText().toString();
+                        FavouriteObject.addToFavouritePrograms(new Program(str), MainActivity.this);
+                        ManageFavouritesFragment.createInstance().updateAndRefresh();
+                        texter.setText("");
+                        inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                        menuItem.collapseActionView();
+                        Toast.makeText(MainActivity.this,
+                                "Program is set to favourites",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                final EditText texter = (EditText) menuItem.getActionView();
                 texter.setText("");
+                final InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                item.collapseActionView();
-                Toast.makeText(MainActivity.this,
-                        "Program is set to favourites",
-                        Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
 
