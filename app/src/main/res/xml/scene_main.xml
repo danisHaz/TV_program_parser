@@ -8,8 +8,6 @@
         motion:duration="200"
         android:id="@+id/transition_to_main"
         motion:motionInterpolator="linear">
-        <OnClick
-            motion:clickAction="transitionToEnd"/>
     </Transition>
 
     <Transition
@@ -18,8 +16,6 @@
         motion:duration="200"
         android:id="@+id/transition_to_favourites"
         motion:motionInterpolator="linear">
-        <OnClick
-            motion:clickAction="transitionToEnd"/>
     </Transition>
 
     <ConstraintSet android:id="@+id/mainList">
