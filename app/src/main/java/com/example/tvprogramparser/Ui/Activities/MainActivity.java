@@ -87,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
                 texter.setHint(R.string.addNewProgram);
                 texter.setSingleLine(true);
                 texter.requestFocus();
-                final InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                final InputMethodManager inputManager
+                        = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
                 texter.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +112,8 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemActionCollapse(MenuItem menuItem) {
                 final EditText texter = (EditText) menuItem.getActionView();
                 texter.setText("");
-                final InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                final InputMethodManager inputManager
+                        = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                 return true;
             }

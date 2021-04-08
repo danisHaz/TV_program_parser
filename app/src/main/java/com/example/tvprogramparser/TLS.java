@@ -15,6 +15,7 @@ public class TLS {
     public static final String QUERY_1_1 = "a.p-channels__item__info__title__link[href]";
     public static final String QUERY_1_2 = "span.p-programms__item__time-value";
     public static final String QUERY_1_3 = "span.p-programms__item__name-link";
+    public static final String QUERY_GET_IMAGES = "img.p-picture__image[src]";
     public static final String ARG_COUNT = "argCount";
     public static final String CURRENT_ARRAY_ID = "smallMenuId";
     public static final String CHOSEN_OBJECT_NAME = "chosenObjectName";
