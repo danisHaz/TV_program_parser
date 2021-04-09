@@ -14,12 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.content.Intent;
 
 import com.example.tvprogramparser.Components.Channel;
@@ -108,6 +104,7 @@ public class BottomSheetFragment extends Fragment {
                                 ManageFavouritesActivity.class);
 
                         intent.putExtra("name", channels[pos]);
+                        intent.putExtra("pos", pos);
                         view.getContext().startActivity(intent);
                     }
                 });
