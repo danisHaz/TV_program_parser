@@ -1,34 +1,25 @@
 package com.example.tvprogramparser.Ui.Activities;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.content.SharedPreferences;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.tvprogramparser.Background.RestartService;
 import com.example.tvprogramparser.Components.FavouriteObject;
-import com.example.tvprogramparser.Components.OnCompleteListener;
 import com.example.tvprogramparser.Components.Program;
-import com.example.tvprogramparser.Components.WorkDoneListener;
 import com.example.tvprogramparser.Ui.Fragments.BottomSheetFragment;
-import com.example.tvprogramparser.Components.FavouriteObjectsDB;
-import com.example.tvprogramparser.Components.MainChannelsList;
 import com.example.tvprogramparser.Ui.Fragments.ManageFavouritesFragment;
 import com.example.tvprogramparser.R;
 import com.example.tvprogramparser.TLS;
-import com.example.tvprogramparser.Ui.Fragments.NoNetworkFragment;
 import com.example.tvprogramparser.Ui.Fragments.ProgressFragment;
 
 public class MainActivity extends AppCompatActivity {

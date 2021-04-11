@@ -6,6 +6,7 @@
     android:id="@+id/starting_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorStartingBack"
     android:orientation="vertical"
     app:layoutDescription="@xml/scene_starting"
     tools:context=".Ui.Activities.StartingActivity">
@@ -15,6 +16,22 @@
         android:background="@color/colorBackOne"
         android:layout_width="150dp"
         android:layout_height="60dp"/>
+
+    <com.example.tvprogramparser.Ui.Views.TriangleView
+        android:id="@+id/back_view_triangle_1"
+        android:layout_width="30dp"
+        android:layout_height="30dp"/>
+
+    <com.example.tvprogramparser.Ui.Views.ReverseTriangleView
+        android:id="@+id/back_view_triangle_2"
+        android:layout_width="30dp"
+        android:layout_height="30dp"/>
+
+    <View
+        android:id="@+id/masking_view_1"
+        android:background="@color/colorStartingBack"
+        android:layout_width="160dp"
+        android:layout_height="90dp"/>
 
     <TextView
         android:id="@+id/loading_view"
