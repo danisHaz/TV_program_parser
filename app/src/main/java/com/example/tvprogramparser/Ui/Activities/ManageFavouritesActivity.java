@@ -1,19 +1,24 @@
 package com.example.tvprogramparser.Ui.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ArrayAdapter;
 import android.view.View;
+import android.graphics.Bitmap;
 
 import com.example.tvprogramparser.Components.Channel;
+import com.example.tvprogramparser.Components.MainChannelsList;
 import com.example.tvprogramparser.Components.OnCompleteListener;
 import com.example.tvprogramparser.Components.WorkDoneListener;
 import com.example.tvprogramparser.R;
@@ -38,8 +43,10 @@ public class ManageFavouritesActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Channel ch = null;
+        int pos;
         try {
             ch = (Channel) intent.getExtras().getSerializable("name");
+            pos = intent.getExtras().getInt("pos", -1);
         } catch (NullPointerException e) {
             e.printStackTrace();
             Toast.makeText(this,
@@ -48,12 +55,28 @@ public class ManageFavouritesActivity extends AppCompatActivity {
             return;
         }
 
-        if (ch == null)
+        if (ch == null || pos == -1)
             return;
 
         final String link = TLS.MAIN_URL + ch.getLink();
         final ManageFavouritesActivity local = this;
         final ListView list = (ListView) findViewById(R.id.manageFavouritesList);
+
+        try {
+            Toolbar customToolbar = (Toolbar) findViewById(R.id.program_toolbar);
+            String channelName = MainChannelsList.getChannelsList()[pos].getName();
+            ((TextView) findViewById(R.id.channel_name_in_program))
+                    .setText(channelName);
+            Bitmap channelBitmap = MainChannelsList.getImagesList()[pos];
+            ((ImageView) findViewById(R.id.channel_image)).setImageBitmap(channelBitmap);
+
+            setSupportActionBar(customToolbar);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+
         final ProgressBar progressBar
                 = (ProgressBar) findViewById(R.id.loading_while_favourites);
 

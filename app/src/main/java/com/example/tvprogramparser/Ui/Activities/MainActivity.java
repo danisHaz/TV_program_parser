@@ -9,24 +9,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.content.SharedPreferences;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.tvprogramparser.Background.RestartService;
 import com.example.tvprogramparser.Components.FavouriteObject;
-import com.example.tvprogramparser.Components.OnCompleteListener;
 import com.example.tvprogramparser.Components.Program;
-import com.example.tvprogramparser.Components.WorkDoneListener;
 import com.example.tvprogramparser.Ui.Fragments.BottomSheetFragment;
-import com.example.tvprogramparser.Components.FavouriteObjectsDB;
-import com.example.tvprogramparser.Components.MainChannelsList;
 import com.example.tvprogramparser.Ui.Fragments.ManageFavouritesFragment;
 import com.example.tvprogramparser.R;
 import com.example.tvprogramparser.TLS;
-import com.example.tvprogramparser.Ui.Fragments.NoNetworkFragment;
 import com.example.tvprogramparser.Ui.Fragments.ProgressFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,39 +27,15 @@ public class MainActivity extends AppCompatActivity {
         super(R.layout.activity_main);
     }
     private int defaultFragment = 0;
-    public static boolean isNetworkActive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        isNetworkActive = TLS.isNetworkProvided(this);
-
         Toolbar customToolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(customToolbar);
 
-        FavouriteObjectsDB.createInstance(this);
-        if (!isNetworkActive) {
-            setWatchProgramFragment();
-            return;
-        }
-
-        setProgressFragment();
-
-        final MainActivity activity = this;
-
-        WorkDoneListener.setNewListener(new OnCompleteListener() {
-            @Override
-            public void doWork(Bundle bundle) {
-                activity.setDefaultFragment();
-                SharedPreferences prefs
-                        = getSharedPreferences(TLS.APPLICATION_PREFERENCES, MODE_PRIVATE);
-                if (prefs.getInt(TLS.BACKGROUND_REQUEST_ID, 1) == 1) {
-                    RestartService.scheduleAlarm(activity);
-                }
-            }
-        }.setTag(TLS.GET_CHANNELS_LIST));
-        MainChannelsList.define();
+        setDefaultFragment();
     }
 
     @Override
@@ -139,14 +108,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setWatchProgramFragment() {
-        if (!isNetworkActive) {
-            getSupportFragmentManager().beginTransaction()
-                    .setReorderingAllowed(true)
-                    .replace(R.id.frag, NoNetworkFragment.createInstance(), TLS.WATCH_PROGRAM_TAG)
-                    .commit();
-            return;
-        }
-
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.frag, BottomSheetFragment.createInstance(), TLS.WATCH_PROGRAM_TAG)

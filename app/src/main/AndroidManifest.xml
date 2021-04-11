@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.tvprogramparser">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -14,18 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <service
-            android:name=".Background.FavouriteJobService"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
         <activity
-            android:name=".Ui.Activities.ManageFavouritesActivity"
-            android:label="@string/manageFavourites"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".Ui.Activities.MainActivity"
+            android:name=".Ui.Activities.StartingActivity"
+            android:label="@string/title_activity_starting"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,15 +28,30 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".Background.RestartService"
-            android:exported="false"
-            android:enabled="true">
+        <service
+            android:name=".Background.FavouriteJobService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <activity
+            android:name=".Ui.Activities.ManageFavouritesActivity"
+            android:label="@string/manageFavourites"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Ui.Activities.MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <receiver
+            android:name=".Background.RestartService"
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="com.example.tvprogramparser.ACTION_NAME"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="com.example.tvprogramparser.ACTION_NAME" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

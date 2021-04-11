@@ -43,8 +43,8 @@ public class HttpConnection {
             return innerBitmapGetterFromURL(newUrl);
         }
 
-        public Bitmap getBitmapFromUrl(@Nullable URL url) throws NullPointerException {
-            return innerBitmapGetterFromURL(url); }
+        public Bitmap getBitmapFromUrl(@Nullable URL url) throws NullPointerException
+        { return innerBitmapGetterFromURL(url); }
 
         private Bitmap innerBitmapGetterFromURL(@Nullable URL url) throws NullPointerException {
             Bitmap receivedBitmap = null;
