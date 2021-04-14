@@ -21,7 +21,7 @@ import com.example.tvprogramparser.TLS;
 import java.util.ArrayList;
 
 public class FavouriteObjectCheckingWork extends Worker {
-    FavouriteObjectCheckingWork(@NonNull Context context,
+    public FavouriteObjectCheckingWork(@NonNull Context context,
                                 @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }

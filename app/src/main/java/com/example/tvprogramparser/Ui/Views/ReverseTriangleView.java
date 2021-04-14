@@ -14,14 +14,19 @@ public class ReverseTriangleView extends View {
     private Paint myPainter = new Paint();
     private Path myPath = new Path();
 
-    Point point1 = new Point(0,
+    public Point point1 = new Point(0,
             (int)((Point.getY() - Point.convertDpToPx(60, getContext())) * 0.04));
     Point point2 = new Point(0, 0);
-    Point point3 = new Point((int)((Point.getX() - Point.convertDpToPx(150, getContext())) * 0.04),
+    public Point point3 = new Point((int)((Point.getX() - Point.convertDpToPx(150, getContext())) * 0.04),
             0);
 
     public ReverseTriangleView(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    public void setMyLayoutParams(int widthInPx, int heightInPx) {
+        this.getLayoutParams().height = heightInPx;
+        this.getLayoutParams().width = widthInPx;
     }
 
     @Override

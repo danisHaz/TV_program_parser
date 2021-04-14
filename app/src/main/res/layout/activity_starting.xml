@@ -19,13 +19,17 @@
 
     <com.example.tvprogramparser.Ui.Views.TriangleView
         android:id="@+id/back_view_triangle_1"
-        android:layout_width="30dp"
-        android:layout_height="30dp"/>
+        android:layout_width="200px"
+        android:layout_height="200px"
+        app:layout_constraintStart_toStartOf="@+id/back_view_1"
+        app:layout_constraintBottom_toTopOf="@+id/back_view_1"/>
 
     <com.example.tvprogramparser.Ui.Views.ReverseTriangleView
         android:id="@+id/back_view_triangle_2"
-        android:layout_width="30dp"
-        android:layout_height="30dp"/>
+        android:layout_width="16px"
+        android:layout_height="54px"
+        app:layout_constraintStart_toEndOf="@+id/back_view_1"
+        app:layout_constraintBottom_toBottomOf="@+id/back_view_1"/>
 
     <View
         android:id="@+id/masking_view_1"
@@ -41,5 +45,4 @@
         android:gravity="center"
         android:layout_width="150dp"
         android:layout_height="60dp"/>
-
 </androidx.constraintlayout.motion.widget.MotionLayout>

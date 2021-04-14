@@ -6,14 +6,18 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.example.tvprogramparser.Background.NotificationBuilder;
 import com.example.tvprogramparser.Components.FavouriteObject;
 import com.example.tvprogramparser.Components.Program;
 import com.example.tvprogramparser.Ui.Fragments.BottomSheetFragment;
@@ -60,18 +64,24 @@ public class MainActivity extends AppCompatActivity {
                         = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
-                texter.setOnClickListener(new View.OnClickListener() {
+                texter.setImeOptions(EditorInfo.IME_ACTION_GO);
+                texter.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
-                    public void onClick(View view) {
-                        String str = texter.getText().toString();
-                        FavouriteObject.addToFavouritePrograms(new Program(str), MainActivity.this);
-                        ManageFavouritesFragment.createInstance().updateAndRefresh();
-                        texter.setText("");
-                        inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                        menuItem.collapseActionView();
-                        Toast.makeText(MainActivity.this,
-                                "Program is set to favourites",
-                                Toast.LENGTH_SHORT).show();
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        if (actionId == EditorInfo.IME_ACTION_GO) {
+                            String str = texter.getText().toString();
+                            FavouriteObject.addToFavouritePrograms(new Program(str), MainActivity.this);
+                            ManageFavouritesFragment.createInstance().updateAndRefresh();
+                            texter.setText("");
+                            inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                            menuItem.collapseActionView();
+                            Toast.makeText(MainActivity.this,
+                                    "Program is set to favourites",
+                                    Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+
+                        return false;
                     }
                 });
                 return true;

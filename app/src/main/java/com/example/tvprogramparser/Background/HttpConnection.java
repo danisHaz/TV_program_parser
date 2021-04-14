@@ -54,6 +54,7 @@ public class HttpConnection {
                 connection.connect();
                 InputStream input = connection.getInputStream();
                 receivedBitmap = BitmapFactory.decodeStream(input);
+                connection.disconnect();
             } catch (IOException e) {
                 Log.e("HttpConnection", "IOE when getting bitmap");
             } catch (NullPointerException e) {

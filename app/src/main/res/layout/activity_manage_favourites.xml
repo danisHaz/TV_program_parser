@@ -29,8 +29,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/program_toolbar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/smallMenuFragment"/>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/smallMenuFragment"

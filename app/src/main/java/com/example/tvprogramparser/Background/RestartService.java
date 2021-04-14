@@ -24,26 +24,25 @@ import java.util.Calendar;
 
 public class RestartService extends BroadcastReceiver {
     private static int currJobNum = 1;
-    private static int repeatIntervalInHours = 1;
     private static String workTag = "com.example.tvprogramparser.workTag";
 
     public RestartService() {}
 
     @Override
     public void onReceive(final Context context, Intent intent) {
+        NotificationBuilder builder = new NotificationBuilder(context,
+                R.mipmap.ic_launcher, "Reboot completed", "ChannelIDEBoy",
+                "ChannelNameEBoy");
+        builder.setNotification();
 
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            NotificationBuilder builder = new NotificationBuilder(context,
-                    R.mipmap.ic_launcher, "Reboot completed", "ChannelIDEBoy",
-                    "ChannelNameEBoy");
-            builder.setNotification();
-
             scheduleAlarm(context);
         } else if (intent.getAction().equals(TLS.ACTION_PERFORM_FAVOURITE)) {
             scheduleWork(context);
         }
     }
 
+    @Deprecated
     public static void scheduleJob(Context context) {
         ComponentName jobService = new ComponentName(context, FavouriteJobService.class);
 
@@ -100,17 +99,17 @@ public class RestartService extends BroadcastReceiver {
         }
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 7);
-        calendar.set(Calendar.MINUTE, 30);
+        calendar.set(Calendar.HOUR_OF_DAY, 21);
+        calendar.set(Calendar.MINUTE, 45);
 
         SharedPreferences.Editor prefs = context.getSharedPreferences(TLS.APPLICATION_PREFERENCES,
                 Context.MODE_PRIVATE).edit();
 
-        prefs.putInt(TLS.BACKGROUND_REQUEST_ID, 0);
+        prefs.putInt(TLS.BACKGROUND_REQUEST_ID, 1);
         prefs.apply();
 
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_HALF_DAY, pendingIntent);
+                AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
     }
 }

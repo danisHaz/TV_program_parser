@@ -130,8 +130,15 @@ public class ManageFavouritesActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                Elements fir = doc.select(TLS.QUERY_1_3);
-                Elements sec = doc.select(TLS.QUERY_1_2);
+                Elements fir;
+                Elements sec;
+                try {
+                    fir = doc.select(TLS.QUERY_1_3);
+                    sec = doc.select(TLS.QUERY_1_2);
+                } catch (NullPointerException e) {
+                    Log.e("ManageFavouritesActivity", "Document is null when query_2/3");
+                    return;
+                }
 
                 if (fir.size() != sec.size()) {
                     Log.e("ManageFavouritesActivity", "Something went wrong");
@@ -164,6 +171,8 @@ public class ManageFavouritesActivity extends AppCompatActivity {
                 });
             }
         });
+        newThread.setDaemon(true);
+
         newThread.start();
 
     }

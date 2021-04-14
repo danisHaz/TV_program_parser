@@ -7,8 +7,6 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
-import java.lang.reflect.Type;
-
 public class Point {
     public int x, y;
     private static int screenX = -1, screenY = -1;

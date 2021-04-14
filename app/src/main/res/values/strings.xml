@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TV program parser</string>
+    <string name="app_name">TV program</string>
     <string name="lazha">Even Lazha Is More Than Lazha!</string>
     <string name="watchProgram">Watch</string>
     <string name="manageFavourites">Manage</string>
@@ -30,4 +30,8 @@
     <string name="loadingD">Loading.</string>
     <string name="loadingDD">Loading..</string>
     <string name="loadingDDD">Loading…</string>
+
+    <string name="tvShows">Tv Shows</string>
+    <string name="News">News</string>
+    <string name="SearchFor">Search For…</string>
 </resources>

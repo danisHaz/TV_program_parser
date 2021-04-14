@@ -6,7 +6,7 @@
     <Transition
         motion:constraintSetEnd="@+id/end_position"
         motion:constraintSetStart="@+id/start_position"
-        motion:duration="600"
+        motion:duration="1000"
         android:id="@+id/loading_transition"
         motion:motionInterpolator="linear">
     </Transition>
@@ -40,21 +40,6 @@
             motion:layout_constraintStart_toStartOf="@+id/loading_view"
             motion:layout_constraintBottom_toBottomOf="@+id/loading_view" />
 
-        <Constraint
-            android:id="@+id/back_view_triangle_1"
-            android:layout_width="16px"
-            android:layout_height="54px"
-            motion:layout_constraintStart_toStartOf="@+id/back_view_1"
-            motion:layout_constraintBottom_toTopOf="@+id/back_view_1"
-            />
-
-        <Constraint
-            android:id="@+id/back_view_triangle_2"
-            android:layout_width="16px"
-            android:layout_height="54px"
-            motion:layout_constraintStart_toEndOf="@+id/back_view_1"
-            motion:layout_constraintBottom_toBottomOf="@+id/back_view_1"
-            />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end_position">
@@ -87,21 +72,6 @@
             motion:layout_constraintStart_toStartOf="@+id/loading_view"
             motion:layout_constraintBottom_toBottomOf="@+id/loading_view" />
 
-        <Constraint
-            android:id="@+id/back_view_triangle_1"
-            android:layout_width="16px"
-            android:layout_height="54px"
-            motion:layout_constraintStart_toStartOf="@+id/back_view_1"
-            motion:layout_constraintBottom_toTopOf="@+id/back_view_1"
-            />
-
-        <Constraint
-            android:id="@+id/back_view_triangle_2"
-            android:layout_width="16px"
-            android:layout_height="54px"
-            motion:layout_constraintStart_toEndOf="@+id/back_view_1"
-            motion:layout_constraintBottom_toBottomOf="@+id/back_view_1"
-            />
     </ConstraintSet>
 
 </MotionScene>
