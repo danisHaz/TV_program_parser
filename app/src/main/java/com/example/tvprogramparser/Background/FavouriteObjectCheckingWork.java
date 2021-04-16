@@ -21,7 +21,7 @@ import com.example.tvprogramparser.TLS;
 import java.util.ArrayList;
 
 public class FavouriteObjectCheckingWork extends Worker {
-    FavouriteObjectCheckingWork(@NonNull Context context,
+    public FavouriteObjectCheckingWork(@NonNull Context context,
                                 @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
@@ -29,10 +29,11 @@ public class FavouriteObjectCheckingWork extends Worker {
     @Override
     @NonNull
     public ListenableWorker.Result doWork() {
+        FavouriteObject.addToFavouritePrograms(new Program("KekLol"), getApplicationContext());
         WorkDoneListener.setNewListener(new OnCompleteListener() {
             @Override
             public void doWork(Bundle bundle) {
-                Log.d("FavouriteObjectCheckingWork", "listener is set");
+                FavouriteObject.addToFavouritePrograms(new Program("LolKek"), getApplicationContext());
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {

@@ -18,11 +18,15 @@ import com.example.tvprogramparser.Components.WorkDoneListener;
 import com.example.tvprogramparser.R;
 import com.example.tvprogramparser.TLS;
 import com.example.tvprogramparser.Ui.Views.Point;
+import com.example.tvprogramparser.Ui.Views.ReverseTriangleView;
+import com.example.tvprogramparser.Ui.Views.TriangleView;
 
 public class StartingActivity extends AppCompatActivity {
     public static boolean isNetworkActive;
     private Handler motionHandler = new Handler();
     private int friend = 0;
+    TriangleView view;
+    ReverseTriangleView reverseView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +34,8 @@ public class StartingActivity extends AppCompatActivity {
 
         Point.countScreenDimensions(this);
         setContentView(R.layout.activity_starting);
+        onDefine();
 
-        isNetworkActive = TLS.isNetworkProvided(this);
-
-        FavouriteObjectsDB.createInstance(this);
         if (!isNetworkActive) {
 //            provide with "No network" section
             return;
@@ -45,7 +47,7 @@ public class StartingActivity extends AppCompatActivity {
                 Intent toMainActivity = new Intent(StartingActivity.this, MainActivity.class);
                 SharedPreferences prefs
                         = getSharedPreferences(TLS.APPLICATION_PREFERENCES, MODE_PRIVATE);
-                if (prefs.getInt(TLS.BACKGROUND_REQUEST_ID, 1) == 1) {
+                if (prefs.getInt(TLS.BACKGROUND_REQUEST_ID, 0) == 0) {
                     RestartService.scheduleAlarm(StartingActivity.this);
                 }
 
@@ -53,6 +55,16 @@ public class StartingActivity extends AppCompatActivity {
             }
         }.setTag(TLS.GET_CHANNELS_LIST));
         MainChannelsList.define();
+    }
+
+    private void onDefine() {
+        view = findViewById(R.id.back_view_triangle_1);
+        view.setMyLayoutParams(view.point2.x, view.point2.y);
+        reverseView = findViewById(R.id.back_view_triangle_2);
+        reverseView.setMyLayoutParams(reverseView.point3.x, reverseView.point1.y);
+
+        isNetworkActive = TLS.isNetworkProvided(this);
+        FavouriteObjectsDB.createInstance(this);
     }
 
     @Override

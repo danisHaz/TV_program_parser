@@ -18,7 +18,6 @@ import org.jsoup.nodes.Document;
 
 import com.example.tvprogramparser.TLS;
 
-// TODO: rewrite thread sections ('cause they are SOOOOO stupid, guys)
 public class FavouriteObject {
     public static ArrayList<Channel> favouriteChannels = new ArrayList<Channel>();
     public static ArrayList<Program> favouritePrograms = new ArrayList<Program>();
@@ -148,8 +147,10 @@ public class FavouriteObject {
 
     public static ArrayList<Program> dailyProgramChecker(final Context context) throws java.io.IOException {
 
-        Channel[] channelArray =  MainChannelsList.getChannelsList();
-
+        Channel[] channelArray;
+        synchronized (MainChannelsList.class) {
+            channelArray = MainChannelsList.getChannelsList();
+        }
         final ArrayList<Program> result = new ArrayList<>();
 
         final Document[] doc = new Document[1];

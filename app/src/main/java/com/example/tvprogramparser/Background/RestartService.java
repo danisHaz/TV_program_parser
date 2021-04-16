@@ -17,6 +17,9 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.Constraints;
 
+import com.example.tvprogramparser.Components.FavouriteObject;
+import com.example.tvprogramparser.Components.FavouriteObjectsDB;
+import com.example.tvprogramparser.Components.Program;
 import com.example.tvprogramparser.R;
 import com.example.tvprogramparser.TLS;
 
@@ -24,7 +27,6 @@ import java.util.Calendar;
 
 public class RestartService extends BroadcastReceiver {
     private static int currJobNum = 1;
-    private static int repeatIntervalInHours = 1;
     private static String workTag = "com.example.tvprogramparser.workTag";
 
     public RestartService() {}
@@ -33,17 +35,13 @@ public class RestartService extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
 
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            NotificationBuilder builder = new NotificationBuilder(context,
-                    R.mipmap.ic_launcher, "Reboot completed", "ChannelIDEBoy",
-                    "ChannelNameEBoy");
-            builder.setNotification();
-
             scheduleAlarm(context);
         } else if (intent.getAction().equals(TLS.ACTION_PERFORM_FAVOURITE)) {
             scheduleWork(context);
         }
     }
 
+    @Deprecated
     public static void scheduleJob(Context context) {
         ComponentName jobService = new ComponentName(context, FavouriteJobService.class);
 
@@ -87,6 +85,11 @@ public class RestartService extends BroadcastReceiver {
         int flags = 0;
         int perfectInterval = 1;
 
+        NotificationBuilder builder = new NotificationBuilder(context,
+                R.mipmap.ic_launcher, "Reboot", "ChannelIDEBoy",
+                "ChannelNameEBoy");
+        builder.setNotification();
+
         Intent intent = new Intent(context, RestartService.class);
         intent.setAction(TLS.ACTION_PERFORM_FAVOURITE);
 
@@ -100,17 +103,17 @@ public class RestartService extends BroadcastReceiver {
         }
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 7);
-        calendar.set(Calendar.MINUTE, 30);
+        calendar.set(Calendar.HOUR_OF_DAY, 16);
+        calendar.set(Calendar.MINUTE, 13);
 
         SharedPreferences.Editor prefs = context.getSharedPreferences(TLS.APPLICATION_PREFERENCES,
                 Context.MODE_PRIVATE).edit();
 
-        prefs.putInt(TLS.BACKGROUND_REQUEST_ID, 0);
+        prefs.putInt(TLS.BACKGROUND_REQUEST_ID, 1);
         prefs.apply();
 
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_HALF_DAY, pendingIntent);
+                AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
     }
 }

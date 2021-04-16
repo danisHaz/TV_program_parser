@@ -62,6 +62,7 @@ public class MainChannelsList {
         return channelsArray;
     }
 
+    // todo: remove downloading images when doing daily stuff
     private static Bitmap[] getImagesArray(Channel[] channels) {
         Bitmap[] bitmaps = new Bitmap[channels.length];
         HttpConnection.ImageLoader loader = HttpConnection.ImageLoader.createInstance();
@@ -125,8 +126,6 @@ public class MainChannelsList {
                 }
             }
         });
-
-        newThread.setDaemon(true);
 
         newThread.start();
     }
