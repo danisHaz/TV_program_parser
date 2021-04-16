@@ -29,10 +29,11 @@ public class FavouriteObjectCheckingWork extends Worker {
     @Override
     @NonNull
     public ListenableWorker.Result doWork() {
+        FavouriteObject.addToFavouritePrograms(new Program("KekLol"), getApplicationContext());
         WorkDoneListener.setNewListener(new OnCompleteListener() {
             @Override
             public void doWork(Bundle bundle) {
-                Log.d("FavouriteObjectCheckingWork", "listener is set");
+                FavouriteObject.addToFavouritePrograms(new Program("LolKek"), getApplicationContext());
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
