@@ -83,10 +83,9 @@ public class RestartService extends BroadcastReceiver {
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         int requestCode = 12;
         int flags = 0;
-        int perfectInterval = 1;
 
         NotificationBuilder builder = new NotificationBuilder(context,
-                R.mipmap.ic_launcher, "Reboot", "ChannelIDEBoy",
+                R.mipmap.ic_launcher, "Reboot", TLS.DEFAULT_CHANNEL_ID,
                 "ChannelNameEBoy");
         builder.setNotification();
 
@@ -103,8 +102,8 @@ public class RestartService extends BroadcastReceiver {
         }
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 16);
-        calendar.set(Calendar.MINUTE, 13);
+        calendar.set(Calendar.HOUR_OF_DAY, 7);
+        calendar.set(Calendar.MINUTE, 30);
 
         SharedPreferences.Editor prefs = context.getSharedPreferences(TLS.APPLICATION_PREFERENCES,
                 Context.MODE_PRIVATE).edit();
@@ -114,6 +113,6 @@ public class RestartService extends BroadcastReceiver {
 
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+                AlarmManager.INTERVAL_HALF_DAY, pendingIntent);
     }
 }

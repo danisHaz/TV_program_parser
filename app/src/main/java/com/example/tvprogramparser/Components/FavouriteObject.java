@@ -60,7 +60,11 @@ public class FavouriteObject {
     public static void addToFavouritePrograms(Program pr, final Context context) {
         for (int i = 0; i < favouritePrograms.size(); i++) {
             if (favouritePrograms.get(i).isEqual(pr)) {
-                Toast.makeText(context, "Program is already in favourites", Toast.LENGTH_SHORT).show();
+                try {
+                    Toast.makeText(context, "Program is already in favourites", Toast.LENGTH_SHORT).show();
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
+                }
                 return;
             }
         }

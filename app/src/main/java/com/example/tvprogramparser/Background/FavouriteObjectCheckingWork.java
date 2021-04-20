@@ -7,7 +7,6 @@ import androidx.work.WorkerParameters;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.example.tvprogramparser.Components.FavouriteObject;
 import com.example.tvprogramparser.Components.FavouriteObjectsDB;
@@ -29,11 +28,9 @@ public class FavouriteObjectCheckingWork extends Worker {
     @Override
     @NonNull
     public ListenableWorker.Result doWork() {
-        FavouriteObject.addToFavouritePrograms(new Program("KekLol"), getApplicationContext());
         WorkDoneListener.setNewListener(new OnCompleteListener() {
             @Override
             public void doWork(Bundle bundle) {
-                FavouriteObject.addToFavouritePrograms(new Program("LolKek"), getApplicationContext());
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -46,7 +43,7 @@ public class FavouriteObjectCheckingWork extends Worker {
                         }
 
                         for (int i = 0; i < programList.size(); i++) {
-                            String channelId = "CHANNEL_ID_" + String.valueOf(i);
+                            String channelId = TLS.DEFAULT_CHANNEL_ID;
                             String channelName = "CHANNEL_NAME_" + String.valueOf(i);
                             String contentText = programList.get(i).getName() + " at " + programList.get(i).getTimeBegin();
                             NotificationBuilder builder = new NotificationBuilder(getApplicationContext(),

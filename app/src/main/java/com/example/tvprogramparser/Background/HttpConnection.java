@@ -48,18 +48,22 @@ public class HttpConnection {
 
         private Bitmap innerBitmapGetterFromURL(@Nullable URL url) throws NullPointerException {
             Bitmap receivedBitmap = null;
+            HttpsURLConnection connection = null;
             try {
-                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+                connection = (HttpsURLConnection) url.openConnection();
                 connection.setDoInput(true);
                 connection.connect();
                 InputStream input = connection.getInputStream();
                 receivedBitmap = BitmapFactory.decodeStream(input);
-                connection.disconnect();
             } catch (IOException e) {
                 Log.e("HttpConnection", "IOE when getting bitmap");
             } catch (NullPointerException e) {
                 Log.e("HttpConnection", "Provided URL is null");
+                throw new NullPointerException();
             }
+
+            if (connection != null)
+                connection.disconnect();
 
             if (receivedBitmap == null)
                 throw new NullPointerException();

@@ -19,10 +19,13 @@ public class TriangleView extends View {
     private Path myPath = new Path();
 
     Point point1 = new Point(0,
-            (int)((Point.getY() - Point.convertDpToPx(60, getContext())) * 0.04));
-    public Point point2 = new Point((int)((Point.getX() - Point.convertDpToPx(150, getContext())) * 0.04),
-            (int)((Point.getY() - Point.convertDpToPx(60, getContext())) * 0.04));
-    Point point3 = new Point((int)((Point.getX() - Point.convertDpToPx(150, getContext())) * 0.04),
+            (int)((Point.getY() - Point.convertDpToPx(60, getContext())) * 0.04) + Point.ROUNDING_PX);
+    public Point point2 = new Point(
+            (int)((Point.getX() - Point.convertDpToPx(150, getContext())) * 0.04) + Point.ROUNDING_PX,
+            (int)((Point.getY() - Point.convertDpToPx(60, getContext())) * 0.04) + Point.ROUNDING_PX
+            );
+    Point point3 = new Point(
+            (int)((Point.getX() - Point.convertDpToPx(150, getContext())) * 0.04) + Point.ROUNDING_PX,
             0);
 
     public TriangleView(Context context, AttributeSet attrs) {
