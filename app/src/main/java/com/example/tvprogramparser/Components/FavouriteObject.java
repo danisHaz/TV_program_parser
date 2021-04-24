@@ -43,13 +43,14 @@ public class FavouriteObject {
         final int nId = ch.getId();
         final String nName = ch.getName();
         final String nLink = ch.getLink();
+        final String path = ch.getPathToIcon();
 
         // section 2
         Thread thread2 = new Thread(new Runnable() {
             @Override
             public synchronized void run() {
                 FavouriteObjectsDB.ChannelsDao chDao = FavouriteObjectsDB.createInstance(context).getDB().channelsDao();
-                chDao.insertChannel(new FavouriteObjectsDB.Channel(nId, nName, nLink));
+                chDao.insertChannel(new FavouriteObjectsDB.Channel(nId, nName, nLink, path));
             }
         });
 
@@ -90,6 +91,7 @@ public class FavouriteObject {
             final int nId = favouriteChannels.get(position).getId();
             final String nName = favouriteChannels.get(position).getName();
             final String nLink = favouriteChannels.get(position).getLink();
+            final String path = favouriteChannels.get(position).getPathToIcon();
 
             favouriteChannels.remove(position);
 
@@ -97,7 +99,7 @@ public class FavouriteObject {
                 @Override
                 public synchronized void run() {
                     FavouriteObjectsDB.ChannelsDao chDao = FavouriteObjectsDB.createInstance(context).getDB().channelsDao();
-                    chDao.delete(new FavouriteObjectsDB.Channel(nId, nName, nLink));
+                    chDao.delete(new FavouriteObjectsDB.Channel(nId, nName, nLink, path));
                 }
             });
 

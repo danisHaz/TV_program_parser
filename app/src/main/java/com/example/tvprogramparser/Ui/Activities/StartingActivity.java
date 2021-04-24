@@ -55,7 +55,7 @@ public class StartingActivity extends AppCompatActivity {
                 StartingActivity.this.startActivity(toMainActivity);
             }
         }.setTag(TLS.GET_CHANNELS_LIST));
-        MainChannelsList.define();
+        MainChannelsList.define(this);
     }
 
     private void onDefine() {

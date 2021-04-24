@@ -31,6 +31,8 @@ public class TLS {
     public static final String DAILY_CHECKER_TAG = "dailyCheckerTag";
     public static final String PROGRESS_FRAGMENT = "progressFragment";
     public static final String DEFAULT_CHANNEL_ID = "defaultChannelId";
+    public static final String MAIN_CHANNELS_CACHE_STATE = "mainChannelsCacheState";
+    public static final String MAIN_CHANNELS_INITIAL_TAG = "mainChannelsInitialTag";
 
     public static final ArrayList<Channel> ADDITIONAL_CHANNELS = new ArrayList<Channel>() {{
         add(new Channel("Paramount Comedy", "/kazan/channel/808/"));

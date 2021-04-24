@@ -57,6 +57,48 @@ public class ManageFavouritesFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_manage_favourites, container, false);
     }
 
+    private void setChannelsViewListener(@NonNull final Bundle channelsBundle, ArrayAdapter<String> adap) {
+        try {
+            ListView channelsView = ((ListView) getView().findViewById(R.id.favouriteChannelsList));
+            channelsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+                    channelsBundle.putInt(TLS.CHOSEN_POSITION, pos);
+                    SmallMenuFragment.createInstance(channelsBundle)
+                            .show(getActivity().getSupportFragmentManager(), "manageFavourites");
+                }
+            });
+            channelsView.setAdapter(adap);
+        } catch (NullPointerException e) {
+            Log.e("ManageFavouritesFragment",
+                    "NullPointerException: getView provided null instance");
+        }
+    }
+
+    private void setProgramsViewListener(@NonNull final Bundle programsBundle, ArrayAdapter<String> adap) {
+        try {
+            ListView programsView = ((ListView)getView().findViewById(R.id.favouriteProgramsList));
+            programsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+                    programsBundle.putInt(TLS.CHOSEN_POSITION, pos);
+                    WorkDoneListener.setNewListener(new OnCompleteListener() {
+                        @Override
+                        public void doWork(Bundle bundle) {
+                            local.updateAndRefresh();
+                        }
+                }.setTag(TLS.DELETE_FROM_FAVOURITE_PROGRAMS));
+                    SmallMenuFragment.createInstance(programsBundle)
+                            .show(getActivity().getSupportFragmentManager(), "manageFavourites");
+                }
+            });
+            programsView.setAdapter(adap);
+        } catch (NullPointerException e) {
+            Log.e("ManageFavouritesFragment",
+                    "NullPointerException: getView provided null instance");
+        }
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -78,12 +120,6 @@ public class ManageFavouritesFragment extends Fragment {
                     programs
             );
 
-            if (adap1.isEmpty())
-                adap1.add(getResources().getString(R.string.channelsListEmpty));
-
-            if (adap2.isEmpty())
-                adap2.add(getResources().getString(R.string.programsListEmpty));
-
             final Bundle programsBundle = new Bundle();
             final Bundle channelsBundle = new Bundle();
 
@@ -94,35 +130,18 @@ public class ManageFavouritesFragment extends Fragment {
             channelsBundle.putInt(TLS.CURRENT_ARRAY_ID, R.array.favouriteChannelsBottomFragment);
             channelsBundle.putString(TLS.CHOSEN_LAYOUT, TLS.DELETE_FROM_FAVOURITE_CHANNELS);
 
-            ListView channelsView = ((ListView)view.findViewById(R.id.favouriteChannelsList));
-            channelsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
-                    channelsBundle.putInt(TLS.CHOSEN_POSITION, pos);
-                    SmallMenuFragment.createInstance(channelsBundle)
-                            .show(getActivity().getSupportFragmentManager(), "manageFavourites");
-                }
-            });
-            channelsView.setAdapter(adap1);
-            ListView programsView = ((ListView)view.findViewById(R.id.favouriteProgramsList));
-            programsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
-                    programsBundle.putInt(TLS.CHOSEN_POSITION, pos);
-                    WorkDoneListener.setNewListener(new OnCompleteListener() {
-                        @Override
-                        public void doWork(Bundle bundle) {
-                            local.updateAndRefresh();
-                        }
-                    }.setTag(TLS.DELETE_FROM_FAVOURITE_PROGRAMS));
-                    SmallMenuFragment.createInstance(programsBundle)
-                            .show(getActivity().getSupportFragmentManager(), "manageFavourites");
-                }
-            });
-            programsView.setAdapter(adap2);
+            if (adap1.isEmpty())
+                adap1.add(getResources().getString(R.string.channelsListEmpty));
+            else
+                setChannelsViewListener(channelsBundle, adap1);
+
+            if (adap2.isEmpty())
+                adap2.add(getResources().getString(R.string.programsListEmpty));
+            else
+                setProgramsViewListener(programsBundle, adap2);
 
         } else {
-            Toast.makeText(getActivity(), "shitty shit", Toast.LENGTH_SHORT).show();
+            Log.d("ManageFavouritesFragment", "Provided null is null");
         }
     }
 }

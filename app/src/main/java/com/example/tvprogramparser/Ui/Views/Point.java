@@ -12,7 +12,7 @@ public class Point {
     private static int screenX = -1, screenY = -1;
 
     //  Actually this var is for setting more width and height to custom views cause uncertainty
-    public static final int ROUNDING_PX = 5;
+    public static final int ROUNDING_PX = 0;
 
     public Point(int x, int y) throws NullPointerException {
         this.x = x;

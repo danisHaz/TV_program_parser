@@ -1,5 +1,6 @@
 package com.example.tvprogramparser.Components;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Database;
 import androidx.room.Dao;
@@ -10,6 +11,8 @@ import androidx.room.PrimaryKey;
 import androidx.room.Query;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.List;
 
@@ -21,19 +24,23 @@ public class FavouriteObjectsDB {
 
     private FavouriteObjectsDB(Context context) {
         myDB = Room.databaseBuilder(context, FavouriteObjectsDB.DefaultDb.class,
-                "defDb").build();
+                "defDb").addMigrations(MIGRATION_2_3).build();
 
         Thread thread1 = new Thread(new Runnable() {
             @Override
             public synchronized void run() {
                 FavouriteObjectsDB.ChannelsDao chanDao = myDB.channelsDao();
                 for (FavouriteObjectsDB.Channel ch: chanDao.getAll()) {
-                    FavouriteObject.favouriteChannels.add(new com.example.tvprogramparser.Components.Channel(ch.name, ch.link));
+                    FavouriteObject.favouriteChannels.add(
+                            new com.example.tvprogramparser.Components.Channel(ch.name, ch.link)
+                    );
                 }
 
                 FavouriteObjectsDB.ProgramsDao progDao = myDB.programsDao();
                 for (FavouriteObjectsDB.Program prog: progDao.getAll()) {
-                    FavouriteObject.favouritePrograms.add(new com.example.tvprogramparser.Components.Program(prog.name));
+                    FavouriteObject.favouritePrograms.add(
+                            new com.example.tvprogramparser.Components.Program(prog.name)
+                    );
                 }
             }
         });
@@ -58,6 +65,7 @@ public class FavouriteObjectsDB {
     public DefaultDb getDB() {
         return myDB;
     }
+
     @Entity
     public static class Channel {
         @PrimaryKey
@@ -69,10 +77,22 @@ public class FavouriteObjectsDB {
         @ColumnInfo(name = "link")
         public String link;
 
-        Channel(int id, String name, String link) {
+        @ColumnInfo(name = "icon")
+        public String pathToIcon;
+
+        public Channel(int id, String name, String link, String pathToIcon) {
             this.id = id;
             this.name = name;
             this.link = link;
+            this.pathToIcon = pathToIcon;
+        }
+    }
+
+    @Entity
+    public static class MainChannels extends Channel {
+
+        public MainChannels(int id, String name, String link, String pathToIcon) {
+            super(id, name, link, pathToIcon);
         }
     }
 
@@ -105,6 +125,21 @@ public class FavouriteObjectsDB {
         void delete(Channel channel);
     }
 
+    @Dao
+    public interface MainChannelsDao {
+        @Query("SELECT * FROM mainchannels")
+        List<MainChannels> getAll();
+
+        @Insert
+        void insertAll(MainChannels... channels);
+
+        @Insert
+        void insertChannel(MainChannels channel);
+
+        @Delete
+        void delete(MainChannels channel);
+    }
+
     @Dao public interface ProgramsDao {
         @Query("SELECT * FROM program")
         List<Program> getAll();
@@ -119,10 +154,24 @@ public class FavouriteObjectsDB {
         void delete(Program program);
     }
 
-    @Database(entities={Channel.class, Program.class}, version = 2)
+//    Database update for caching channels info ( especially images )
+    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE channel ADD COLUMN icon TEXT");
+            database.execSQL("CREATE TABLE mainchannels ("
+            + "id INTEGER PRIMARY KEY NOT NULL,"
+            + "name TEXT,"
+            + "link TEXT,"
+            + "icon TEXT)");
+        }
+    };
+
+    @Database(entities={Channel.class, Program.class, MainChannels.class}, version = 3)
     public abstract static class DefaultDb extends RoomDatabase {
         public abstract ChannelsDao channelsDao();
         public abstract ProgramsDao programsDao();
+        public abstract MainChannelsDao mainChannelsDao();
     }
 
 }

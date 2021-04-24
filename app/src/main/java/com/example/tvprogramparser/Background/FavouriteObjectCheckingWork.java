@@ -62,7 +62,7 @@ public class FavouriteObjectCheckingWork extends Worker {
             }
         }.setTag(TLS.DAILY_CHECKER_TAG));
         FavouriteObjectsDB.createInstance(getApplicationContext());
-        MainChannelsList.define();
+        MainChannelsList.define(getApplicationContext());
         return ListenableWorker.Result.success();
     }
 }
