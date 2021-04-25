@@ -3,8 +3,10 @@ package com.example.tvprogramparser.Ui.Fragments;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.example.tvprogramparser.Components.Channel;
 import com.example.tvprogramparser.Components.FavouriteObject;
 import com.example.tvprogramparser.Components.OnCompleteListener;
+import com.example.tvprogramparser.Components.Program;
 import com.example.tvprogramparser.Components.WorkDoneListener;
 import com.example.tvprogramparser.R;
 import com.example.tvprogramparser.TLS;
@@ -132,7 +134,7 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
                 private void addFavouriteProgramMethod() {
                     // TODO: add a Toast to notify user about successful add to favourites
                     if (pos == 0) {
-                        FavouriteObject.parseFavouriteProgram(chosenObjectName, upperContext);
+                        Program.parseProgram(chosenObjectName);
                     }
                     try {
                         WorkDoneListener.complete(TLS.ADD_TO_FAVOURITES,
@@ -145,7 +147,7 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
 
                 private void deleteFromFavouritePrograms() {
                     if (pos == 0) {
-                        FavouriteObject.deleteFromFavouritePrograms(chosenPos, upperContext);
+                        Program.deleteFromFavouritePrograms(chosenPos, upperContext);
                     }
                     try {
                         WorkDoneListener.complete(TLS.DELETE_FROM_FAVOURITE_PROGRAMS,
@@ -158,7 +160,7 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
 
                 private void deleteFromFavouriteChannels() {
                     if (pos == 0) {
-                        FavouriteObject.deleteFromFavouriteChannels(chosenPos, upperContext);
+                        Channel.deleteFromFavouriteChannels(chosenPos, upperContext);
                     }
                     try {
                         WorkDoneListener.complete(TLS.DELETE_FROM_FAVOURITE_CHANNELS,

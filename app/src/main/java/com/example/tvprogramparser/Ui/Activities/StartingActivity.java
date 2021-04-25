@@ -1,5 +1,6 @@
 package com.example.tvprogramparser.Ui.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -71,6 +72,13 @@ public class StartingActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+
+        SharedPreferences prefs = getSharedPreferences(
+                TLS.APPLICATION_PREFERENCES, Context.MODE_PRIVATE
+        );
+
+        if (prefs.getBoolean(TLS.MAIN_CHANNELS_CACHE_STATE, false))
+            return;
 
         ((MotionLayout) findViewById(R.id.starting_layout)).transitionToState(R.id.end_position);
         final TextView loadingText = (TextView) findViewById(R.id.loading_view);

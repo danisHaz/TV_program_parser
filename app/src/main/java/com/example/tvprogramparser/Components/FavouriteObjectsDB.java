@@ -14,6 +14,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -26,7 +27,7 @@ public class FavouriteObjectsDB {
         myDB = Room.databaseBuilder(context, FavouriteObjectsDB.DefaultDb.class,
                 "defDb").addMigrations(MIGRATION_2_3).build();
 
-        Thread thread1 = new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public synchronized void run() {
                 FavouriteObjectsDB.ChannelsDao chanDao = myDB.channelsDao();
@@ -43,9 +44,7 @@ public class FavouriteObjectsDB {
                     );
                 }
             }
-        });
-
-        thread1.start();
+        }).start();
     }
 
     public static FavouriteObjectsDB createInstance(Context context) {
@@ -62,8 +61,130 @@ public class FavouriteObjectsDB {
         return localDB;
     }
 
+//    Instead of working with real db class easy-to-understand API created
+    @Deprecated
     public DefaultDb getDB() {
         return myDB;
+    }
+
+    public List<com.example.tvprogramparser.Components.Channel> getAllFavouriteChannels() {
+        FavouriteObjectsDB.ChannelsDao channelsDao = myDB.channelsDao();
+        List<com.example.tvprogramparser.Components.Channel> channelList
+                = new ArrayList<>();
+
+        synchronized (FavouriteObjectsDB.class) {
+            for (FavouriteObjectsDB.Channel channel : channelsDao.getAll()) {
+                channelList.add(new com.example.tvprogramparser.Components.Channel(
+                        channel.name,
+                        channel.link,
+                        channel.pathToIcon
+                ));
+            }
+        }
+
+        return channelList;
+    }
+
+    public void insertFavouriteChannel(com.example.tvprogramparser.Components.Channel channel) {
+        FavouriteObjectsDB.ChannelsDao channelsDao = myDB.channelsDao();
+        synchronized (FavouriteObjectsDB.class) {
+            channelsDao.insertChannel(new FavouriteObjectsDB.Channel(
+                    channel.getId(),
+                    channel.getName(),
+                    channel.getLink(),
+                    channel.getPathToIcon()
+            ));
+        }
+    }
+
+    public void deleteFavouriteChannel(com.example.tvprogramparser.Components.Channel channel) {
+        FavouriteObjectsDB.ChannelsDao channelsDao = myDB.channelsDao();
+        synchronized (FavouriteObjectsDB.class) {
+            channelsDao.delete(new FavouriteObjectsDB.Channel(
+                    channel.getId(),
+                    channel.getName(),
+                    channel.getLink(),
+                    channel.getPathToIcon()
+            ));
+        }
+    }
+
+    public List<com.example.tvprogramparser.Components.Channel> getAllMainChannels() {
+        FavouriteObjectsDB.MainChannelsDao mainDao = myDB.mainChannelsDao();
+        List<com.example.tvprogramparser.Components.Channel> channelList
+                = new ArrayList<>();
+
+        synchronized (FavouriteObjectsDB.class) {
+            for (FavouriteObjectsDB.Channel channel : mainDao.getAll()) {
+                channelList.add(new com.example.tvprogramparser.Components.Channel(
+                        channel.name,
+                        channel.link,
+                        channel.pathToIcon
+                ));
+            }
+        }
+
+        return channelList;
+    }
+
+    public void insertMainChannel(com.example.tvprogramparser.Components.Channel channel) {
+        FavouriteObjectsDB.MainChannelsDao mainDao = myDB.mainChannelsDao();
+        synchronized (FavouriteObjectsDB.class) {
+            mainDao.insertChannel(new FavouriteObjectsDB.MainChannels(
+                    channel.getId(),
+                    channel.getName(),
+                    channel.getLink(),
+                    channel.getPathToIcon()
+            ));
+        }
+    }
+
+    public void deleteMainChannel(com.example.tvprogramparser.Components.Channel channel) {
+        FavouriteObjectsDB.MainChannelsDao mainDao = myDB.mainChannelsDao();
+        synchronized (FavouriteObjectsDB.class) {
+            mainDao.delete(new FavouriteObjectsDB.MainChannels(
+                    channel.getId(),
+                    channel.getName(),
+                    channel.getLink(),
+                    channel.getPathToIcon()
+            ));
+        }
+    }
+
+    public List<com.example.tvprogramparser.Components.Program> getAllFavouritePrograms() {
+        FavouriteObjectsDB.ProgramsDao programsDao = myDB.programsDao();
+        List<com.example.tvprogramparser.Components.Program> programList
+                = new ArrayList<>();
+
+        synchronized (FavouriteObjectsDB.class) {
+            for (FavouriteObjectsDB.Program program : programsDao.getAll()) {
+                programList.add(new com.example.tvprogramparser.Components.Program(
+                        program.name
+                ));
+            }
+        }
+
+        return programList;
+    }
+
+    public void insertFavouriteProgram(com.example.tvprogramparser.Components.Program program) {
+        FavouriteObjectsDB.ProgramsDao programsDao = myDB.programsDao();
+        synchronized (FavouriteObjectsDB.class) {
+            programsDao.insertProgram(new FavouriteObjectsDB.Program(
+                    program.getId(),
+                    program.getName()
+            ));
+        }
+    }
+
+    public void deleteFavouriteProgram(com.example.tvprogramparser.Components.Program program) {
+        FavouriteObjectsDB.ProgramsDao programsDao = myDB.programsDao();
+        synchronized (FavouriteObjectsDB.class) {
+            programsDao.delete(new FavouriteObjectsDB.Program(
+                    program.getId(),
+                    program.getName()
+            ));
+        }
     }
 
     @Entity

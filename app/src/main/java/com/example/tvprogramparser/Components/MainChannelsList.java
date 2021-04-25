@@ -19,7 +19,6 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class MainChannelsList extends Application {
     private static Channel[] channelsList;
@@ -39,25 +38,14 @@ public class MainChannelsList extends Application {
                         MODE_PRIVATE
                 );
 
-
-        FavouriteObjectsDB myDb = FavouriteObjectsDB
-                .createInstance((context).getApplicationContext());
-
-        final FavouriteObjectsDB.MainChannelsDao mainDao = myDb.getDB().mainChannelsDao();
-
         if (prefs.getBoolean(TLS.MAIN_CHANNELS_CACHE_STATE, false)) {
             Thread tempThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    ArrayList<FavouriteObjectsDB.MainChannels> mainChannelsList
-                            = (ArrayList<FavouriteObjectsDB.MainChannels>) mainDao.getAll();
+                    ArrayList<Channel> mainChannelsList
+                            = (ArrayList<Channel>) FavouriteObjectsDB.createInstance(context).getAllMainChannels();
 
-                    channelsList = new Channel[mainChannelsList.size()];
-                    int pos = 0;
-                    for (FavouriteObjectsDB.MainChannels channel: mainChannelsList) {
-                        channelsList[pos] = new Channel(channel.name, channel.link, channel.pathToIcon);
-                        pos++;
-                    }
+                    channelsList = (Channel[]) mainChannelsList.toArray();
 
                     notifyChannelsListInitDone();
                 }
@@ -75,11 +63,7 @@ public class MainChannelsList extends Application {
                 @Override
                 public void doWork(@Nullable Bundle bundle) {
                     for (Channel channel: channelsList) {
-                        mainDao.insertChannel(new FavouriteObjectsDB.MainChannels(
-                                channel.getId(),
-                                channel.getName(),
-                                channel.getLink(),
-                                channel.getPathToIcon()));
+                        FavouriteObjectsDB.createInstance(context).insertMainChannel(channel);
                     }
                 }
             }.setTag(TLS.MAIN_CHANNELS_INITIAL_TAG));
@@ -156,11 +140,11 @@ public class MainChannelsList extends Application {
             }
 
 //            Sleeping provided to avoid too frequent connections by Jsoup
-//            try {
-//                TimeUnit.SECONDS.sleep(100);
-//            } catch (java.lang.InterruptedException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                Thread.sleep(150);
+            } catch (java.lang.InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         return bitmaps;
@@ -185,8 +169,6 @@ public class MainChannelsList extends Application {
 
                 channelsList = getChannelsArray(fir, sec);
                 imagesList = getImagesArray(channelsList);
-
-                Log.d("Deb", "Download is done");
 
                 try {
                     for (int i = 0; i < channelsList.length; i++)

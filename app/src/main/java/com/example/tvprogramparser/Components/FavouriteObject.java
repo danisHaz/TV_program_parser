@@ -18,6 +18,7 @@ import org.jsoup.nodes.Document;
 
 import com.example.tvprogramparser.TLS;
 
+@Deprecated
 public class FavouriteObject {
     public static ArrayList<Channel> favouriteChannels = new ArrayList<Channel>();
     public static ArrayList<Program> favouritePrograms = new ArrayList<Program>();

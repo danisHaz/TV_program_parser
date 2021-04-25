@@ -1,9 +1,9 @@
 package com.example.tvprogramparser.Components;
 
-import com.example.tvprogramparser.Components.InternalStorageManager;
 import com.example.tvprogramparser.R;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,6 +19,16 @@ public class Channel implements Serializable {
     private int id;
     private String pathToIcon;
     private final String fileName;
+
+    public static ArrayList<Channel> favouriteChannels = new ArrayList<Channel>();
+
+    public static ArrayList<String> getFavouriteChannelsNames(Context context) {
+        ArrayList<String> channels = new ArrayList<>();
+        for (Channel chan: favouriteChannels) {
+            channels.add(chan.getName());
+        }
+        return channels;
+    }
 
     public Channel(String name, String link) {
         this.name = name;
@@ -66,6 +76,41 @@ public class Channel implements Serializable {
 
     public boolean isFavourite() {
         return favourite;
+    }
+
+    public void addToFavouriteChannels(final Context context) {
+        if (!favourite) {
+            Log.w("Channel", "Adding favourite channel to favourites");
+            return;
+        }
+
+        favourite = true;
+        favouriteChannels.add(this);
+//      Adding to db
+        new Thread(new Runnable() {
+            @Override
+            public synchronized void run() {
+                FavouriteObjectsDB.createInstance(context)
+                        .insertFavouriteChannel(Channel.this);
+            }
+        }).start();
+    }
+
+    public static void deleteFromFavouriteChannels(final int pos, final Context context) {
+        if (!favouriteChannels.get(pos).favourite) {
+            Log.w("Channel", "Adding favourite channel to favourites");
+            return;
+        }
+
+        favouriteChannels.get(pos).favourite = false;
+        new Thread(new Runnable() {
+            @Override
+            public synchronized void run() {
+                FavouriteObjectsDB.createInstance(context)
+                        .deleteFavouriteChannel(favouriteChannels.remove(pos));
+                favouriteChannels.remove(pos);
+            }
+        }).start();
     }
 
 }

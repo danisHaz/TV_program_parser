@@ -15,8 +15,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView;
 
+import com.example.tvprogramparser.Components.Channel;
 import com.example.tvprogramparser.Components.FavouriteObject;
 import com.example.tvprogramparser.Components.OnCompleteListener;
+import com.example.tvprogramparser.Components.Program;
 import com.example.tvprogramparser.Components.WorkDoneListener;
 import com.example.tvprogramparser.R;
 import com.example.tvprogramparser.TLS;
@@ -104,8 +106,8 @@ public class ManageFavouritesFragment extends Fragment {
         super.onStart();
         View view = getView();
         if (view != null) {
-            ArrayList<String> channels = FavouriteObject.getArrayOfFavouriteChannels(getContext());
-            final ArrayList<String> programs = FavouriteObject.getArrayOfFavouritePrograms(getContext());
+            ArrayList<String> channels = Channel.getFavouriteChannelsNames(getContext());
+            final ArrayList<String> programs = Program.getArrayOfFavouritePrograms(getContext());
 
             // TODO: handle with null getActivity
             ArrayAdapter<String> adap1 = new ArrayAdapter<String>(
@@ -141,7 +143,7 @@ public class ManageFavouritesFragment extends Fragment {
                 setProgramsViewListener(programsBundle, adap2);
 
         } else {
-            Log.d("ManageFavouritesFragment", "Provided null is null");
+            Log.d("ManageFavouritesFragment", "Provided view is null");
         }
     }
 }
