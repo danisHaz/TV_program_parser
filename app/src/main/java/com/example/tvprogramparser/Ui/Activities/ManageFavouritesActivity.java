@@ -67,7 +67,7 @@ public class ManageFavouritesActivity extends AppCompatActivity {
             String channelName = MainChannelsList.getChannelsList()[pos].getName();
             ((TextView) findViewById(R.id.channel_name_in_program))
                     .setText(channelName);
-            Bitmap channelBitmap = MainChannelsList.getImagesList()[pos];
+            Bitmap channelBitmap = MainChannelsList.getChannelsList()[pos].getIcon(this);
             ((ImageView) findViewById(R.id.channel_image)).setImageBitmap(channelBitmap);
 
             setSupportActionBar(customToolbar);
@@ -99,9 +99,13 @@ public class ManageFavouritesActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
                         Bundle fragmentInfo = new Bundle();
-                        fragmentInfo.putInt(TLS.ARG_COUNT, getResources().getStringArray(R.array.favouriteProgramsMenu).length);
+                        fragmentInfo.putInt(TLS.ARG_COUNT, getResources()
+                                .getStringArray(R.array.favouriteProgramsMenu).length);
                         fragmentInfo.putInt(TLS.CURRENT_ARRAY_ID, R.array.favouriteProgramsMenu);
-                        fragmentInfo.putString(TLS.CHOSEN_OBJECT_NAME, ((TextView)view).getText().toString());
+                        fragmentInfo.putString(
+                                TLS.CHOSEN_OBJECT_NAME,
+                                ((TextView)view).getText().toString()
+                        );
                         fragmentInfo.putString(TLS.CHOSEN_LAYOUT, TLS.ADD_TO_FAVOURITES);
                         fragmentInfo.putInt(TLS.CHOSEN_POSITION, pos);
 

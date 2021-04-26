@@ -18,6 +18,7 @@ import org.jsoup.nodes.Document;
 
 import com.example.tvprogramparser.TLS;
 
+@Deprecated
 public class FavouriteObject {
     public static ArrayList<Channel> favouriteChannels = new ArrayList<Channel>();
     public static ArrayList<Program> favouritePrograms = new ArrayList<Program>();
@@ -43,13 +44,14 @@ public class FavouriteObject {
         final int nId = ch.getId();
         final String nName = ch.getName();
         final String nLink = ch.getLink();
+        final String path = ch.getPathToIcon();
 
         // section 2
         Thread thread2 = new Thread(new Runnable() {
             @Override
             public synchronized void run() {
                 FavouriteObjectsDB.ChannelsDao chDao = FavouriteObjectsDB.createInstance(context).getDB().channelsDao();
-                chDao.insertChannel(new FavouriteObjectsDB.Channel(nId, nName, nLink));
+                chDao.insertChannel(new FavouriteObjectsDB.Channel(nId, nName, nLink, path));
             }
         });
 
@@ -60,7 +62,11 @@ public class FavouriteObject {
     public static void addToFavouritePrograms(Program pr, final Context context) {
         for (int i = 0; i < favouritePrograms.size(); i++) {
             if (favouritePrograms.get(i).isEqual(pr)) {
-                Toast.makeText(context, "Program is already in favourites", Toast.LENGTH_SHORT).show();
+                try {
+                    Toast.makeText(context, "Program is already in favourites", Toast.LENGTH_SHORT).show();
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
+                }
                 return;
             }
         }
@@ -86,6 +92,7 @@ public class FavouriteObject {
             final int nId = favouriteChannels.get(position).getId();
             final String nName = favouriteChannels.get(position).getName();
             final String nLink = favouriteChannels.get(position).getLink();
+            final String path = favouriteChannels.get(position).getPathToIcon();
 
             favouriteChannels.remove(position);
 
@@ -93,7 +100,7 @@ public class FavouriteObject {
                 @Override
                 public synchronized void run() {
                     FavouriteObjectsDB.ChannelsDao chDao = FavouriteObjectsDB.createInstance(context).getDB().channelsDao();
-                    chDao.delete(new FavouriteObjectsDB.Channel(nId, nName, nLink));
+                    chDao.delete(new FavouriteObjectsDB.Channel(nId, nName, nLink, path));
                 }
             });
 
@@ -145,7 +152,9 @@ public class FavouriteObject {
         return false;
     }
 
+    @Deprecated
     public static ArrayList<Program> dailyProgramChecker(final Context context) throws java.io.IOException {
+        Log.d("FavouriteObject", "daily program checker is still used");
 
         Channel[] channelArray;
         synchronized (MainChannelsList.class) {

@@ -1,6 +1,8 @@
 package com.example.tvprogramparser.Ui.Fragments;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -54,7 +56,7 @@ public class BottomSheetFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle bundle) {
         RecyclerView recView = (RecyclerView) view.findViewById(R.id.main_recycler);
         recView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recView.setAdapter(new CustomAdapter());
+        recView.setAdapter(new CustomAdapter(view.getContext()));
     }
 
     private static String[] getNamesArray(Channel[] arr) {
@@ -83,9 +85,13 @@ public class BottomSheetFragment extends Fragment {
         final Channel[] channels;
         final Bitmap[] bitmaps;
 
-        CustomAdapter() {
+        CustomAdapter(@NonNull final Context context) {
             channels = MainChannelsList.getChannelsList();
-            bitmaps = MainChannelsList.getImagesList();
+            bitmaps = new Bitmap[channels.length];
+            for (int i = 0; i < channels.length; i++) {
+                bitmaps[i] = channels[i].getIcon(context);
+            }
+
             count = channels.length;
         }
 
@@ -96,6 +102,8 @@ public class BottomSheetFragment extends Fragment {
                 holder.image.setImageBitmap(bitmaps[pos]);
                 if (pos % 2 == 1)
                     holder.itemChannelsLayout.setBackgroundResource(R.drawable.item_channels_list_shape);
+                else
+                    holder.itemChannelsLayout.setBackgroundResource(R.drawable.item_channels_list_shape_no_borders);
 
                 holder.itemChannelsLayout.setOnClickListener(new View.OnClickListener() {
                     @Override

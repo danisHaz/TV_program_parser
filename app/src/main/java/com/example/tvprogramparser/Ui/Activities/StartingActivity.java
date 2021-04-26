@@ -1,5 +1,6 @@
 package com.example.tvprogramparser.Ui.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 
+import com.example.tvprogramparser.Background.NotificationBuilder;
 import com.example.tvprogramparser.Background.RestartService;
 import com.example.tvprogramparser.Components.FavouriteObjectsDB;
 import com.example.tvprogramparser.Components.MainChannelsList;
@@ -54,7 +56,7 @@ public class StartingActivity extends AppCompatActivity {
                 StartingActivity.this.startActivity(toMainActivity);
             }
         }.setTag(TLS.GET_CHANNELS_LIST));
-        MainChannelsList.define();
+        MainChannelsList.define(this);
     }
 
     private void onDefine() {
@@ -70,6 +72,13 @@ public class StartingActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+
+        SharedPreferences prefs = getSharedPreferences(
+                TLS.APPLICATION_PREFERENCES, Context.MODE_PRIVATE
+        );
+
+        if (prefs.getBoolean(TLS.MAIN_CHANNELS_CACHE_STATE, false))
+            return;
 
         ((MotionLayout) findViewById(R.id.starting_layout)).transitionToState(R.id.end_position);
         final TextView loadingText = (TextView) findViewById(R.id.loading_view);

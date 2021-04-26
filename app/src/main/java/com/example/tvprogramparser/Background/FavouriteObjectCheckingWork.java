@@ -7,10 +7,7 @@ import androidx.work.WorkerParameters;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 
-import com.example.tvprogramparser.Components.FavouriteObject;
-import com.example.tvprogramparser.Components.FavouriteObjectsDB;
 import com.example.tvprogramparser.Components.MainChannelsList;
 import com.example.tvprogramparser.Components.OnCompleteListener;
 import com.example.tvprogramparser.Components.Program;
@@ -29,24 +26,21 @@ public class FavouriteObjectCheckingWork extends Worker {
     @Override
     @NonNull
     public ListenableWorker.Result doWork() {
-        FavouriteObject.addToFavouritePrograms(new Program("KekLol"), getApplicationContext());
         WorkDoneListener.setNewListener(new OnCompleteListener() {
             @Override
             public void doWork(Bundle bundle) {
-                FavouriteObject.addToFavouritePrograms(new Program("LolKek"), getApplicationContext());
-                Thread thread = new Thread(new Runnable() {
+                new Thread(new Runnable() {
                     @Override
                     public void run() {
-
                         ArrayList<Program> programList = new ArrayList<>();
                         try {
-                            programList = FavouriteObject.dailyProgramChecker(getApplicationContext());
+                            programList = Program.FavouritePrograms.dailyProgramChecker(getApplicationContext());
                         } catch (java.io.IOException e) {
                             // pass
                         }
 
                         for (int i = 0; i < programList.size(); i++) {
-                            String channelId = "CHANNEL_ID_" + String.valueOf(i);
+                            String channelId = TLS.DEFAULT_CHANNEL_ID;
                             String channelName = "CHANNEL_NAME_" + String.valueOf(i);
                             String contentText = programList.get(i).getName() + " at " + programList.get(i).getTimeBegin();
                             NotificationBuilder builder = new NotificationBuilder(getApplicationContext(),
@@ -57,15 +51,12 @@ public class FavouriteObjectCheckingWork extends Worker {
                             );
                             builder.setNotification();
                         }
-
                     }
-                });
+                }).start();
 
-                thread.start();
             }
         }.setTag(TLS.DAILY_CHECKER_TAG));
-        FavouriteObjectsDB.createInstance(getApplicationContext());
-        MainChannelsList.define();
+        MainChannelsList.define(getApplicationContext());
         return ListenableWorker.Result.success();
     }
 }

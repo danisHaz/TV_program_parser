@@ -15,9 +15,11 @@ public class ReverseTriangleView extends View {
     private Path myPath = new Path();
 
     public Point point1 = new Point(0,
-            (int)((Point.getY() - Point.convertDpToPx(60, getContext())) * 0.04));
+            (int)((Point.getY() - Point.convertDpToPx(60, getContext())) * 0.04) +  + Point.ROUNDING_PX
+                );
     Point point2 = new Point(0, 0);
-    public Point point3 = new Point((int)((Point.getX() - Point.convertDpToPx(150, getContext())) * 0.04),
+    public Point point3 = new Point(
+            (int)((Point.getX() - Point.convertDpToPx(150, getContext())) * 0.04) + Point.ROUNDING_PX,
             0);
 
     public ReverseTriangleView(Context context, AttributeSet attrs) {
