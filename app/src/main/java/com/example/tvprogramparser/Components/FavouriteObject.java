@@ -152,7 +152,9 @@ public class FavouriteObject {
         return false;
     }
 
+    @Deprecated
     public static ArrayList<Program> dailyProgramChecker(final Context context) throws java.io.IOException {
+        Log.d("FavouriteObject", "daily program checker is still used");
 
         Channel[] channelArray;
         synchronized (MainChannelsList.class) {

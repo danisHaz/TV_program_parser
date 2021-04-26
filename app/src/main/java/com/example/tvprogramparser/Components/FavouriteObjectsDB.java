@@ -67,9 +67,9 @@ public class FavouriteObjectsDB {
         return myDB;
     }
 
-    public List<com.example.tvprogramparser.Components.Channel> getAllFavouriteChannels() {
+    public ArrayList<com.example.tvprogramparser.Components.Channel> getAllFavouriteChannels() {
         FavouriteObjectsDB.ChannelsDao channelsDao = myDB.channelsDao();
-        List<com.example.tvprogramparser.Components.Channel> channelList
+        ArrayList<com.example.tvprogramparser.Components.Channel> channelList
                 = new ArrayList<>();
 
         synchronized (FavouriteObjectsDB.class) {
@@ -109,9 +109,9 @@ public class FavouriteObjectsDB {
         }
     }
 
-    public List<com.example.tvprogramparser.Components.Channel> getAllMainChannels() {
+    public ArrayList<com.example.tvprogramparser.Components.Channel> getAllMainChannels() {
         FavouriteObjectsDB.MainChannelsDao mainDao = myDB.mainChannelsDao();
-        List<com.example.tvprogramparser.Components.Channel> channelList
+        ArrayList<com.example.tvprogramparser.Components.Channel> channelList
                 = new ArrayList<>();
 
         synchronized (FavouriteObjectsDB.class) {
@@ -151,9 +151,9 @@ public class FavouriteObjectsDB {
         }
     }
 
-    public List<com.example.tvprogramparser.Components.Program> getAllFavouritePrograms() {
+    public ArrayList<com.example.tvprogramparser.Components.Program> getAllFavouritePrograms() {
         FavouriteObjectsDB.ProgramsDao programsDao = myDB.programsDao();
-        List<com.example.tvprogramparser.Components.Program> programList
+        ArrayList<com.example.tvprogramparser.Components.Program> programList
                 = new ArrayList<>();
 
         synchronized (FavouriteObjectsDB.class) {

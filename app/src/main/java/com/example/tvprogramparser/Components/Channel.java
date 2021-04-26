@@ -4,6 +4,7 @@ import com.example.tvprogramparser.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.lang.InterruptedException;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,14 +21,38 @@ public class Channel implements Serializable {
     private String pathToIcon;
     private final String fileName;
 
-    public static ArrayList<Channel> favouriteChannels = new ArrayList<Channel>();
+    public static class FavouriteChannels {
+        private static boolean isDefined = false;
 
-    public static ArrayList<String> getFavouriteChannelsNames(Context context) {
-        ArrayList<String> channels = new ArrayList<>();
-        for (Channel chan: favouriteChannels) {
-            channels.add(chan.getName());
+        private static void define(final Context context) {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    favouriteChannels = FavouriteObjectsDB.createInstance(context)
+                            .getAllFavouriteChannels();
+                }
+            });
+            t.start();
+
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-        return channels;
+
+        public static ArrayList<Channel> favouriteChannels = new ArrayList<Channel>();
+
+        public static ArrayList<String> getFavouriteChannelsNames(final Context context) {
+            if (!isDefined)
+                define(context);
+
+            ArrayList<String> channels = new ArrayList<>();
+            for (Channel chan: favouriteChannels) {
+                channels.add(chan.getName());
+            }
+            return channels;
+        }
     }
 
     public Channel(String name, String link) {
@@ -85,7 +110,7 @@ public class Channel implements Serializable {
         }
 
         favourite = true;
-        favouriteChannels.add(this);
+        FavouriteChannels.favouriteChannels.add(this);
 //      Adding to db
         new Thread(new Runnable() {
             @Override
@@ -97,18 +122,18 @@ public class Channel implements Serializable {
     }
 
     public static void deleteFromFavouriteChannels(final int pos, final Context context) {
-        if (!favouriteChannels.get(pos).favourite) {
+        if (!FavouriteChannels.favouriteChannels.get(pos).favourite) {
             Log.w("Channel", "Adding favourite channel to favourites");
             return;
         }
 
-        favouriteChannels.get(pos).favourite = false;
+        FavouriteChannels.favouriteChannels.get(pos).favourite = false;
         new Thread(new Runnable() {
             @Override
             public synchronized void run() {
                 FavouriteObjectsDB.createInstance(context)
-                        .deleteFavouriteChannel(favouriteChannels.remove(pos));
-                favouriteChannels.remove(pos);
+                        .deleteFavouriteChannel(FavouriteChannels.favouriteChannels.remove(pos));
+                FavouriteChannels.favouriteChannels.remove(pos);
             }
         }).start();
     }

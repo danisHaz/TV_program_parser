@@ -29,26 +29,30 @@ public class FavouriteObjectCheckingWork extends Worker {
         WorkDoneListener.setNewListener(new OnCompleteListener() {
             @Override
             public void doWork(Bundle bundle) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ArrayList<Program> programList = new ArrayList<>();
+                        try {
+                            programList = Program.FavouritePrograms.dailyProgramChecker(getApplicationContext());
+                        } catch (java.io.IOException e) {
+                            // pass
+                        }
 
-                ArrayList<Program> programList = new ArrayList<>();
-                try {
-                    programList = Program.dailyProgramChecker(getApplicationContext());
-                } catch (java.io.IOException e) {
-                    // pass
-                }
-
-                for (int i = 0; i < programList.size(); i++) {
-                    String channelId = TLS.DEFAULT_CHANNEL_ID;
-                    String channelName = "CHANNEL_NAME_" + String.valueOf(i);
-                    String contentText = programList.get(i).getName() + " at " + programList.get(i).getTimeBegin();
-                    NotificationBuilder builder = new NotificationBuilder(getApplicationContext(),
-                            R.mipmap.ic_launcher,
-                            contentText,
-                            channelId,
-                            channelName
-                    );
-                    builder.setNotification();
-                }
+                        for (int i = 0; i < programList.size(); i++) {
+                            String channelId = TLS.DEFAULT_CHANNEL_ID;
+                            String channelName = "CHANNEL_NAME_" + String.valueOf(i);
+                            String contentText = programList.get(i).getName() + " at " + programList.get(i).getTimeBegin();
+                            NotificationBuilder builder = new NotificationBuilder(getApplicationContext(),
+                                    R.mipmap.ic_launcher,
+                                    contentText,
+                                    channelId,
+                                    channelName
+                            );
+                            builder.setNotification();
+                        }
+                    }
+                }).start();
 
             }
         }.setTag(TLS.DAILY_CHECKER_TAG));

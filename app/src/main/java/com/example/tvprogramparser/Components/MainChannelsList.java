@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainChannelsList extends Application {
-    private static Channel[] channelsList;
+    private volatile static Channel[] channelsList;
     private static Bitmap[] imagesList;
     private static Document doc;
     private static boolean isDefined = false;
@@ -32,7 +32,7 @@ public class MainChannelsList extends Application {
             return;
         }
 
-        SharedPreferences prefs =
+        final SharedPreferences prefs =
                 (context).getSharedPreferences(
                         TLS.APPLICATION_PREFERENCES,
                         MODE_PRIVATE
@@ -43,25 +43,30 @@ public class MainChannelsList extends Application {
                 @Override
                 public void run() {
                     ArrayList<Channel> mainChannelsList
-                            = (ArrayList<Channel>) FavouriteObjectsDB.createInstance(context).getAllMainChannels();
+                            = (ArrayList<Channel>) FavouriteObjectsDB.createInstance(context)
+                            .getAllMainChannels();
 
-                    channelsList = (Channel[]) mainChannelsList.toArray();
+                    int pos = 0;
+                    channelsList = new Channel[mainChannelsList.size()];
+                    for (Channel channel: mainChannelsList) {
+                        channelsList[pos] = channel;
+                        pos++;
+                    }
 
                     notifyChannelsListInitDone();
                 }
             });
             tempThread.start();
         } else {
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putBoolean(TLS.MAIN_CHANNELS_CACHE_STATE, true);
-            editor.apply();
-
             receiveAllData(context);
 //            todo: make explicit addition to db implicit
 //                  by hiding logic in Channel and FavouriteObjectsDB classes
             WorkDoneListener.setNewListener(new OnCompleteListener() {
                 @Override
                 public void doWork(@Nullable Bundle bundle) {
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putBoolean(TLS.MAIN_CHANNELS_CACHE_STATE, true);
+                    editor.apply();
                     for (Channel channel: channelsList) {
                         FavouriteObjectsDB.createInstance(context).insertMainChannel(channel);
                     }
@@ -150,7 +155,6 @@ public class MainChannelsList extends Application {
         return bitmaps;
     }
 
-    // todo: cache it!
     private static void receiveAllData(final Context context) {
         isDefined = true;
 

@@ -134,7 +134,7 @@ public class SmallMenuFragment extends BottomSheetDialogFragment {
                 private void addFavouriteProgramMethod() {
                     // TODO: add a Toast to notify user about successful add to favourites
                     if (pos == 0) {
-                        Program.parseProgram(chosenObjectName);
+                        Program.parseFavouriteProgram(chosenObjectName, upperContext);
                     }
                     try {
                         WorkDoneListener.complete(TLS.ADD_TO_FAVOURITES,

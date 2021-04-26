@@ -106,8 +106,8 @@ public class ManageFavouritesFragment extends Fragment {
         super.onStart();
         View view = getView();
         if (view != null) {
-            ArrayList<String> channels = Channel.getFavouriteChannelsNames(getContext());
-            final ArrayList<String> programs = Program.getArrayOfFavouritePrograms(getContext());
+            ArrayList<String> channels = Channel.FavouriteChannels.getFavouriteChannelsNames(getContext());
+            final ArrayList<String> programs = Program.FavouritePrograms.getArrayOfFavouritePrograms(getContext());
 
             // TODO: handle with null getActivity
             ArrayAdapter<String> adap1 = new ArrayAdapter<String>(
