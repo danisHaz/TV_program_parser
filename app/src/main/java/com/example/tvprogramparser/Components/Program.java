@@ -107,8 +107,10 @@ public class Program {
                     );
 
                     if (curProg.isFavourite()) {
-                        result.add(new Program(firEls.get(i).ownText(),
-                                secEls.get(i).ownText()));
+                        result.add(
+                                new Program(firEls.get(i).ownText(),
+                                secEls.get(i).ownText())
+                        );
                     }
                 }
 
