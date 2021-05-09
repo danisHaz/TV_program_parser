@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.graphics.Bitmap;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.graphics.drawable.Drawable;
@@ -39,25 +38,19 @@ public class ProgramListViewModel extends BaseObservable {
 
     private final ManageFavouritesActivity activity;
 
-    public ProgramListViewModel(@NonNull Context context,
+    public ProgramListViewModel(@NonNull ManageFavouritesActivity activity,
                                 @NonNull Intent intent) {
-        if (!(context instanceof ManageFavouritesActivity)) {
-            Log.e("ProgramListBinding",
-                    "Binding to not ManageFavouritesActivity");
-//            todo: notify app about not creating this viewmodel properly
-            throw new RuntimeException();
-        }
-        activity = (ManageFavouritesActivity) context;
+        this.activity = activity;
         getDataFromIntent(intent);
 
-        if (channel == null || position.get() == -1) {
+        if (channel == null || position.get() == -1 || !TLS.isNetworkProvidedCheck) {
             Log.e("ProgramListViewModel",
-                    "Data provided by activity is not valid");
+                    "Data provided by activity is not valid or no Internet");
             return;
         }
 
-        setWorkDoneListener(context);
-        loadChannelContent(context, channel);
+        setWorkDoneListener(activity);
+        loadChannelContent(activity, channel);
     }
 
     public ArrayAdapter<String> getListAdapter() {
@@ -145,7 +138,7 @@ public class ProgramListViewModel extends BaseObservable {
 
                     return;
                 }
-//          todo: try to find solution with binding adapter or smth else
+
                 listAdapter.set(
                         new ArrayAdapter<String>(context,
                         android.R.layout.simple_list_item_1,

@@ -32,14 +32,16 @@ public class FavouriteObjectsDB {
             public synchronized void run() {
                 FavouriteObjectsDB.ChannelsDao chanDao = myDB.channelsDao();
                 for (FavouriteObjectsDB.Channel ch: chanDao.getAll()) {
-                    FavouriteObject.favouriteChannels.add(
+                    com.example.tvprogramparser.Components.Channel.FavouriteChannels
+                            .favouriteChannels.add(
                             new com.example.tvprogramparser.Components.Channel(ch.name, ch.link)
                     );
                 }
 
                 FavouriteObjectsDB.ProgramsDao progDao = myDB.programsDao();
                 for (FavouriteObjectsDB.Program prog: progDao.getAll()) {
-                    FavouriteObject.favouritePrograms.add(
+                    com.example.tvprogramparser.Components.Program.FavouritePrograms
+                            .favouritePrograms.add(
                             new com.example.tvprogramparser.Components.Program(prog.name)
                     );
                 }

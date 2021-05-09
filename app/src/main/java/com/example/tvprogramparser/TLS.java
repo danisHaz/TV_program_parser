@@ -44,7 +44,9 @@ public class TLS {
         return programName.split("\\)")[0];
     }
 
-    public static boolean isNetworkProvided(Context context) {
+    public static boolean isNetworkProvidedCheck;
+
+    public static void isNetworkProvided(Context context) {
         android.net.ConnectivityManager manager =
                 (android.net.ConnectivityManager) context.getSystemService(
                         Context.CONNECTIVITY_SERVICE);
@@ -52,13 +54,14 @@ public class TLS {
         for (android.net.Network network: manager.getAllNetworks()) {
             try {
                 if (manager.getNetworkInfo(network).isConnected()) {
-                    return true;
+                    isNetworkProvidedCheck = true;
+                    return;
                 }
             } catch (java.lang.NullPointerException e) {
                 e.printStackTrace();
             }
         }
 
-        return false;
+        isNetworkProvidedCheck = false;
     }
 }

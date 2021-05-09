@@ -1,8 +1,10 @@
 package com.example.tvprogramparser.Ui.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.motion.widget.MotionLayout;
+import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -70,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                         if (actionId == EditorInfo.IME_ACTION_GO) {
                             String str = texter.getText().toString();
-                            FavouriteObject.addToFavouritePrograms(new Program(str), MainActivity.this);
+                            (new Program(str)).addToFavouritePrograms(MainActivity.this);
+//                            FavouriteObject.addToFavouritePrograms(new Program(str), MainActivity.this);
                             ManageFavouritesFragment.createInstance().updateAndRefresh();
                             texter.setText("");
                             inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
@@ -106,29 +109,28 @@ public class MainActivity extends AppCompatActivity {
         setManageFavouritesFragment();
     }
 
+    private void changeFragment(int fragmentId, Fragment fragment, String tag) {
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(fragmentId, fragment, tag)
+                .commit();
+    }
+
     private void setProgressFragment() {
-        getSupportFragmentManager().beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.frag, ProgressFragment.createInstance(), TLS.PROGRESS_FRAGMENT)
-                .commit();
-        getSupportFragmentManager().beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.secondFrag, ProgressFragment.createInstance(), TLS.PROGRESS_FRAGMENT)
-                .commit();
+        changeFragment(R.id.frag, ProgressFragment.createInstance(), TLS.PROGRESS_FRAGMENT);
+        changeFragment(R.id.secondFrag, ProgressFragment.createInstance(), TLS.PROGRESS_FRAGMENT);
     }
 
     private void setWatchProgramFragment() {
-        getSupportFragmentManager().beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.frag, BottomSheetFragment.createInstance(), TLS.WATCH_PROGRAM_TAG)
-                .commit();
+        changeFragment(R.id.frag, BottomSheetFragment.createInstance(), TLS.WATCH_PROGRAM_TAG);
     }
 
     private void setManageFavouritesFragment() {
-        getSupportFragmentManager().beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.secondFrag, ManageFavouritesFragment.createInstance(), TLS.MANAGE_YOUR_FAVOURITES_TAG)
-                .commit();
+        changeFragment(
+                R.id.secondFrag,
+                ManageFavouritesFragment.createInstance(),
+                TLS.MANAGE_YOUR_FAVOURITES_TAG
+        );
     }
 
     public void onWatchProgramClick(View view) {

@@ -26,31 +26,41 @@ public class FavouriteObjectCheckingWork extends Worker {
     @Override
     @NonNull
     public ListenableWorker.Result doWork() {
+        NotificationBuilder builder = new NotificationBuilder(
+                getApplicationContext(),
+                R.mipmap.ic_launcher,
+                "Work is being done",
+                TLS.DEFAULT_CHANNEL_ID,
+                "ChannelNameEboy"
+        );
+
+        builder.setNotification();
+
         WorkDoneListener.setNewListener(new OnCompleteListener() {
             @Override
             public void doWork(Bundle bundle) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ArrayList<Program> programList = new ArrayList<>();
-                        try {
-                            programList = Program.FavouritePrograms.dailyProgramChecker(getApplicationContext());
-                        } catch (java.io.IOException e) {
-                            // pass
-                        }
+                new Thread(() -> {
+                    ArrayList<Program> programList = new ArrayList<>();
+                    try {
+                        programList = Program.FavouritePrograms
+                                .dailyProgramChecker(getApplicationContext());
+                    } catch (java.io.IOException e) {
+                        // pass
+                    }
 
-                        for (int i = 0; i < programList.size(); i++) {
-                            String channelId = TLS.DEFAULT_CHANNEL_ID;
-                            String channelName = "CHANNEL_NAME_" + String.valueOf(i);
-                            String contentText = programList.get(i).getName() + " at " + programList.get(i).getTimeBegin();
-                            NotificationBuilder builder = new NotificationBuilder(getApplicationContext(),
-                                    R.mipmap.ic_launcher,
-                                    contentText,
-                                    channelId,
-                                    channelName
-                            );
-                            builder.setNotification();
-                        }
+                    for (int i = 0; i < programList.size(); i++) {
+                        String channelId = TLS.DEFAULT_CHANNEL_ID;
+                        String channelName = "CHANNEL_NAME_" + String.valueOf(i);
+                        String contentText = programList.get(i).getName()
+                                + " at " + programList.get(i).getTimeBegin();
+                        NotificationBuilder builder = new NotificationBuilder(
+                                getApplicationContext(),
+                                R.mipmap.ic_launcher,
+                                contentText,
+                                channelId,
+                                channelName
+                        );
+                        builder.setNotification();
                     }
                 }).start();
 
