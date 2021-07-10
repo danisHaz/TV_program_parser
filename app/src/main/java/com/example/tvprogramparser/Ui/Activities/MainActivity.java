@@ -1,11 +1,14 @@
 package com.example.tvprogramparser.Ui.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.motion.widget.MotionLayout;
+import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -65,24 +68,21 @@ public class MainActivity extends AppCompatActivity {
                 inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
                 texter.setImeOptions(EditorInfo.IME_ACTION_GO);
-                texter.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == EditorInfo.IME_ACTION_GO) {
-                            String str = texter.getText().toString();
-                            FavouriteObject.addToFavouritePrograms(new Program(str), MainActivity.this);
-                            ManageFavouritesFragment.createInstance().updateAndRefresh();
-                            texter.setText("");
-                            inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                            menuItem.collapseActionView();
-                            Toast.makeText(MainActivity.this,
-                                    "Program is set to favourites",
-                                    Toast.LENGTH_SHORT).show();
-                            return true;
-                        }
-
-                        return false;
+                texter.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
+                    if (actionId == EditorInfo.IME_ACTION_GO) {
+                        String str = texter.getText().toString();
+                        (new Program(str)).addToFavouritePrograms(MainActivity.this);
+                        ManageFavouritesFragment.createInstance().updateAndRefresh();
+                        texter.setText("");
+                        inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                        menuItem.collapseActionView();
+                        Toast.makeText(MainActivity.this,
+                                "Program is set to favourites",
+                                Toast.LENGTH_SHORT).show();
+                        return true;
                     }
+
+                    return false;
                 });
                 return true;
             }
@@ -106,29 +106,34 @@ public class MainActivity extends AppCompatActivity {
         setManageFavouritesFragment();
     }
 
+    private void changeFragment(int fragmentId, Fragment fragment, String tag) {
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(fragmentId, fragment, tag)
+                .commit();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i("MainActivity", "Activity started");
+    }
+
     private void setProgressFragment() {
-        getSupportFragmentManager().beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.frag, ProgressFragment.createInstance(), TLS.PROGRESS_FRAGMENT)
-                .commit();
-        getSupportFragmentManager().beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.secondFrag, ProgressFragment.createInstance(), TLS.PROGRESS_FRAGMENT)
-                .commit();
+        changeFragment(R.id.frag, ProgressFragment.createInstance(), TLS.PROGRESS_FRAGMENT);
+        changeFragment(R.id.secondFrag, ProgressFragment.createInstance(), TLS.PROGRESS_FRAGMENT);
     }
 
     private void setWatchProgramFragment() {
-        getSupportFragmentManager().beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.frag, BottomSheetFragment.createInstance(), TLS.WATCH_PROGRAM_TAG)
-                .commit();
+        changeFragment(R.id.frag, BottomSheetFragment.createInstance(), TLS.WATCH_PROGRAM_TAG);
     }
 
     private void setManageFavouritesFragment() {
-        getSupportFragmentManager().beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.secondFrag, ManageFavouritesFragment.createInstance(), TLS.MANAGE_YOUR_FAVOURITES_TAG)
-                .commit();
+        changeFragment(
+                R.id.secondFrag,
+                ManageFavouritesFragment.createInstance(),
+                TLS.MANAGE_YOUR_FAVOURITES_TAG
+        );
     }
 
     public void onWatchProgramClick(View view) {

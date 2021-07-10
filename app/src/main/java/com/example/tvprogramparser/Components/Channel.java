@@ -69,17 +69,11 @@ public class Channel implements Serializable {
         this.pathToIcon = pathToIcon;
     }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
-    public String getLink() {
-        return link;
-    }
+    public String getLink() { return link; }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
 
     public String getPathToIcon() { return pathToIcon; }
 
@@ -104,7 +98,7 @@ public class Channel implements Serializable {
     }
 
     public void addToFavouriteChannels(final Context context) {
-        if (!favourite) {
+        if (favourite) {
             Log.w("Channel", "Adding favourite channel to favourites");
             return;
         }

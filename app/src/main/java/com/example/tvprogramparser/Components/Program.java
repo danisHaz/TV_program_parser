@@ -2,17 +2,17 @@ package com.example.tvprogramparser.Components;
 
 import android.content.Context;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.Toast;
 
+import com.example.tvprogramparser.Background.HttpConnection;
 import com.example.tvprogramparser.TLS;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.lang.InterruptedException;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 public class Program {
@@ -27,6 +27,7 @@ public class Program {
         public static ArrayList<Program> favouritePrograms = new ArrayList<Program>();
         private static boolean isDefined = false;
 
+//        if it is called not from UI thread, it shouldn't create another thread
         private static void define(final Context context) {
             Thread t = new Thread(new Runnable() {
                 @Override
@@ -56,11 +57,10 @@ public class Program {
             return programs;
         }
 
-        public static ArrayList<Program> dailyProgramChecker(final Context context) throws java.io.IOException {
+        public static ArrayList<Program> dailyProgramChecker(final Context context)
+                throws java.io.IOException {
             if (!isDefined)
                 define(context);
-
-            Log.d("Program", "Program 1 point done");
 
             Channel[] channelArray;
             synchronized (MainChannelsList.class) {
@@ -69,46 +69,30 @@ public class Program {
 
             final ArrayList<Program> result = new ArrayList<>();
 
-            Log.d("Program", String.valueOf(channelArray.length));
-
-            final Document[] doc = new Document[1];
             for (Channel channel: channelArray) {
 
                 final String mainLink = TLS.MAIN_URL + channel.getLink();
-                try {
-                    doc[0] = Jsoup.connect(mainLink).get();
-                } catch (java.io.IOException e) {
-                    e.printStackTrace();
-                    doc[0] = null;
+                TreeMap<String, Elements> map = HttpConnection.JsoupDownloader
+                        .createInstance().getDataByQueries(
+                        mainLink,
+                        new ArrayList<String>() {{ add(TLS.QUERY_1_3); add(TLS.QUERY_1_2); }},
+                        false
+                );
+
+                if (!map.containsKey(TLS.QUERY_1_3) || map.get(TLS.QUERY_1_3) == null) {
+                    Log.w("Program.FavouritePrograms",
+                            "Cannot get all info => daily checker not working");
+                    return result;
                 }
 
-                if (doc[0] == null)
-                    throw new IOException("BAD INTERNET CONNECTION");
-
-                Elements firEls = null;
-                try {
-                    firEls = doc[0].select(TLS.QUERY_1_3);
-                } catch (java.lang.NullPointerException e) {
-                    e.printStackTrace();
-                    break;
-                }
-
-                Elements secEls = null;
-                try {
-                    secEls = doc[0].select(TLS.QUERY_1_2);
-                } catch (java.lang.NullPointerException e) {
-                    e.printStackTrace();
-                    break;
-                };
-
-                for (int i = 0; i < firEls.size(); i++) {
+                for (int i = 0; i < map.get(TLS.QUERY_1_3).size(); i++) {
                     Program curProg = new Program(
-                            Program.parseProgram(firEls.get(i).ownText())
+                            Program.parseProgram(map.get(TLS.QUERY_1_3).get(i).ownText())
                     );
 
                     if (curProg.isFavourite()) {
-                        result.add(new Program(firEls.get(i).ownText(),
-                                secEls.get(i).ownText()));
+                        curProg.setTimeBegin(map.get(TLS.QUERY_1_2).get(i).ownText());
+                        result.add(curProg);
                     }
                 }
 
@@ -141,37 +125,41 @@ public class Program {
         this.timeEnd = timeEnd;
     }
 
-    public void updateTimeBegin(String timeBegin) {
-        this.timeBegin = timeBegin;
+    public boolean isEqual(Program pr) { return (pr.getId() == this.id); }
+
+    public String getName() { return this.programName; }
+
+    public int getId() { return this.id; }
+
+    public String getTimeBegin() { return this.timeBegin; }
+    public Pair<Integer, Integer> getParsedTimeBegin() {
+        return new Pair<>(
+                Integer.parseInt(timeBegin.split(":")[0]),
+                Integer.parseInt(timeBegin.split(":")[1])
+        );
     }
 
-    public boolean isEqual(Program pr) {
-        return (pr.getId() == this.id);
-    }
+    public void setTimeBegin(String timeBegin) { this.timeBegin = timeBegin; }
 
-    public String getName() {
-        return this.programName;
-    }
+    public String getTimeEnd() { return this.timeEnd; }
 
-    public int getId() {
-        return this.id;
+    public boolean isFavourite() {
+        for (Program program: FavouritePrograms.favouritePrograms) {
+            if (program.isEqual(this)) {
+                this.favourite = true;
+                return true;
+            }
+        }
+        return false;
     }
-
-    public String getTimeBegin() {
-        return this.timeBegin;
-    }
-
-    public String getTimeEnd() {
-        return this.timeEnd;
-    }
-
-    public boolean isFavourite() { return this.favourite; }
 
     public void addToFavouritePrograms(final Context context) {
         for (int i = 0; i < FavouritePrograms.favouritePrograms.size(); i++) {
             if (FavouritePrograms.favouritePrograms.get(i).isEqual(this)) {
                 try {
-                    Toast.makeText(context, "Program is already in favourites", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,
+                            "Program is already in favourites",
+                            Toast.LENGTH_SHORT).show();
                 } catch (RuntimeException e) {
                     e.printStackTrace();
                 }

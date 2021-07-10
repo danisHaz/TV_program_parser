@@ -1,7 +1,6 @@
 package com.example.tvprogramparser.Ui.Activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,76 +10,44 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 
-import com.example.tvprogramparser.Background.NotificationBuilder;
-import com.example.tvprogramparser.Background.RestartService;
-import com.example.tvprogramparser.Components.FavouriteObjectsDB;
-import com.example.tvprogramparser.Components.MainChannelsList;
-import com.example.tvprogramparser.Components.OnCompleteListener;
-import com.example.tvprogramparser.Components.WorkDoneListener;
 import com.example.tvprogramparser.R;
 import com.example.tvprogramparser.TLS;
-import com.example.tvprogramparser.Ui.Views.Point;
 import com.example.tvprogramparser.Ui.Views.ReverseTriangleView;
 import com.example.tvprogramparser.Ui.Views.TriangleView;
+import com.example.tvprogramparser.StartingViewModel;
 
 public class StartingActivity extends AppCompatActivity {
-    public static boolean isNetworkActive;
     private Handler motionHandler = new Handler();
     private int friend = 0;
-    TriangleView view;
-    ReverseTriangleView reverseView;
+    private TriangleView view;
+    private ReverseTriangleView reverseView;
+    private StartingViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = new StartingViewModel(this);
+        int currentContentView = R.layout.activity_starting;
+        SharedPreferences prefs
+                = getSharedPreferences(TLS.APPLICATION_PREFERENCES, Context.MODE_PRIVATE);
 
-        Point.countScreenDimensions(this);
-        setContentView(R.layout.activity_starting);
-        onDefine();
+        if (!TLS.isNetworkProvided(this) && !prefs.getBoolean(TLS.MAIN_CHANNELS_CACHE_STATE, false))
+            currentContentView = R.layout.fragment_no_network;
 
-        if (!isNetworkActive) {
-//            provide with "No network" section
-            return;
-        }
-
-        WorkDoneListener.setNewListener(new OnCompleteListener() {
-            @Override
-            public void doWork(Bundle bundle) {
-                Intent toMainActivity = new Intent(StartingActivity.this, MainActivity.class);
-                SharedPreferences prefs
-                        = getSharedPreferences(TLS.APPLICATION_PREFERENCES, MODE_PRIVATE);
-                if (prefs.getInt(TLS.BACKGROUND_REQUEST_ID, 0) == 0) {
-                    RestartService.scheduleAlarm(StartingActivity.this);
-                }
-
-                StartingActivity.this.startActivity(toMainActivity);
-            }
-        }.setTag(TLS.GET_CHANNELS_LIST));
-        MainChannelsList.define(this);
+        setContentView(currentContentView);
     }
 
-    private void onDefine() {
+    public void onDefineViews() {
         view = findViewById(R.id.back_view_triangle_1);
         view.setMyLayoutParams(view.point2.x, view.point2.y);
         reverseView = findViewById(R.id.back_view_triangle_2);
         reverseView.setMyLayoutParams(reverseView.point3.x, reverseView.point1.y);
-
-        isNetworkActive = TLS.isNetworkProvided(this);
-        FavouriteObjectsDB.createInstance(this);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        SharedPreferences prefs = getSharedPreferences(
-                TLS.APPLICATION_PREFERENCES, Context.MODE_PRIVATE
-        );
-
-        if (prefs.getBoolean(TLS.MAIN_CHANNELS_CACHE_STATE, false))
-            return;
-
+//    todo: try to use data binding instead
+    public void performMotion() {
         ((MotionLayout) findViewById(R.id.starting_layout)).transitionToState(R.id.end_position);
+
         final TextView loadingText = (TextView) findViewById(R.id.loading_view);
         motionHandler.post(new Runnable() {
             @Override
@@ -105,6 +72,12 @@ public class StartingActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        viewModel.onStart();
     }
 
     @Override

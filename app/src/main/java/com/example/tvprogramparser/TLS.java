@@ -33,6 +33,9 @@ public class TLS {
     public static final String DEFAULT_CHANNEL_ID = "defaultChannelId";
     public static final String MAIN_CHANNELS_CACHE_STATE = "mainChannelsCacheState";
     public static final String MAIN_CHANNELS_INITIAL_TAG = "mainChannelsInitialTag";
+    public static final String PROGRAM_NOTIFIER_TAG = "programNotifierTag";
+    public static final String ACTION_DEFAULT = "defaultActionForAlarmSchedulers";
+    public static final String ACTION_NOTIFY = "actionSetProgramNotification";
 
     public static final ArrayList<Channel> ADDITIONAL_CHANNELS = new ArrayList<Channel>() {{
         add(new Channel("Paramount Comedy", "/kazan/channel/808/"));
@@ -44,6 +47,8 @@ public class TLS {
         return programName.split("\\)")[0];
     }
 
+    public static boolean isNetworkProvidedCheck;
+
     public static boolean isNetworkProvided(Context context) {
         android.net.ConnectivityManager manager =
                 (android.net.ConnectivityManager) context.getSystemService(
@@ -52,13 +57,13 @@ public class TLS {
         for (android.net.Network network: manager.getAllNetworks()) {
             try {
                 if (manager.getNetworkInfo(network).isConnected()) {
-                    return true;
+                    return isNetworkProvidedCheck = true;
                 }
             } catch (java.lang.NullPointerException e) {
                 e.printStackTrace();
             }
         }
 
-        return false;
+        return isNetworkProvidedCheck = false;
     }
 }

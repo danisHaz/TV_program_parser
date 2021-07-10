@@ -30,6 +30,8 @@ import org.jsoup.nodes.Document;
 public class BottomSheetFragment extends Fragment {
     private static Document doc = null;
     private static BottomSheetFragment local;
+    public static String channelName = "name";
+    public static String channelPosition = "pos";
 
     // TODO: rewrite createInstance
     public static BottomSheetFragment createInstance() {
@@ -111,8 +113,8 @@ public class BottomSheetFragment extends Fragment {
                         Intent intent = new Intent(view.getContext(),
                                 ManageFavouritesActivity.class);
 
-                        intent.putExtra("name", channels[pos]);
-                        intent.putExtra("pos", pos);
+                        intent.putExtra(channelName, channels[pos]);
+                        intent.putExtra(channelPosition, pos);
                         view.getContext().startActivity(intent);
                     }
                 });
