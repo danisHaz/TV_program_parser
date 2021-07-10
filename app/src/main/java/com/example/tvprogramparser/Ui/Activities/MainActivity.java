@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,25 +68,21 @@ public class MainActivity extends AppCompatActivity {
                 inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
                 texter.setImeOptions(EditorInfo.IME_ACTION_GO);
-                texter.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == EditorInfo.IME_ACTION_GO) {
-                            String str = texter.getText().toString();
-                            (new Program(str)).addToFavouritePrograms(MainActivity.this);
-//                            FavouriteObject.addToFavouritePrograms(new Program(str), MainActivity.this);
-                            ManageFavouritesFragment.createInstance().updateAndRefresh();
-                            texter.setText("");
-                            inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                            menuItem.collapseActionView();
-                            Toast.makeText(MainActivity.this,
-                                    "Program is set to favourites",
-                                    Toast.LENGTH_SHORT).show();
-                            return true;
-                        }
-
-                        return false;
+                texter.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
+                    if (actionId == EditorInfo.IME_ACTION_GO) {
+                        String str = texter.getText().toString();
+                        (new Program(str)).addToFavouritePrograms(MainActivity.this);
+                        ManageFavouritesFragment.createInstance().updateAndRefresh();
+                        texter.setText("");
+                        inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                        menuItem.collapseActionView();
+                        Toast.makeText(MainActivity.this,
+                                "Program is set to favourites",
+                                Toast.LENGTH_SHORT).show();
+                        return true;
                     }
+
+                    return false;
                 });
                 return true;
             }
@@ -114,6 +111,12 @@ public class MainActivity extends AppCompatActivity {
                 .setReorderingAllowed(true)
                 .replace(fragmentId, fragment, tag)
                 .commit();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i("MainActivity", "Activity started");
     }
 
     private void setProgressFragment() {

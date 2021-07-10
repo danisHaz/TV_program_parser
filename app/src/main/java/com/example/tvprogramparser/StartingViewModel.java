@@ -26,13 +26,15 @@ public class StartingViewModel extends ActivityViewModel<StartingActivity> {
     }
 
     private void setWork() {
-
         WorkDoneListener.setNewListener(new OnCompleteListener() {
             @Override
             public void doWork(Bundle bundle) {
                 Intent toMainActivity = new Intent(activity, MainActivity.class);
-                SharedPreferences prefs
-                        = activity.getSharedPreferences(TLS.APPLICATION_PREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences prefs = activity.getSharedPreferences(
+                                TLS.APPLICATION_PREFERENCES,
+                                Context.MODE_PRIVATE
+                );
+
                 if (prefs.getInt(TLS.BACKGROUND_REQUEST_ID, 0) == 0) {
                     RestartService.scheduleAlarm(activity);
                 }
@@ -51,13 +53,13 @@ public class StartingViewModel extends ActivityViewModel<StartingActivity> {
         if (!TLS.isNetworkProvidedCheck && !prefs.getBoolean(TLS.MAIN_CHANNELS_CACHE_STATE, false))
             return;
 
-        activity.onDefineViews();
         FavouriteObjectsDB.createInstance(activity);
         setWork();
 
         if (prefs.getBoolean(TLS.MAIN_CHANNELS_CACHE_STATE, false))
             return;
 
+        activity.onDefineViews();
         activity.performMotion();
     }
 }

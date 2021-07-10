@@ -33,15 +33,13 @@ public class MainChannelsList extends Application {
         }
 
         final SharedPreferences prefs =
-                (context).getSharedPreferences(
+                context.getSharedPreferences(
                         TLS.APPLICATION_PREFERENCES,
                         MODE_PRIVATE
                 );
 
         if (prefs.getBoolean(TLS.MAIN_CHANNELS_CACHE_STATE, false)) {
-            Thread tempThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
+            Thread tempThread = new Thread(() -> {
                     ArrayList<Channel> mainChannelsList
                             = (ArrayList<Channel>) FavouriteObjectsDB.createInstance(context)
                             .getAllMainChannels();
@@ -54,13 +52,9 @@ public class MainChannelsList extends Application {
                     }
 
                     notifyChannelsListInitDone();
-                }
-            });
+                });
             tempThread.start();
         } else {
-            receiveAllData(context);
-//            todo: make explicit addition to db implicit
-//                  by hiding logic in Channel and FavouriteObjectsDB classes
             WorkDoneListener.setNewListener(new OnCompleteListener() {
                 @Override
                 public void doWork(@Nullable Bundle bundle) {
@@ -72,7 +66,9 @@ public class MainChannelsList extends Application {
                     }
                 }
             }.setTag(TLS.MAIN_CHANNELS_INITIAL_TAG));
+            receiveAllData(context);
         }
+        isDefined = true;
     }
 
     private static void notifyChannelsListInitDone() {
@@ -81,7 +77,7 @@ public class MainChannelsList extends Application {
                     null,
                     OnCompleteListener.Result.SUCCESS);
         } catch (NullPointerException e) {
-//            pass
+            e.printStackTrace();
         }
 
         try {
@@ -89,7 +85,7 @@ public class MainChannelsList extends Application {
                     null,
                     OnCompleteListener.Result.SUCCESS);
         } catch (NullPointerException e) {
-//            pass
+            e.printStackTrace();
         }
     }
 
@@ -140,7 +136,6 @@ public class MainChannelsList extends Application {
 
                 bitmaps[i] = loader.getBitmapFromUrl((elements.get(0).attr("src")));
             } catch (NullPointerException e) {
-                Log.e("MainChannelsList", "Doc is null");
                 e.printStackTrace();
             }
 
@@ -157,8 +152,6 @@ public class MainChannelsList extends Application {
 
     private static void receiveAllData(final Context context) {
         isDefined = true;
-
-        Log.d("Deb", "deb1");
 
         Thread newThread = new Thread(new Runnable() {
             @Override

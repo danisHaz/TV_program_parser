@@ -31,7 +31,7 @@ public class StartingActivity extends AppCompatActivity {
         SharedPreferences prefs
                 = getSharedPreferences(TLS.APPLICATION_PREFERENCES, Context.MODE_PRIVATE);
 
-        if (!TLS.isNetworkProvidedCheck && !prefs.getBoolean(TLS.MAIN_CHANNELS_CACHE_STATE, false))
+        if (!TLS.isNetworkProvided(this) && !prefs.getBoolean(TLS.MAIN_CHANNELS_CACHE_STATE, false))
             currentContentView = R.layout.fragment_no_network;
 
         setContentView(currentContentView);

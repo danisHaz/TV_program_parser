@@ -85,7 +85,7 @@ public class HttpConnection {
 //        not recommended to use `true` statement
         private boolean needsAllDownloaded;
 
-        JsoupDownloader() {
+        private JsoupDownloader() {
 
         }
 
