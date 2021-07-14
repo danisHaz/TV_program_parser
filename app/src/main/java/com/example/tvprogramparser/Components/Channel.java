@@ -24,7 +24,7 @@ public class Channel implements Serializable {
     public static class FavouriteChannels {
         private static boolean isDefined = false;
 
-        private static void define(final Context context) {
+        private static synchronized void define(final Context context) {
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {

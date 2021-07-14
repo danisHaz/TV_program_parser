@@ -44,7 +44,7 @@ public class FavouriteObjectCheckingWork extends Worker {
 //                      before 10 minutes program starts
                     for (int i = 0; i < programList.size(); i++) {
                         String channelId = TLS.DEFAULT_CHANNEL_ID;
-                        String channelName = "CHANNEL_NAME_" + String.valueOf(i);
+                        String channelName = TLS.MAIN_CHANNEL_NAME;
                         String contentText = programList.get(i).getName()
                                 + " at " + programList.get(i).getTimeBegin();
 

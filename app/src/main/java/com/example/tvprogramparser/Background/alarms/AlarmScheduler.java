@@ -11,7 +11,9 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
+import com.example.tvprogramparser.Background.NotificationBuilder;
 import com.example.tvprogramparser.Components.Timer;
+import com.example.tvprogramparser.R;
 import com.example.tvprogramparser.TLS;
 
 import java.util.Calendar;
@@ -100,7 +102,8 @@ public class AlarmScheduler {
         calendar.setTimeInMillis(System.currentTimeMillis());
 
         if (!toRepeat) {
-            Pair<Integer, Integer> p = (new Timer(this.hours, this.minutes)).getPrettyEarlierTime();
+            Pair<Integer, Integer> p
+                    = (new Timer(this.hours, this.minutes)).getPrettyEarlierTime();
             this.hours = p.first;
             this.minutes = p.second;
         }
@@ -120,7 +123,10 @@ public class AlarmScheduler {
             int currentHours = currentDate.get(Calendar.HOUR_OF_DAY);
             int currentMinutes = currentDate.get(Calendar.MINUTE);
             if (currentHours > hours || currentMinutes > minutes && currentHours == hours) {
-                Log.i("AlarmScheduler", "Tried to set alarm with rotten time");
+//                Log.i("AlarmScheduler", "Tried to set alarm with rotten time");
+                (new NotificationBuilder(context, R.mipmap.ic_launcher_round,
+                        "Rotten time", TLS.DEFAULT_CHANNEL_ID,
+                        TLS.MAIN_CHANNEL_NAME)).setNotification();
                 return;
             }
         }
@@ -140,11 +146,15 @@ public class AlarmScheduler {
 //            e.printStackTrace();
 //        }
 
-        if (toRepeat)
+        if (toRepeat) {
+            (new NotificationBuilder(context, R.mipmap.ic_launcher_round,
+                    "Inexact repeating", TLS.DEFAULT_CHANNEL_ID,
+                    TLS.MAIN_CHANNEL_NAME)).setNotification();
+
             manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                     calendar.getTimeInMillis(),
                     intervalOfRepeating, pendingIntent);
-        else
+        } else
             manager.set(AlarmManager.RTC_WAKEUP,
                     calendar.getTimeInMillis(), pendingIntent);
     }

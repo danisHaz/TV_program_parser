@@ -36,11 +36,14 @@ public class TLS {
     public static final String PROGRAM_NOTIFIER_TAG = "programNotifierTag";
     public static final String ACTION_DEFAULT = "defaultActionForAlarmSchedulers";
     public static final String ACTION_NOTIFY = "actionSetProgramNotification";
+    public static final String MAIN_CHANNEL_NAME = "Program Notifications";
 
     public static final ArrayList<Channel> ADDITIONAL_CHANNELS = new ArrayList<Channel>() {{
         add(new Channel("Paramount Comedy", "/kazan/channel/808/"));
         add(new Channel("KHL HD", "/kazan/channel/1590/"));
         add(new Channel("Kino TV", "/kazan/channel/1653/"));
+        add(new Channel("TV 1000", "/kazan/channel/796/"));
+        add(new Channel("TV 1000 Action", "/kazan/channel/787/"));
     }};
 
     public static String favouriteProgramParser(String programName) {

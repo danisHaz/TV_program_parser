@@ -11,6 +11,8 @@ import android.util.Pair;
 public class Timer {
     private int hours = 0;
     private int minutes = 0;
+//    this is for setting border when to fire notifications
+    private static final int beforeInterval = 10;
 
 //    this constructor is for setting
 //    notifications for alarm scheduler
@@ -22,7 +24,7 @@ public class Timer {
 
 //    name of method is too stupid and out-of-context, but i'm inadequate now, sorry:(
     public Pair<Integer, Integer> getPrettyEarlierTime() {
-        int whole = (hours * 60 + minutes - 5);
+        int whole = (hours * 60 + minutes - beforeInterval);
         if (whole < 0)
             return new Pair<>(0, 0);
 

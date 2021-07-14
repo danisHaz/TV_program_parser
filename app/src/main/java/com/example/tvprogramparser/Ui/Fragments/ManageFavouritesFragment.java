@@ -56,18 +56,29 @@ public class ManageFavouritesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_manage_favourites, container, false);
+        return inflater.inflate(
+                R.layout.fragment_manage_favourites,
+                container,
+                false
+        );
     }
 
-    private void setChannelsViewListener(@NonNull final Bundle channelsBundle, ArrayAdapter<String> adap) {
+    private void setChannelsViewListener(
+            @NonNull final Bundle channelsBundle,
+            ArrayAdapter<String> adap
+    ) {
         try {
-            ListView channelsView = ((ListView) getView().findViewById(R.id.favouriteChannelsList));
+            ListView channelsView
+                    = ((ListView) getView().findViewById(R.id.favouriteChannelsList));
             channelsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
                     channelsBundle.putInt(TLS.CHOSEN_POSITION, pos);
                     SmallMenuFragment.createInstance(channelsBundle)
-                            .show(getActivity().getSupportFragmentManager(), "manageFavourites");
+                            .show(
+                                    getActivity().getSupportFragmentManager(),
+                                    "manageFavourites"
+                            );
                 }
             });
             channelsView.setAdapter(adap);
@@ -77,9 +88,13 @@ public class ManageFavouritesFragment extends Fragment {
         }
     }
 
-    private void setProgramsViewListener(@NonNull final Bundle programsBundle, ArrayAdapter<String> adap) {
+    private void setProgramsViewListener(
+            @NonNull final Bundle programsBundle,
+            ArrayAdapter<String> adap
+    ) {
         try {
-            ListView programsView = ((ListView)getView().findViewById(R.id.favouriteProgramsList));
+            ListView programsView
+                    = ((ListView)getView().findViewById(R.id.favouriteProgramsList));
             programsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
@@ -91,7 +106,10 @@ public class ManageFavouritesFragment extends Fragment {
                         }
                 }.setTag(TLS.DELETE_FROM_FAVOURITE_PROGRAMS));
                     SmallMenuFragment.createInstance(programsBundle)
-                            .show(getActivity().getSupportFragmentManager(), "manageFavourites");
+                            .show(
+                                    getActivity().getSupportFragmentManager(),
+                                    "manageFavourites"
+                            );
                 }
             });
             programsView.setAdapter(adap);
@@ -106,8 +124,10 @@ public class ManageFavouritesFragment extends Fragment {
         super.onStart();
         View view = getView();
         if (view != null) {
-            ArrayList<String> channels = Channel.FavouriteChannels.getFavouriteChannelsNames(getContext());
-            final ArrayList<String> programs = Program.FavouritePrograms.getArrayOfFavouritePrograms(getContext());
+            ArrayList<String> channels
+                    = Channel.FavouriteChannels.getFavouriteChannelsNames(getContext());
+            final ArrayList<String> programs
+                    = Program.FavouritePrograms.getArrayOfFavouritePrograms(getContext());
 
             // TODO: handle with null getActivity
             ArrayAdapter<String> adap1 = new ArrayAdapter<String>(
@@ -132,18 +152,18 @@ public class ManageFavouritesFragment extends Fragment {
             channelsBundle.putInt(TLS.CURRENT_ARRAY_ID, R.array.favouriteChannelsBottomFragment);
             channelsBundle.putString(TLS.CHOSEN_LAYOUT, TLS.DELETE_FROM_FAVOURITE_CHANNELS);
 
-            if (adap1.isEmpty())
+            if (channels.isEmpty())
                 adap1.add(getResources().getString(R.string.channelsListEmpty));
             else
                 setChannelsViewListener(channelsBundle, adap1);
 
-            if (adap2.isEmpty())
+            if (programs.isEmpty())
                 adap2.add(getResources().getString(R.string.programsListEmpty));
             else
                 setProgramsViewListener(programsBundle, adap2);
 
         } else {
-            Log.d("ManageFavouritesFragment", "Provided view is null");
+            Log.e("ManageFavouritesFragment", "Provided view is null");
         }
     }
 }
